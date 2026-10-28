@@ -1,0 +1,12 @@
+{
+  "name": "say-my-name",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PWA compañera de juego de cartas para reuniones y fiestas",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js"
+  },
+  "keywords": ["pwa", "card-game", "party-game", "offline-first"]
+}
