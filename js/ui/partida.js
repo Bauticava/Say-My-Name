@@ -78,6 +78,11 @@ export function renderPartida(container, router) {
       return;
     }
 
+    if (gameState.faseTurno === 'turno_terminado_pase') {
+      renderTurnoTerminadoPase();
+      return;
+    }
+
     if (gameState.faseTurno === 'tiempo_agotado') {
       renderTiempoAgotado();
       return;
@@ -328,13 +333,20 @@ export function renderPartida(container, router) {
     // Paso
     container.querySelector('#btn-paso')?.addEventListener('click', () => {
       gameState.pasarCarta();
+      if (gameState.faseTurno === 'turno_terminado_pase') {
+        activeTimer.pause();
+      }
       renderCurrentPhase();
     });
 
     // Acierto
     container.querySelector('#btn-acierto')?.addEventListener('click', () => {
       gameState.acertarCarta();
-      if (gameState.faseTurno === 'mazo_completado' || gameState.faseTurno === 'ronda_terminada') {
+      if (
+        gameState.faseTurno === 'mazo_completado' ||
+        gameState.faseTurno === 'ronda_terminada' ||
+        gameState.faseTurno === 'turno_terminado_pase'
+      ) {
         activeTimer.pause();
       }
       renderCurrentPhase();
@@ -385,10 +397,10 @@ export function renderPartida(container, router) {
                 `).join('')}
               </div>
 
-              <!-- Palabra clave oculta durante los 15s -->
-              <div class="forbidden-box" style="background: #f8fafc; border-color: #94a3b8;">
-                <span class="forbidden-label" style="color: #64748b;">Palabra Clave (Oculta)</span>
-                <span class="forbidden-word" style="color: #475569; filter: blur(4px); user-select: none;">
+              <!-- Palabra clave visible para quien lee la carta -->
+              <div class="forbidden-box" style="background: #eef2ff; border-color: #6366f1;">
+                <span class="forbidden-label" style="color: #4f46e5;">Palabra Clave (Para quien lee)</span>
+                <span class="forbidden-word" style="color: #1e1b4b; font-size: 1.35rem;">
                   ${escapeHtml(carta.palabraClave)}
                 </span>
               </div>
@@ -537,6 +549,46 @@ export function renderPartida(container, router) {
               </div>
             `).join('')}
           </div>
+
+          <button id="btn-siguiente-turno" class="btn btn-primary btn-large btn-block" type="button">
+            Pasar al siguiente equipo →
+          </button>
+        </div>
+      </section>
+    `;
+
+    container.querySelector('#btn-siguiente-turno')?.addEventListener('click', () => {
+      gameState.siguienteTurno();
+      renderCurrentPhase();
+    });
+  }
+
+  // --- Fase: Turno Terminado por Recorrer el Mazo (Pase de cartas) ---
+  function renderTurnoTerminadoPase() {
+    container.innerHTML = `
+      <section class="screen" aria-label="Turno terminado">
+        <div class="surface-card" style="text-align: center; padding: 2rem 1.25rem; margin: auto 0;">
+          <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">↪️</div>
+          <h2 style="font-size: 1.8rem; font-weight: var(--font-weight-black); margin-bottom: 0.5rem;">
+            Fin del turno
+          </h2>
+          <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Se recorrieron todas las cartas disponibles en este turno. Las cartas que saltearon vuelven al mazo para el siguiente equipo.
+          </p>
+
+          <!-- Marcador -->
+          <div class="scoreboard" style="margin-bottom: 1.5rem;">
+            ${gameState.equipos.map((eq, i) => `
+              <div class="score-box ${i === gameState.equipoTurnoIndex ? 'active' : ''}">
+                <div class="score-box-name">${escapeHtml(eq.nombre)}</div>
+                <div class="score-box-points">${eq.puntos} pts</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Quedan ${gameState.cartasRondaRestantes.length} cartas por adivinar en esta ronda. Pasale el teléfono al siguiente equipo.
+          </p>
 
           <button id="btn-siguiente-turno" class="btn btn-primary btn-large btn-block" type="button">
             Pasar al siguiente equipo →

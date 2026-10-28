@@ -1,7 +1,7 @@
 // Service Worker para Say My Name
 // Offline-first con cache versionado
 
-const CACHE_NAME = 'cartas-v4';
+const CACHE_NAME = 'cartas-v5';
 
 const PRECACHE_ASSETS = [
   './',

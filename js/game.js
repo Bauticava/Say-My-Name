@@ -78,12 +78,13 @@ export class GameState {
     this.cartasPartida = []; // Cartas para rondas 1, 2 y 3 (cada una con su elementoAsignado)
     this.cartasRelampago = []; // 2 cartas por equipo para la relámpago
     this.cartasRondaRestantes = []; // Pila actual de la ronda
+    this.cartasPasadasEnTurno = []; // Cartas pasadas durante el turno actual
     this.cartaActual = null;
     this.rondaIndex = 0; // 0: Ronda 1, 1: Ronda 2, 2: Relámpago, 3: Ronda 3
     this.equipoTurnoIndex = 0;
 
     // Estado del turno
-    // 'listo' | 'jugando' | 'tiempo_agotado' | 'turno_terminado_error' | 'mazo_completado' | 'relampago_evaluando' | 'ronda_terminada' | 'partida_terminada'
+    // 'listo' | 'jugando' | 'tiempo_agotado' | 'turno_terminado_error' | 'turno_terminado_pase' | 'mazo_completado' | 'relampago_evaluando' | 'ronda_terminada' | 'partida_terminada'
     this.faseTurno = 'listo';
     this.enPartida = false;
 
@@ -270,6 +271,7 @@ export class GameState {
     // Inicializar ronda 1
     this.rondaIndex = 0;
     this.cartasRondaRestantes = shuffle(this.cartasPartida);
+    this.cartasPasadasEnTurno = [];
     this.cartaActual = null;
     this.equipoTurnoIndex = 0;
     this.faseTurno = 'listo';
@@ -318,11 +320,18 @@ export class GameState {
       esRelampago: false
     };
 
-    // Si no quedan más cartas en esta ronda
+    // ¿Quedan más cartas sin ver en el mazo de la ronda?
     if (this.cartasRondaRestantes.length === 0) {
       this.cartaActual = null;
-      // Fin del turno por haber completado el mazo
-      this.faseTurno = 'mazo_completado';
+      // Si hubo cartas que pasaron en este turno, se devuelven al mazo y se termina el turno
+      if (this.cartasPasadasEnTurno.length > 0) {
+        this.cartasRondaRestantes = [...this.cartasPasadasEnTurno];
+        this.cartasPasadasEnTurno = [];
+        this.faseTurno = 'turno_terminado_pase';
+      } else {
+        // No hay cartas pasadas ni pendientes: se completó el mazo entero de la ronda
+        this.faseTurno = 'mazo_completado';
+      }
       this.saveToStorage();
       return null;
     }
@@ -331,23 +340,41 @@ export class GameState {
   }
 
   /**
-   * Pasa la carta actual: vuelve al fondo del mazo de la ronda.
+   * Pasa la carta actual: se separa para este turno.
+   * Si no quedan más cartas sin ver en el mazo, se devuelven las pasadas y concluye el turno.
    */
   pasarCarta() {
     if (!this.cartaActual || this.esRondaRelampago) return null;
-    const pasada = this.cartaActual;
-    this.cartasRondaRestantes.unshift(pasada);
+
+    // Agregar la carta actual a las pasadas en este turno
+    this.cartasPasadasEnTurno.push(this.cartaActual);
+    this.cartaActual = null;
+
+    // ¿Quedan más cartas sin ver en el mazo de la ronda?
+    if (this.cartasRondaRestantes.length === 0) {
+      // Se recorrió todo el mazo en este turno: devolvemos las pasadas y termina el turno
+      this.cartasRondaRestantes = [...this.cartasPasadasEnTurno];
+      this.cartasPasadasEnTurno = [];
+      this.faseTurno = 'turno_terminado_pase';
+      this.saveToStorage();
+      return null;
+    }
+
     return this.sacarSiguienteCarta();
   }
 
   /**
    * Termina el turno por error (ej: quien da la pista dice la palabra prohibida).
-   * La carta actual va al fondo del mazo de la ronda.
+   * La carta actual y las pasadas en el turno vuelven al mazo.
    */
   terminarTurnoPorError() {
     if (this.cartaActual) {
       this.cartasRondaRestantes.unshift(this.cartaActual);
       this.cartaActual = null;
+    }
+    if (this.cartasPasadasEnTurno.length > 0) {
+      this.cartasRondaRestantes.unshift(...this.cartasPasadasEnTurno);
+      this.cartasPasadasEnTurno = [];
     }
     this.faseTurno = 'turno_terminado_error';
     this.saveToStorage();
@@ -367,15 +394,14 @@ export class GameState {
     }
 
     if (esRelampago) {
-      // En relámpago, volver a la pantalla de asignación
       this.faseTurno = 'relampago_evaluando';
       this.ultimoAcierto = null;
       this.saveToStorage();
       return true;
     }
 
-    // Si se había completado el mazo, reanudamos el estado de juego
-    if (this.faseTurno === 'mazo_completado') {
+    // Si se había terminado el turno por mazo o por pase, reanudar
+    if (this.faseTurno === 'mazo_completado' || this.faseTurno === 'turno_terminado_pase') {
       this.faseTurno = 'jugando';
     }
 
@@ -396,7 +422,6 @@ export class GameState {
    */
   tiempoAgotado() {
     if (this.esRondaRelampago) {
-      // Al terminar los 15 segundos en relámpago, se pasa a evaluar quién adivinó
       this.relampagoPalabraRevelada = true;
       this.faseTurno = 'relampago_evaluando';
       this.saveToStorage();
@@ -406,6 +431,10 @@ export class GameState {
     if (this.cartaActual) {
       this.cartasRondaRestantes.unshift(this.cartaActual);
       this.cartaActual = null;
+    }
+    if (this.cartasPasadasEnTurno.length > 0) {
+      this.cartasRondaRestantes.unshift(...this.cartasPasadasEnTurno);
+      this.cartasPasadasEnTurno = [];
     }
     this.faseTurno = 'tiempo_agotado';
     this.saveToStorage();
@@ -453,6 +482,7 @@ export class GameState {
   siguienteTurno() {
     this.equipoTurnoIndex = (this.equipoTurnoIndex + 1) % this.equipos.length;
     this.cartaActual = null;
+    this.cartasPasadasEnTurno = [];
     this.faseTurno = 'listo';
     this.ultimoAcierto = null;
     this.saveToStorage();
@@ -465,6 +495,7 @@ export class GameState {
     if (this.rondaIndex + 1 < RONDAS_CONFIG.length) {
       this.rondaIndex += 1;
       this.cartaActual = null;
+      this.cartasPasadasEnTurno = [];
       this.ultimoAcierto = null;
 
       if (this.esRondaRelampago) {
@@ -488,6 +519,7 @@ export class GameState {
     this.enPartida = false;
     this.cartaActual = null;
     this.cartasRondaRestantes = [];
+    this.cartasPasadasEnTurno = [];
     this.cartasPartida = [];
     this.cartasRelampago = [];
     this.faseTurno = 'listo';
@@ -508,6 +540,7 @@ export class GameState {
         cartasPartida: this.cartasPartida,
         cartasRelampago: this.cartasRelampago,
         cartasRondaRestantes: this.cartasRondaRestantes,
+        cartasPasadasEnTurno: this.cartasPasadasEnTurno,
         cartaActual: this.cartaActual,
         rondaIndex: this.rondaIndex,
         equipoTurnoIndex: this.equipoTurnoIndex,
@@ -537,6 +570,7 @@ export class GameState {
       if (Array.isArray(data.cartasPartida)) this.cartasPartida = data.cartasPartida;
       if (Array.isArray(data.cartasRelampago)) this.cartasRelampago = data.cartasRelampago;
       if (Array.isArray(data.cartasRondaRestantes)) this.cartasRondaRestantes = data.cartasRondaRestantes;
+      if (Array.isArray(data.cartasPasadasEnTurno)) this.cartasPasadasEnTurno = data.cartasPasadasEnTurno;
       this.cartaActual = data.cartaActual || null;
       this.rondaIndex = data.rondaIndex || 0;
       this.equipoTurnoIndex = data.equipoTurnoIndex || 0;
