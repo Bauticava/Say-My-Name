@@ -4,6 +4,7 @@
  */
 
 import { gameState } from '../game.js';
+import { customAlert, customConfirm, customPrompt } from './modal.js';
 
 export function renderEquipos(container, router) {
   function updateUI() {
@@ -117,44 +118,66 @@ export function renderEquipos(container, router) {
     // Renombrar equipo
     const botonesEditar = container.querySelectorAll('.btn-editar');
     botonesEditar.forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-id');
         const eq = gameState.equipos.find((e) => e.id === id);
         if (!eq) return;
 
-        const nuevoNombre = window.prompt('Nuevo nombre para el equipo:', eq.nombre);
-        if (nuevoNombre === null) return; // cancelado
+        const nuevoNombre = await customPrompt({
+          title: 'Renombrar equipo',
+          message: 'Ingresá el nuevo nombre para este equipo:',
+          defaultValue: eq.nombre,
+          placeholder: 'Ej: Los Dinamita',
+          confirmText: 'Guardar',
+          cancelText: 'Cancelar',
+          validate: (val) => gameState.validarNombreEquipo(val, id)
+        });
 
-        const validacion = gameState.validarNombreEquipo(nuevoNombre, id);
-        if (!validacion.valid) {
-          alert(validacion.error);
-          return;
+        if (nuevoNombre !== null) {
+          gameState.renombrarEquipo(id, nuevoNombre);
+          updateUI();
         }
-
-        gameState.renombrarEquipo(id, nuevoNombre);
-        updateUI();
       });
     });
 
     // Eliminar equipo
     const botonesEliminar = container.querySelectorAll('.btn-eliminar');
     botonesEliminar.forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const id = btn.getAttribute('data-id');
-        try {
-          gameState.quitarEquipo(id);
-          updateUI();
-        } catch (err) {
-          alert(err.message);
+        const eq = gameState.equipos.find((e) => e.id === id);
+        if (!eq) return;
+
+        const confirma = await customConfirm({
+          title: '¿Quitar equipo?',
+          message: `¿Querés eliminar a "${eq.nombre}" de la partida?`,
+          confirmText: 'Eliminar',
+          cancelText: 'Cancelar',
+          danger: true
+        });
+
+        if (confirma) {
+          try {
+            gameState.quitarEquipo(id);
+            updateUI();
+          } catch (err) {
+            await customAlert({
+              title: 'No se puede quitar',
+              message: err.message
+            });
+          }
         }
       });
     });
 
     // Continuar
     const btnContinuar = container.querySelector('#btn-continuar');
-    btnContinuar.addEventListener('click', () => {
+    btnContinuar.addEventListener('click', async () => {
       if (gameState.equipos.length < 2) {
-        alert('Se necesitan al menos 2 equipos para jugar.');
+        await customAlert({
+          title: 'Equipos insuficientes',
+          message: 'Se necesitan al menos 2 equipos para poder jugar.'
+        });
         return;
       }
       router.navigate('configuracion');

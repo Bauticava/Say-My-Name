@@ -6,6 +6,7 @@
 
 import { wakeLockManager } from './wakelock.js';
 import { gameState } from './game.js';
+import { customConfirm } from './ui/modal.js';
 
 export class Router {
   constructor(routes, container) {
@@ -56,19 +57,26 @@ export class Router {
     this._renderScreen(pantalla);
   }
 
-  _onPopState(event) {
+  async _onPopState(event) {
     const targetScreen = event.state?.pantalla || this.getScreenFromLocation();
 
     // Interceptar "atrás" si estamos en partida activa
     if (this.currentScreen === 'partida' && targetScreen !== 'partida' && gameState.enPartida) {
-      const confirma = window.confirm('¿Querés abandonar la partida actual? Se mantendrá el progreso en este dispositivo.');
-      if (!confirma) {
-        // El usuario canceló: restaurar el estado en el historial
-        window.history.pushState({ pantalla: 'partida' }, '', '#partida');
-        return;
+      window.history.pushState({ pantalla: 'partida' }, '', '#partida');
+
+      const confirma = await customConfirm({
+        title: '¿Abandonar la partida?',
+        message: 'Se mantendrá el progreso en este dispositivo para que puedas retomarla después.',
+        confirmText: 'Abandonar',
+        cancelText: 'Seguir jugando',
+        danger: true
+      });
+
+      if (confirma) {
+        wakeLockManager.release();
+        this.navigate(targetScreen);
       }
-      // Si confirmó, se libera el wake lock
-      wakeLockManager.release();
+      return;
     }
 
     this._renderScreen(targetScreen);

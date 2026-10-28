@@ -5,6 +5,7 @@
 
 import { gameState, TOTAL_RONDAS, RONDAS_INFO } from '../game.js';
 import { GameTimer } from '../timer.js';
+import { customConfirm } from './modal.js';
 
 let activeTimer = null;
 
@@ -214,13 +215,24 @@ export function renderPartida(container, router) {
 
     // Reiniciar tiempo del turno
     const btnReiniciarTimer = container.querySelector('#btn-reiniciar-timer');
-    btnReiniciarTimer?.addEventListener('click', () => {
-      const confirma = window.confirm('¿Reiniciar el tiempo de este turno a ' + gameState.tiempoPorTurno + ' segundos?');
+    btnReiniciarTimer?.addEventListener('click', async () => {
+      const estabaCorriendo = activeTimer.isRunning;
+      if (estabaCorriendo) {
+        activeTimer.pause();
+      }
+      const confirma = await customConfirm({
+        title: '¿Reiniciar temporizador?',
+        message: `¿Querés reiniciar el tiempo de este turno a ${gameState.tiempoPorTurno} segundos?`,
+        confirmText: 'Reiniciar',
+        cancelText: 'Seguir como estaba'
+      });
       if (confirma) {
         activeTimer.reset(gameState.tiempoPorTurno);
         activeTimer.start();
-        renderCurrentPhase();
+      } else if (estabaCorriendo) {
+        activeTimer.resume();
       }
+      renderCurrentPhase();
     });
 
     // Paso

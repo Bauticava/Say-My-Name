@@ -3,6 +3,7 @@
  */
 
 import { gameState } from '../game.js';
+import { customConfirm } from './modal.js';
 
 export function renderInicio(container, router) {
   const tienePartidaEnCurso = gameState.enPartida;
@@ -42,8 +43,14 @@ export function renderInicio(container, router) {
     });
 
     const btnJugarNuevo = container.querySelector('#btn-jugar-nuevo');
-    btnJugarNuevo?.addEventListener('click', () => {
-      const confirma = window.confirm('¿Empezar una partida nueva? Se descartará la partida anterior.');
+    btnJugarNuevo?.addEventListener('click', async () => {
+      const confirma = await customConfirm({
+        title: '¿Nueva partida?',
+        message: 'Se descartará la partida anterior que estaba en curso.',
+        confirmText: 'Empezar nueva',
+        cancelText: 'Cancelar',
+        danger: true
+      });
       if (confirma) {
         gameState.terminarPartida();
         router.navigate('equipos');
