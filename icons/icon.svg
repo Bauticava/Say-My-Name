@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="gradCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5E62" />
+      <stop offset="100%" stop-color="#FF9966" />
+    </linearGradient>
+    <linearGradient id="gradInner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E1736" />
+      <stop offset="100%" stop-color="#140E28" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  
+  <!-- Outer Card with glow / shadow -->
+  <rect x="48" y="48" width="416" height="416" rx="64" fill="url(#gradCard)" filter="url(#shadow)" stroke="#FFE082" stroke-width="6"/>
+  
+  <!-- Inner Card -->
+  <rect x="80" y="80" width="352" height="352" rx="44" fill="url(#gradInner)" stroke="#FFB74D" stroke-width="4" stroke-opacity="0.6"/>
+  
+  <!-- Central Text / Monogram -->
+  <text x="256" y="275" font-family="system-ui, -apple-system, 'Inter', sans-serif" font-weight="900" font-size="94" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">SMN</text>
+  
+  <!-- Subtle decorative spark / card suit accent -->
+  <circle cx="256" cy="140" r="10" fill="#FFD54F" />
+  <circle cx="256" cy="370" r="10" fill="#FFD54F" />
+</svg>
