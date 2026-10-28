@@ -223,6 +223,28 @@ body {
   padding: 1.5rem 0;
 }
 
+.hero-logo-wrapper {
+  width: 100%;
+  max-width: 380px;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-logo-wrapper:active {
+  transform: scale(0.98);
+}
+
+.hero-marquee-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .hero-icon {
   width: 96px;
   height: 96px;

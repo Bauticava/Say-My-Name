@@ -12,8 +12,9 @@ export function renderInicio(container, router) {
   container.innerHTML = `
     <section class="screen" aria-label="Pantalla de inicio">
       <div class="hero">
-        <img src="icons/icon.svg" alt="Say My Name" class="hero-icon" width="96" height="96" />
-        <h1 class="hero-title">Say My Name</h1>
+        <div class="hero-logo-wrapper" id="hero-logo-tap" title="Say My Name">
+          <img src="icons/logo.png" alt="Say My Name" class="hero-marquee-img" />
+        </div>
         <p class="hero-subtitle">La app compañera para tus partidas de cartas presenciales.</p>
 
         <div class="hero-actions">
@@ -69,11 +70,10 @@ export function renderInicio(container, router) {
     router.navigate('reglas');
   });
 
-  // Activación discreta del Modo Desarrollador (5 toques en el título / logo)
+  // Activación discreta del Modo Desarrollador (5 toques en el logo)
   let devTapCount = 0;
   let devTapTimer = null;
-  const logoEl = container.querySelector('.hero-icon');
-  const titleEl = container.querySelector('.hero-title');
+  const logoWrapper = container.querySelector('#hero-logo-tap');
 
   function handleDevTap() {
     devTapCount += 1;
@@ -94,6 +94,5 @@ export function renderInicio(container, router) {
     }
   }
 
-  logoEl?.addEventListener('click', handleDevTap);
-  titleEl?.addEventListener('click', handleDevTap);
+  logoWrapper?.addEventListener('click', handleDevTap);
 }

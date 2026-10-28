@@ -1,7 +1,7 @@
 // Service Worker para Say My Name
 // Offline-first con cache versionado
 
-const CACHE_NAME = 'cartas-v3';
+const CACHE_NAME = 'cartas-v4';
 
 const PRECACHE_ASSETS = [
   './',
@@ -23,6 +23,7 @@ const PRECACHE_ASSETS = [
   'js/ui/partida.js',
   'data/cartas.json',
   'data/reglas.md',
+  'icons/logo.png',
   'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',
