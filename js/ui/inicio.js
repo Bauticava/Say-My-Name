@@ -4,6 +4,7 @@
 
 import { gameState } from '../game.js';
 import { customConfirm } from './modal.js';
+import { abrirModoDesarrollador } from './dev-mode.js';
 
 export function renderInicio(container, router) {
   const tienePartidaEnCurso = gameState.enPartida;
@@ -67,4 +68,32 @@ export function renderInicio(container, router) {
   btnReglas?.addEventListener('click', () => {
     router.navigate('reglas');
   });
+
+  // Activación discreta del Modo Desarrollador (5 toques en el título / logo)
+  let devTapCount = 0;
+  let devTapTimer = null;
+  const logoEl = container.querySelector('.hero-icon');
+  const titleEl = container.querySelector('.hero-title');
+
+  function handleDevTap() {
+    devTapCount += 1;
+    clearTimeout(devTapTimer);
+    devTapTimer = setTimeout(() => {
+      devTapCount = 0;
+    }, 2500);
+
+    if (devTapCount >= 5) {
+      devTapCount = 0;
+      fetch('data/cartas.json')
+        .then((r) => r.json())
+        .catch(() => [])
+        .then((catalogo) => {
+          const customs = gameState.obtenerCartasCustom();
+          abrirModoDesarrollador([...catalogo, ...customs]);
+        });
+    }
+  }
+
+  logoEl?.addEventListener('click', handleDevTap);
+  titleEl?.addEventListener('click', handleDevTap);
 }

@@ -1,9 +1,10 @@
 /**
  * Pantalla de Configuración (#configuracion)
- * Elección de cantidad de cartas y duración del temporizador.
+ * Elección de cantidad de cartas, duración del temporizador y filtros avanzados.
  */
 
 import { gameState } from '../game.js';
+import { COLOR_TIPOS, cartaCumpleFiltros } from '../deck.js';
 
 let catalogoCartasCache = null;
 
@@ -18,27 +19,36 @@ async function obtenerCatalogoCartas() {
     return catalogoCartasCache;
   } catch (err) {
     console.warn('Fallback de cartas por error de red:', err);
-    // Fallback mínimo si falla la red
-    return [
-      { id: 1, nombre: 'Lionel Messi', categoria: 'Deporte' },
-      { id: 2, nombre: 'Marilyn Monroe', categoria: 'Cine' },
-      { id: 3, nombre: 'Gustavo Cerati', categoria: 'Música' },
-      { id: 4, nombre: 'Harry Potter', categoria: 'Ficción' },
-      { id: 5, nombre: 'Frida Kahlo', categoria: 'Arte' }
-    ];
+    return [];
   }
 }
 
 export async function renderConfiguracion(container, router) {
-  const todasLasCartas = await obtenerCatalogoCartas();
-  const maxCartas = todasLasCartas.length;
+  const cartasEstaticas = await obtenerCatalogoCartas();
+  const cartasCustom = gameState.obtenerCartasCustom();
+  const todasLasCartas = [...cartasEstaticas, ...cartasCustom];
 
-  // Ajustar si la cantidad actual supera el catálogo
-  if (gameState.cantidadCartas > maxCartas) {
-    gameState.setCantidadCartas(maxCartas);
-  }
+  // Extraer todas las categorías únicas disponibles en el catálogo
+  const categoriasDisponibles = Array.from(
+    new Set(
+      todasLasCartas.flatMap((c) => (c.elementos || []).map((e) => e.categoria)).filter(Boolean)
+    )
+  ).sort();
 
   function updateUI() {
+    // Calcular cuántas cartas cumplen los filtros activos
+    const cartasFiltradas = todasLasCartas.filter((c) => cartaCumpleFiltros(c, gameState.filtros));
+    const cantidadRelampago = gameState.equipos.length * 2;
+    const maximoCartasPrincipal = Math.max(0, cartasFiltradas.length - cantidadRelampago);
+    const alcanzanCartas = maximoCartasPrincipal >= 5;
+
+    // Asegurar que la cantidad de cartas elegida no supere el máximo disponible
+    if (gameState.cantidadCartas > maximoCartasPrincipal && maximoCartasPrincipal > 0) {
+      gameState.setCantidadCartas(maximoCartasPrincipal);
+    } else if (gameState.cantidadCartas < 5 && maximoCartasPrincipal >= 5) {
+      gameState.setCantidadCartas(Math.min(15, maximoCartasPrincipal));
+    }
+
     container.innerHTML = `
       <section class="screen" aria-label="Configuración de la partida">
         <header class="screen-header">
@@ -49,46 +59,140 @@ export async function renderConfiguracion(container, router) {
           <div style="width: 44px;"></div>
         </header>
 
-        <!-- Selección de Cantidad de Cartas -->
+        <!-- Filtros de Contenido -->
         <div class="surface-card">
-          <label class="input-label" style="display: block; margin-bottom: 0.5rem;">
-            Cantidad de cartas para la partida
-          </label>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.85rem;">
-            Se elegirán al azar entre las ${maxCartas} disponibles y se mantendrán durante las 3 rondas.
-          </p>
+          <h2 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--text-primary);">
+            🎯 Filtros de Cartas
+          </h2>
 
-          <div class="setting-counter">
-            <button id="btn-menos-cartas" class="counter-btn" type="button" aria-label="Menos cartas">-</button>
-            <div style="text-align: center;">
-              <span id="valor-cartas" class="counter-value">${gameState.cantidadCartas}</span>
-              <span style="font-size: 0.85rem; color: var(--text-secondary); display: block;">cartas</span>
+          <!-- Filtro por Tipo de Elemento -->
+          <div style="margin-bottom: 1rem;">
+            <label class="input-label" style="display: block; margin-bottom: 0.35rem;">
+              Tipo de elemento
+            </label>
+            <div class="chip-container">
+              ${Object.values(COLOR_TIPOS).map((tipo) => {
+                const activo = gameState.filtros.tipos.includes(tipo.id);
+                return `
+                  <button 
+                    class="filter-chip btn-filtro-tipo ${activo ? 'active' : ''}" 
+                    data-tipo="${tipo.id}" 
+                    type="button"
+                  >
+                    ${tipo.label} (${tipo.id})
+                  </button>
+                `;
+              }).join('')}
             </div>
-            <button id="btn-mas-cartas" class="counter-btn" type="button" aria-label="Más cartas">+</button>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">
+              Si no seleccionás ninguno, entran todos los tipos.
+            </p>
           </div>
 
-          <!-- Atajos rápidos -->
-          <div style="display: flex; gap: 0.5rem; margin-top: 0.85rem; flex-wrap: wrap;">
-            ${[15, 25, 35, maxCartas].filter((v, i, arr) => arr.indexOf(v) === i && v <= maxCartas).map((preset) => `
-              <button 
-                class="btn btn-secondary btn-preset-cartas" 
-                data-preset="${preset}" 
-                type="button" 
-                style="padding: 0.4rem 0.8rem; font-size: 0.85rem; flex: 1; ${gameState.cantidadCartas === preset ? 'border-color: var(--accent-secondary); color: var(--accent-secondary);' : ''}"
-              >
-                ${preset === maxCartas ? 'Todas (' + maxCartas + ')' : preset}
-              </button>
-            `).join('')}
+          <!-- Filtro por Dificultad (1 a 5) -->
+          <div style="margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <label class="input-label">Dificultad máxima</label>
+              <span id="label-dificultad" style="font-weight: bold; color: var(--accent-secondary);">
+                Hasta nivel ${gameState.filtros.dificultadMax || 5}
+              </span>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              ${[1, 2, 3, 4, 5].map((lvl) => `
+                <button 
+                  class="btn btn-secondary btn-filtro-dif ${gameState.filtros.dificultadMax === lvl ? 'btn-warning' : ''}" 
+                  data-lvl="${lvl}" 
+                  type="button" 
+                  style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.9rem;"
+                >
+                  ${lvl}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Filtro por Categorías Específicas -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <label class="input-label">Categorías específicas</label>
+              ${gameState.filtros.categorias.length > 0 ? `
+                <button id="btn-limpiar-cat" class="icon-btn" style="font-size: 0.8rem; color: var(--accent-danger);" type="button">
+                  Limpiar (${gameState.filtros.categorias.length})
+                </button>
+              ` : ''}
+            </div>
+            <div class="chip-container" style="max-height: 120px; overflow-y: auto; padding-bottom: 0.25rem;">
+              ${categoriasDisponibles.map((cat) => {
+                const activo = gameState.filtros.categorias.includes(cat);
+                return `
+                  <button 
+                    class="filter-chip btn-filtro-cat ${activo ? 'active' : ''}" 
+                    data-cat="${escapeHtml(cat)}" 
+                    type="button"
+                  >
+                    ${escapeHtml(cat)}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- Contador de Cartas Elegibles -->
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--bg-surface-border); display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.85rem; color: var(--text-secondary);">Cartas que cumplen filtros:</span>
+            <span style="font-size: 1.1rem; font-weight: var(--font-weight-black); color: var(--accent-secondary);">
+              ${cartasFiltradas.length} disponibles
+            </span>
           </div>
         </div>
 
-        <!-- Selección de Tiempo por Turno -->
+        <!-- Cantidad de Cartas para el Mazo Principal -->
         <div class="surface-card">
-          <label class="input-label" style="display: block; margin-bottom: 0.5rem;">
-            Tiempo por turno
+          <label class="input-label" style="display: block; margin-bottom: 0.35rem;">
+            Cantidad de cartas para la partida
           </label>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.85rem;">
-            Duración del temporizador para cada equipo en cada pasada.
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+            ${cantidadRelampago} cartas exclusivas irán a la Ronda Relámpago (2 por equipo). Máximo disponible para rondas 1 a 3: <strong>${maximoCartasPrincipal}</strong>.
+          </p>
+
+          <div class="setting-counter">
+            <button id="btn-menos-cartas" class="counter-btn" type="button" aria-label="Menos cartas" ${!alcanzanCartas ? 'disabled style="opacity:0.4"' : ''}>-</button>
+            <div style="text-align: center;">
+              <span id="valor-cartas" class="counter-value">${alcanzanCartas ? gameState.cantidadCartas : 0}</span>
+              <span style="font-size: 0.85rem; color: var(--text-secondary); display: block;">cartas</span>
+            </div>
+            <button id="btn-mas-cartas" class="counter-btn" type="button" aria-label="Más cartas" ${!alcanzanCartas ? 'disabled style="opacity:0.4"' : ''}>+</button>
+          </div>
+
+          ${alcanzanCartas ? `
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.85rem; flex-wrap: wrap;">
+              ${[10, 15, 20, maximoCartasPrincipal].filter((v, i, arr) => arr.indexOf(v) === i && v <= maximoCartasPrincipal && v >= 5).map((preset) => `
+                <button 
+                  class="btn btn-secondary btn-preset-cartas" 
+                  data-preset="${preset}" 
+                  type="button" 
+                  style="padding: 0.4rem 0.8rem; font-size: 0.85rem; flex: 1; ${gameState.cantidadCartas === preset ? 'border-color: var(--accent-secondary); color: var(--accent-secondary);' : ''}"
+                >
+                  ${preset === maximoCartasPrincipal ? 'Máx (' + maximoCartasPrincipal + ')' : preset}
+                </button>
+              `).join('')}
+            </div>
+          ` : `
+            <div style="margin-top: 0.85rem; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: var(--radius-sm); padding: 0.75rem;">
+              <p style="font-size: 0.85rem; color: #fca5a5;">
+                ⚠️ No alcanzan las cartas con los filtros seleccionados. Se necesitan al menos ${cantidadRelampago + 5} cartas (${cantidadRelampago} para la relámpago y 5 para las rondas principales).
+              </p>
+            </div>
+          `}
+        </div>
+
+        <!-- Tiempo por Turno -->
+        <div class="surface-card">
+          <label class="input-label" style="display: block; margin-bottom: 0.35rem;">
+            Tiempo por turno (Rondas 1, 2 y 3)
+          </label>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.85rem;">
+            La Ronda Relámpago tiene una duración fija de 15 segundos por carta.
           </p>
 
           <div style="display: flex; gap: 0.5rem;">
@@ -105,59 +209,89 @@ export async function renderConfiguracion(container, router) {
           </div>
         </div>
 
-        <!-- Resumen de partida -->
-        <div class="surface-card" style="background: rgba(255, 94, 54, 0.08); border-color: rgba(255, 94, 54, 0.25);">
-          <div style="font-size: 0.9rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-            <span>Equipos:</span>
-            <strong style="color: var(--text-primary);">${gameState.equipos.length}</strong>
-          </div>
-          <div style="font-size: 0.9rem; color: var(--text-secondary); display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
-            <span>Rondas:</span>
-            <strong style="color: var(--text-primary);">3 rondas clásicas</strong>
-          </div>
-          <div style="font-size: 0.9rem; color: var(--text-secondary); display: flex; justify-content: space-between;">
-            <span>Mazo:</span>
-            <strong style="color: var(--text-primary);">${gameState.cantidadCartas} personajes</strong>
-          </div>
-        </div>
-
         <div style="margin-top: auto; padding-top: 1rem;">
-          <button id="btn-comenzar" class="btn btn-primary btn-large btn-block" type="button">
+          <button 
+            id="btn-comenzar" 
+            class="btn btn-primary btn-large btn-block" 
+            type="button"
+            ${!alcanzanCartas ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}
+          >
             ¡Comenzar partida! 🚀
           </button>
         </div>
       </section>
     `;
 
-    bindEvents();
+    bindEvents(cartasFiltradas, maximoCartasPrincipal, alcanzanCartas);
   }
 
-  function bindEvents() {
-    // Volver atrás
-    const btnVolver = container.querySelector('#btn-volver');
-    btnVolver.addEventListener('click', () => {
+  function bindEvents(cartasFiltradas, maximoCartasPrincipal, alcanzanCartas) {
+    container.querySelector('#btn-volver')?.addEventListener('click', () => {
       window.history.back();
     });
 
-    // Menos cartas
-    const btnMenos = container.querySelector('#btn-menos-cartas');
-    btnMenos.addEventListener('click', () => {
+    // Filtros de Tipo
+    const botonesTipo = container.querySelectorAll('.btn-filtro-tipo');
+    botonesTipo.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tipo = btn.getAttribute('data-tipo');
+        let nuevosTipos = [...gameState.filtros.tipos];
+        if (nuevosTipos.includes(tipo)) {
+          nuevosTipos = nuevosTipos.filter((t) => t !== tipo);
+        } else {
+          nuevosTipos.push(tipo);
+        }
+        gameState.setFiltros({ tipos: nuevosTipos });
+        updateUI();
+      });
+    });
+
+    // Filtros de Dificultad
+    const botonesDif = container.querySelectorAll('.btn-filtro-dif');
+    botonesDif.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const lvl = parseInt(btn.getAttribute('data-lvl'), 10);
+        gameState.setFiltros({ dificultadMax: lvl });
+        updateUI();
+      });
+    });
+
+    // Filtros de Categoría
+    const botonesCat = container.querySelectorAll('.btn-filtro-cat');
+    botonesCat.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-cat');
+        let nuevasCat = [...gameState.filtros.categorias];
+        if (nuevasCat.includes(cat)) {
+          nuevasCat = nuevasCat.filter((c) => c !== cat);
+        } else {
+          nuevasCat.push(cat);
+        }
+        gameState.setFiltros({ categorias: nuevasCat });
+        updateUI();
+      });
+    });
+
+    container.querySelector('#btn-limpiar-cat')?.addEventListener('click', () => {
+      gameState.setFiltros({ categorias: [] });
+      updateUI();
+    });
+
+    // Contador de cartas
+    container.querySelector('#btn-menos-cartas')?.addEventListener('click', () => {
       if (gameState.cantidadCartas > 5) {
         gameState.setCantidadCartas(gameState.cantidadCartas - 5);
         updateUI();
       }
     });
 
-    // Más cartas
-    const btnMas = container.querySelector('#btn-mas-cartas');
-    btnMas.addEventListener('click', () => {
-      if (gameState.cantidadCartas < maxCartas) {
-        gameState.setCantidadCartas(Math.min(gameState.cantidadCartas + 5, maxCartas));
+    container.querySelector('#btn-mas-cartas')?.addEventListener('click', () => {
+      if (gameState.cantidadCartas < maximoCartasPrincipal) {
+        gameState.setCantidadCartas(Math.min(gameState.cantidadCartas + 5, maximoCartasPrincipal));
         updateUI();
       }
     });
 
-    // Presets de cartas
     const botonesPreset = container.querySelectorAll('.btn-preset-cartas');
     botonesPreset.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -167,7 +301,7 @@ export async function renderConfiguracion(container, router) {
       });
     });
 
-    // Tiempos
+    // Tiempo
     const botonesTiempo = container.querySelectorAll('.btn-tiempo');
     botonesTiempo.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -178,11 +312,22 @@ export async function renderConfiguracion(container, router) {
     });
 
     // Comenzar partida
-    const btnComenzar = container.querySelector('#btn-comenzar');
-    btnComenzar.addEventListener('click', () => {
-      gameState.iniciarNuevaPartida(todasLasCartas);
-      router.navigate('partida');
+    container.querySelector('#btn-comenzar')?.addEventListener('click', () => {
+      if (!alcanzanCartas) return;
+      try {
+        gameState.iniciarNuevaPartida(todasLasCartas);
+        router.navigate('partida');
+      } catch (err) {
+        alert(err.message);
+      }
     });
+  }
+
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
 
   updateUI();

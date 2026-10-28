@@ -1,52 +1,302 @@
 [
-  { "id": 1, "nombre": "Lionel Messi", "categoria": "Deporte" },
-  { "id": 2, "nombre": "Marilyn Monroe", "categoria": "Cine" },
-  { "id": 3, "nombre": "Gustavo Cerati", "categoria": "Música" },
-  { "id": 4, "nombre": "Harry Potter", "categoria": "Ficción" },
-  { "id": 5, "nombre": "Frida Kahlo", "categoria": "Arte" },
-  { "id": 6, "nombre": "Freddie Mercury", "categoria": "Música" },
-  { "id": 7, "nombre": "Diego Maradona", "categoria": "Deporte" },
-  { "id": 8, "nombre": "Sherlock Holmes", "categoria": "Ficción" },
-  { "id": 9, "nombre": "Madonna", "categoria": "Música" },
-  { "id": 10, "nombre": "Albert Einstein", "categoria": "Ciencia" },
-  { "id": 11, "nombre": "Darth Vader", "categoria": "Cine" },
-  { "id": 12, "nombre": "Shakira", "categoria": "Música" },
-  { "id": 13, "nombre": "Leonardo Da Vinci", "categoria": "Arte e Historia" },
-  { "id": 14, "nombre": "Homero Simpson", "categoria": "Animación" },
-  { "id": 15, "nombre": "Charly García", "categoria": "Música" },
-  { "id": 16, "nombre": "Spider-Man", "categoria": "Cómics" },
-  { "id": 17, "nombre": "Cleopatra", "categoria": "Historia" },
-  { "id": 18, "nombre": "Michael Jackson", "categoria": "Música" },
-  { "id": 19, "nombre": "Batman", "categoria": "Cómics" },
-  { "id": 20, "nombre": "Mafalda", "categoria": "Historieta" },
-  { "id": 21, "nombre": "Taylor Swift", "categoria": "Música" },
-  { "id": 22, "nombre": "Quentin Tarantino", "categoria": "Cine" },
-  { "id": 23, "nombre": "Mirtha Legrand", "categoria": "Televisión" },
-  { "id": 24, "nombre": "Pikachu", "categoria": "Videojuegos" },
-  { "id": 25, "nombre": "Beyoncé", "categoria": "Música" },
-  { "id": 26, "nombre": "Stephen Hawking", "categoria": "Ciencia" },
-  { "id": 27, "nombre": "Mona Lisa", "categoria": "Arte" },
-  { "id": 28, "nombre": "Cristiano Ronaldo", "categoria": "Deporte" },
-  { "id": 29, "nombre": "Bob Esponja", "categoria": "Animación" },
-  { "id": 30, "nombre": "Goku", "categoria": "Anime" },
-  { "id": 31, "nombre": "El Chavo del 8", "categoria": "Televisión" },
-  { "id": 32, "nombre": "Mick Jagger", "categoria": "Música" },
-  { "id": 33, "nombre": "Marie Curie", "categoria": "Ciencia" },
-  { "id": 34, "nombre": "Indiana Jones", "categoria": "Cine" },
-  { "id": 35, "nombre": "Manu Ginóbili", "categoria": "Deporte" },
-  { "id": 36, "nombre": "Bill Gates", "categoria": "Tecnología" },
-  { "id": 37, "nombre": "Barack Obama", "categoria": "Política" },
-  { "id": 38, "nombre": "Yoda", "categoria": "Cine" },
-  { "id": 39, "nombre": "Rihanna", "categoria": "Música" },
-  { "id": 40, "nombre": "Julio Cortázar", "categoria": "Literatura" },
-  { "id": 41, "nombre": "Super Mario", "categoria": "Videojuegos" },
-  { "id": 42, "nombre": "Guillermo Francella", "categoria": "Cine y TV" },
-  { "id": 43, "nombre": "Lady Gaga", "categoria": "Música" },
-  { "id": 44, "nombre": "Pablo Picasso", "categoria": "Arte" },
-  { "id": 45, "nombre": "Serena Williams", "categoria": "Deporte" },
-  { "id": 46, "nombre": "Gandalf", "categoria": "Ficción" },
-  { "id": 47, "nombre": "Ricardo Fort", "categoria": "Cultura Pop" },
-  { "id": 48, "nombre": "Britney Spears", "categoria": "Música" },
-  { "id": 49, "nombre": "Steve Jobs", "categoria": "Tecnología" },
-  { "id": 50, "nombre": "El Zorro", "categoria": "Ficción" }
+  {
+    "id": 1,
+    "elementos": [
+      { "texto": "Felices los 4", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Gerard Piqué", "categoria": "Deportista", "color": "verde" },
+      { "texto": "Ojos bien cerrados", "categoria": "Película", "color": "violeta" }
+    ],
+    "palabraClave": "Infidelidad",
+    "dificultad": 2
+  },
+  {
+    "id": 2,
+    "elementos": [
+      { "texto": "Pasapalabra", "categoria": "Televisión", "color": "rojo" },
+      { "texto": "Dora la Exploradora", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Indianápolis", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Pista",
+    "dificultad": 3
+  },
+  {
+    "id": 3,
+    "elementos": [
+      { "texto": "El juego del calamar", "categoria": "Serie", "color": "rojo" },
+      { "texto": "Kim Jong-un", "categoria": "Celebridad", "color": "verde" },
+      { "texto": "BTS", "categoria": "Banda", "color": "violeta" }
+    ],
+    "palabraClave": "Corea",
+    "dificultad": 2
+  },
+  {
+    "id": 4,
+    "elementos": [
+      { "texto": "Santa Cláusula", "categoria": "Película", "color": "rojo" },
+      { "texto": "Ralph Lauren", "categoria": "Celebridad", "color": "verde" },
+      { "texto": "Base Marambio", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Polo",
+    "dificultad": 3
+  },
+  {
+    "id": 5,
+    "elementos": [
+      { "texto": "Muchachos", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Lionel Messi", "categoria": "Deportista", "color": "verde" },
+      { "texto": "Obelisco de Buenos Aires", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Campeón",
+    "dificultad": 1
+  },
+  {
+    "id": 6,
+    "elementos": [
+      { "texto": "El Padrino", "categoria": "Película", "color": "rojo" },
+      { "texto": "Al Capone", "categoria": "Personaje Histórico", "color": "verde" },
+      { "texto": "Sicilia", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Mafia",
+    "dificultad": 2
+  },
+  {
+    "id": 7,
+    "elementos": [
+      { "texto": "Bohemian Rhapsody", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Freddie Mercury", "categoria": "Músico", "color": "verde" },
+      { "texto": "Corona Real", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Queen",
+    "dificultad": 1
+  },
+  {
+    "id": 8,
+    "elementos": [
+      { "texto": "Volver al Futuro", "categoria": "Película", "color": "rojo" },
+      { "texto": "Albert Einstein", "categoria": "Científico", "color": "verde" },
+      { "texto": "Reloj Cucú", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Tiempo",
+    "dificultad": 2
+  },
+  {
+    "id": 9,
+    "elementos": [
+      { "texto": "Harry Potter y la piedra filosofal", "categoria": "Película", "color": "rojo" },
+      { "texto": "Merlín", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Varita", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Magia",
+    "dificultad": 1
+  },
+  {
+    "id": 10,
+    "elementos": [
+      { "texto": "Thriller", "categoria": "Álbum", "color": "rojo" },
+      { "texto": "Frankenstein", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Cementerio", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Monstruo",
+    "dificultad": 2
+  },
+  {
+    "id": 11,
+    "elementos": [
+      { "texto": "Star Wars: Una nueva esperanza", "categoria": "Película", "color": "rojo" },
+      { "texto": "Neil Armstrong", "categoria": "Celebridad", "color": "verde" },
+      { "texto": "Vía Láctea", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Espacio",
+    "dificultad": 2
+  },
+  {
+    "id": 12,
+    "elementos": [
+      { "texto": "De Música Ligera", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Gustavo Cerati", "categoria": "Músico", "color": "verde" },
+      { "texto": "Sifón de Soda", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Soda",
+    "dificultad": 1
+  },
+  {
+    "id": 13,
+    "elementos": [
+      { "texto": "El Secreto de sus Ojos", "categoria": "Película", "color": "rojo" },
+      { "texto": "Sherlock Holmes", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Lupa", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Detective",
+    "dificultad": 2
+  },
+  {
+    "id": 14,
+    "elementos": [
+      { "texto": "Breaking Bad", "categoria": "Serie", "color": "rojo" },
+      { "texto": "Marie Curie", "categoria": "Científica", "color": "verde" },
+      { "texto": "Tabla Periódica", "categoria": "Concepto", "color": "violeta" }
+    ],
+    "palabraClave": "Química",
+    "dificultad": 3
+  },
+  {
+    "id": 15,
+    "elementos": [
+      { "texto": "Jurassic Park", "categoria": "Película", "color": "rojo" },
+      { "texto": "Godzilla", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Fósil", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Dinosaurio",
+    "dificultad": 1
+  },
+  {
+    "id": 16,
+    "elementos": [
+      { "texto": "La Casa de Papel", "categoria": "Serie", "color": "rojo" },
+      { "texto": "Robin Hood", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Caja Fuerte", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Robo",
+    "dificultad": 2
+  },
+  {
+    "id": 17,
+    "elementos": [
+      { "texto": "Titanic", "categoria": "Película", "color": "rojo" },
+      { "texto": "Capitán Garfio", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Triángulo de las Bermudas", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Barco",
+    "dificultad": 2
+  },
+  {
+    "id": 18,
+    "elementos": [
+      { "texto": "Rayuela", "categoria": "Libro", "color": "rojo" },
+      { "texto": "Julio Cortázar", "categoria": "Escritor", "color": "verde" },
+      { "texto": "Torre Eiffel", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "París",
+    "dificultad": 3
+  },
+  {
+    "id": 19,
+    "elementos": [
+      { "texto": "El Rey León", "categoria": "Película", "color": "rojo" },
+      { "texto": "Tarzán", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Sabana Africana", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Selva",
+    "dificultad": 1
+  },
+  {
+    "id": 20,
+    "elementos": [
+      { "texto": "Los Simuladores", "categoria": "Serie", "color": "rojo" },
+      { "texto": "James Bond", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Disfraz", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Misión",
+    "dificultad": 2
+  },
+  {
+    "id": 21,
+    "elementos": [
+      { "texto": "Yellow Submarine", "categoria": "Canción", "color": "rojo" },
+      { "texto": "The Beatles", "categoria": "Banda", "color": "verde" },
+      { "texto": "Big Ben", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Londres",
+    "dificultad": 2
+  },
+  {
+    "id": 22,
+    "elementos": [
+      { "texto": "El Caballero de la Noche", "categoria": "Película", "color": "rojo" },
+      { "texto": "Batman", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Baticueva", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Murciélago",
+    "dificultad": 1
+  },
+  {
+    "id": 23,
+    "elementos": [
+      { "texto": "Coco", "categoria": "Película", "color": "rojo" },
+      { "texto": "Frida Kahlo", "categoria": "Artista", "color": "verde" },
+      { "texto": "Mariachi", "categoria": "Música", "color": "violeta" }
+    ],
+    "palabraClave": "México",
+    "dificultad": 1
+  },
+  {
+    "id": 24,
+    "elementos": [
+      { "texto": "Matrix", "categoria": "Película", "color": "rojo" },
+      { "texto": "Steve Jobs", "categoria": "Celebridad", "color": "verde" },
+      { "texto": "Internet", "categoria": "Concepto", "color": "violeta" }
+    ],
+    "palabraClave": "Computadora",
+    "dificultad": 3
+  },
+  {
+    "id": 25,
+    "elementos": [
+      { "texto": "Rocky", "categoria": "Película", "color": "rojo" },
+      { "texto": "Mike Tyson", "categoria": "Deportista", "color": "verde" },
+      { "texto": "Guante", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Boxeo",
+    "dificultad": 1
+  },
+  {
+    "id": 26,
+    "elementos": [
+      { "texto": "Gladiador", "categoria": "Película", "color": "rojo" },
+      { "texto": "Julio César", "categoria": "Personaje Histórico", "color": "verde" },
+      { "texto": "Coliseo", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Roma",
+    "dificultad": 2
+  },
+  {
+    "id": 27,
+    "elementos": [
+      { "texto": "Toy Story", "categoria": "Película", "color": "rojo" },
+      { "texto": "Barbie", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Lego", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Juguete",
+    "dificultad": 1
+  },
+  {
+    "id": 28,
+    "elementos": [
+      { "texto": "Piratas del Caribe", "categoria": "Película", "color": "rojo" },
+      { "texto": "Barbanegra", "categoria": "Personaje Histórico", "color": "verde" },
+      { "texto": "Isla Desierta", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Tesoro",
+    "dificultad": 2
+  },
+  {
+    "id": 29,
+    "elementos": [
+      { "texto": "El Chavo del 8", "categoria": "Televisión", "color": "rojo" },
+      { "texto": "Don Ramón", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Barril", "categoria": "Objeto", "color": "violeta" }
+    ],
+    "palabraClave": "Vecindad",
+    "dificultad": 1
+  },
+  {
+    "id": 30,
+    "elementos": [
+      { "texto": "Vivir Mi Vida", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Shakira", "categoria": "Músico", "color": "verde" },
+      { "texto": "Carnaval", "categoria": "Evento", "color": "violeta" }
+    ],
+    "palabraClave": "Fiesta",
+    "dificultad": 2
+  }
 ]

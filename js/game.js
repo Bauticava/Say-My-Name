@@ -3,16 +3,61 @@
  * Desacoplado del DOM con persistencia en localStorage.
  */
 
-import { shuffle, selectRandomCards } from './deck.js';
+import { shuffle, selectRandomCards, cartaCumpleFiltros, seleccionarElementoParaCarta } from './deck.js';
 
-export const TOTAL_RONDAS = 3;
-export const RONDAS_INFO = {
-  1: { nombre: 'Descripción libre', icono: '🗣️', descripcion: 'Podés hablar todo lo que quieras sin decir el nombre ni rimas.' },
-  2: { nombre: 'Una sola palabra', icono: '☝️', descripcion: 'Solo podés decir una palabra de pista. Tu equipo tiene un solo intento.' },
-  3: { nombre: 'Mímica', icono: '🎭', descripcion: 'Silencio absoluto: solo gestos y señas corporales.' }
-};
+export const RONDAS_CONFIG = [
+  {
+    id: 'ronda_1',
+    numero: 1,
+    nombre: 'Ronda 1: Descripción libre',
+    icono: '🗣️',
+    reglaResumen: 'Podés hablar todo lo que quieras sin decir la palabra prohibida ni rimas.',
+    mostrarUnSoloElemento: true,
+    acciones: ['acierto', 'error', 'deshacer'],
+    puntosPorAcierto: 1,
+    permitePaso: false,
+    esRelampago: false
+  },
+  {
+    id: 'ronda_2',
+    numero: 2,
+    nombre: 'Ronda 2: Una sola palabra',
+    icono: '☝️',
+    reglaResumen: 'Solo podés decir una palabra de pista por carta. Tu equipo tiene un solo intento; si falla, pasá de carta.',
+    mostrarUnSoloElemento: true,
+    acciones: ['acierto', 'paso', 'error', 'deshacer'],
+    puntosPorAcierto: 1,
+    permitePaso: true,
+    esRelampago: false
+  },
+  {
+    id: 'ronda_relampago',
+    numero: '⚡',
+    nombre: 'Ronda Relámpago',
+    icono: '⚡',
+    reglaResumen: 'Un integrante lee los 3 elementos en voz alta. Todos los equipos intentan adivinar la palabra clave en 15 segundos.',
+    mostrarUnSoloElemento: false, // Muestra los 3 elementos
+    acciones: ['revelar_relampago', 'deshacer'],
+    puntosPorAcierto: 3,
+    duracionSegundos: 15,
+    esRelampago: true
+  },
+  {
+    id: 'ronda_3',
+    numero: 3,
+    nombre: 'Ronda 3: Mímica',
+    icono: '🎭',
+    reglaResumen: 'Silencio absoluto: solo gestos y señas corporales. Se puede pasar de carta.',
+    mostrarUnSoloElemento: true,
+    acciones: ['acierto', 'paso', 'error', 'deshacer'],
+    puntosPorAcierto: 1,
+    permitePaso: true,
+    esRelampago: false
+  }
+];
 
-const STORAGE_KEY = 'say_my_name_game_state_v1';
+const STORAGE_KEY = 'say_my_name_game_state_v2';
+const CARTAS_DEV_STORAGE_KEY = 'say_my_name_custom_cards_v1';
 
 export class GameState {
   constructor() {
@@ -20,27 +65,58 @@ export class GameState {
       { id: 'eq-1', nombre: 'Equipo 1', puntos: 0 },
       { id: 'eq-2', nombre: 'Equipo 2', puntos: 0 }
     ];
-    this.cantidadCartas = 20;
-    this.tiempoPorTurno = 60; // segundos
-    this.cartasPartida = []; // Todas las cartas seleccionadas para el juego
-    this.cartasRondaRestantes = []; // Cartas restantes en la ronda actual
+    this.cantidadCartas = 15;
+    this.tiempoPorTurno = 60; // segundos para rondas tradicionales
+    this.filtros = {
+      tipos: [],       // ['titulos', 'personas', 'mix']
+      categorias: [],  // ['Canción', 'Película', ...]
+      dificultadMin: 1,
+      dificultadMax: 5
+    };
+
+    // Mazo y rondas
+    this.cartasPartida = []; // Cartas para rondas 1, 2 y 3 (cada una con su elementoAsignado)
+    this.cartasRelampago = []; // 2 cartas por equipo para la relámpago
+    this.cartasRondaRestantes = []; // Pila actual de la ronda
     this.cartaActual = null;
-    this.rondaActual = 1;
+    this.rondaIndex = 0; // 0: Ronda 1, 1: Ronda 2, 2: Relámpago, 3: Ronda 3
     this.equipoTurnoIndex = 0;
-    this.faseTurno = 'listo'; // 'listo' | 'jugando' | 'tiempo_agotado' | 'ronda_terminada' | 'partida_terminada'
+
+    // Estado del turno
+    // 'listo' | 'jugando' | 'tiempo_agotado' | 'turno_terminado_error' | 'mazo_completado' | 'relampago_evaluando' | 'ronda_terminada' | 'partida_terminada'
+    this.faseTurno = 'listo';
     this.enPartida = false;
+
+    // Relámpago seguimiento
+    this.relampagoTurnos = []; // Array con { equipoIndex, pasada: 1|2, carta }
+    this.relampagoTurnoIndex = 0;
+    this.relampagoPalabraRevelada = false;
+
+    // Historial para "Deshacer"
+    this.ultimoAcierto = null; // { carta, equipoId, puntos, fasePrevia }
 
     this.loadFromStorage();
   }
 
+  get rondaActualConfig() {
+    return RONDAS_CONFIG[this.rondaIndex] || RONDAS_CONFIG[0];
+  }
+
+  get esRondaRelampago() {
+    return Boolean(this.rondaActualConfig?.esRelampago);
+  }
+
+  get equipoActual() {
+    if (this.esRondaRelampago) {
+      const turnoRel = this.relampagoTurnos[this.relampagoTurnoIndex];
+      const eqIdx = turnoRel ? turnoRel.equipoIndex : 0;
+      return this.equipos[eqIdx] || this.equipos[0];
+    }
+    return this.equipos[this.equipoTurnoIndex] || this.equipos[0];
+  }
+
   // --- Validación y Gestión de Equipos ---
 
-  /**
-   * Valida un nombre de equipo.
-   * @param {string} nombre
-   * @param {string} [excludeId]
-   * @returns {{ valid: boolean, error: string|null, sanitized: string }}
-   */
   validarNombreEquipo(nombre, excludeId = null) {
     const sanitized = (nombre || '').trim();
     if (!sanitized) {
@@ -112,38 +188,108 @@ export class GameState {
     }
   }
 
+  setFiltros(nuevosFiltros) {
+    this.filtros = { ...this.filtros, ...nuevosFiltros };
+    this.saveToStorage();
+  }
+
+  // --- Modo Desarrollador (Cartas en LocalStorage) ---
+
+  obtenerCartasCustom() {
+    if (typeof localStorage === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(CARTAS_DEV_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  guardarCartaCustom(nuevaCarta) {
+    if (typeof localStorage === 'undefined') return nuevaCarta;
+    const customs = this.obtenerCartasCustom();
+    // Validar id único
+    const id = Date.now();
+    const cartaConId = { ...nuevaCarta, id };
+    customs.push(cartaConId);
+    localStorage.setItem(CARTAS_DEV_STORAGE_KEY, JSON.stringify(customs));
+    return cartaConId;
+  }
+
   // --- Ciclo de Juego ---
 
   /**
-   * Inicia una nueva partida con cartas seleccionadas al azar.
-   * @param {Array} allCards - Catálogo total disponible en data/cartas.json
+   * Inicia una nueva partida preparando mazo principal y mazo relámpago según filtros.
    */
-  iniciarNuevaPartida(allCards) {
-    // Resetear puntajes
+  iniciarNuevaPartida(catalogoCompleto) {
+    // Unir catálogo estático con cartas custom de desarrollo
+    const customCards = this.obtenerCartasCustom();
+    const todos = [...catalogoCompleto, ...customCards];
+
+    // Resetear puntos
     this.equipos.forEach((eq) => {
       eq.puntos = 0;
     });
 
-    const cantidadReal = Math.min(this.cantidadCartas, allCards.length);
-    this.cartasPartida = selectRandomCards(allCards, cantidadReal);
+    // 1. Filtrar cartas elegibles
+    const cartasElegibles = todos.filter((c) => cartaCumpleFiltros(c, this.filtros));
+    const cartasBarajadas = shuffle(cartasElegibles);
+
+    // 2. Separar cartas para la Ronda Relámpago (2 por equipo)
+    const cantidadRelampago = this.equipos.length * 2;
+    if (cartasBarajadas.length < cantidadRelampago + 5) {
+      throw new Error(`Se necesitan al menos ${cantidadRelampago + 5} cartas filtradas para jugar.`);
+    }
+
+    this.cartasRelampago = cartasBarajadas.slice(0, cantidadRelampago);
+
+    // 3. Seleccionar cartas para las Rondas 1, 2 y 3
+    const cartasDisponiblesPrincipal = cartasBarajadas.slice(cantidadRelampago);
+    const cantidadPrincipal = Math.min(this.cantidadCartas, cartasDisponiblesPrincipal.length);
+    const cartasSeleccionadas = cartasDisponiblesPrincipal.slice(0, cantidadPrincipal);
+
+    // Asignar y fijar el elemento para rondas 1 a 3
+    this.cartasPartida = cartasSeleccionadas.map((c) => ({
+      ...c,
+      elementoAsignado: seleccionarElementoParaCarta(c, this.filtros)
+    }));
+
+    // Armar turnos de la ronda relámpago (2 pasadas ordenadas por equipos)
+    this.relampagoTurnos = [];
+    let relCartaIdx = 0;
+    for (let pasada = 1; pasada <= 2; pasada++) {
+      for (let eqIdx = 0; eqIdx < this.equipos.length; eqIdx++) {
+        this.relampagoTurnos.push({
+          equipoIndex: eqIdx,
+          pasada,
+          carta: this.cartasRelampago[relCartaIdx++]
+        });
+      }
+    }
+
+    // Inicializar ronda 1
+    this.rondaIndex = 0;
     this.cartasRondaRestantes = shuffle(this.cartasPartida);
     this.cartaActual = null;
-    this.rondaActual = 1;
     this.equipoTurnoIndex = 0;
     this.faseTurno = 'listo';
     this.enPartida = true;
+    this.ultimoAcierto = null;
+    this.relampagoTurnoIndex = 0;
+    this.relampagoPalabraRevelada = false;
 
     this.saveToStorage();
   }
 
-  get equipoActual() {
-    return this.equipos[this.equipoTurnoIndex] || this.equipos[0];
-  }
-
-  /**
-   * Saca una carta del mazo de la ronda.
-   */
   sacarSiguienteCarta() {
+    if (this.esRondaRelampago) {
+      const turnoRel = this.relampagoTurnos[this.relampagoTurnoIndex];
+      this.cartaActual = turnoRel ? turnoRel.carta : null;
+      this.relampagoPalabraRevelada = false;
+      this.saveToStorage();
+      return this.cartaActual;
+    }
+
     if (this.cartasRondaRestantes.length === 0) {
       this.cartaActual = null;
       return null;
@@ -154,23 +300,29 @@ export class GameState {
   }
 
   /**
-   * Se acierta la carta actual: suma punto y saca la siguiente.
+   * Se acierta la carta actual (+1 punto en rondas normales).
    */
   acertarCarta() {
     if (!this.cartaActual) return null;
 
+    const puntos = this.rondaActualConfig.puntosPorAcierto || 1;
     if (this.equipoActual) {
-      this.equipoActual.puntos += 1;
+      this.equipoActual.puntos += puntos;
     }
 
+    // Guardar para "Deshacer"
+    this.ultimoAcierto = {
+      carta: this.cartaActual,
+      equipoId: this.equipoActual.id,
+      puntos,
+      esRelampago: false
+    };
+
+    // Si no quedan más cartas en esta ronda
     if (this.cartasRondaRestantes.length === 0) {
       this.cartaActual = null;
-      // Fin de la ronda
-      if (this.rondaActual >= TOTAL_RONDAS) {
-        this.faseTurno = 'partida_terminada';
-      } else {
-        this.faseTurno = 'ronda_terminada';
-      }
+      // Fin del turno por haber completado el mazo
+      this.faseTurno = 'mazo_completado';
       this.saveToStorage();
       return null;
     }
@@ -179,23 +331,80 @@ export class GameState {
   }
 
   /**
-   * Pasa la carta (no la adivinaron o quieren saltear): vuelve al fondo del mazo de la ronda.
+   * Pasa la carta actual: vuelve al fondo del mazo de la ronda.
    */
   pasarCarta() {
-    if (!this.cartaActual) return null;
+    if (!this.cartaActual || this.esRondaRelampago) return null;
     const pasada = this.cartaActual;
-    // La insertamos al inicio (fondo del mazo)
     this.cartasRondaRestantes.unshift(pasada);
     return this.sacarSiguienteCarta();
+  }
+
+  /**
+   * Termina el turno por error (ej: quien da la pista dice la palabra prohibida).
+   * La carta actual va al fondo del mazo de la ronda.
+   */
+  terminarTurnoPorError() {
+    if (this.cartaActual) {
+      this.cartasRondaRestantes.unshift(this.cartaActual);
+      this.cartaActual = null;
+    }
+    this.faseTurno = 'turno_terminado_error';
+    this.saveToStorage();
+  }
+
+  /**
+   * Deshace el último acierto realizado.
+   * Resta los puntos y devuelve la carta a la pantalla o mazo sin alterar el timer.
+   */
+  deshacerUltimoAcierto() {
+    if (!this.ultimoAcierto) return false;
+
+    const { carta, equipoId, puntos, esRelampago } = this.ultimoAcierto;
+    const eq = this.equipos.find((e) => e.id === equipoId);
+    if (eq) {
+      eq.puntos = Math.max(0, eq.puntos - puntos);
+    }
+
+    if (esRelampago) {
+      // En relámpago, volver a la pantalla de asignación
+      this.faseTurno = 'relampago_evaluando';
+      this.ultimoAcierto = null;
+      this.saveToStorage();
+      return true;
+    }
+
+    // Si se había completado el mazo, reanudamos el estado de juego
+    if (this.faseTurno === 'mazo_completado') {
+      this.faseTurno = 'jugando';
+    }
+
+    // Si había una carta en pantalla, devolverla al mazo
+    if (this.cartaActual) {
+      this.cartasRondaRestantes.push(this.cartaActual);
+    }
+
+    // Restaurar la carta deshecha como carta activa
+    this.cartaActual = carta;
+    this.ultimoAcierto = null;
+    this.saveToStorage();
+    return true;
   }
 
   /**
    * El tiempo del turno expiró.
    */
   tiempoAgotado() {
-    // Si había una carta en pantalla que no se acertó, vuelve al mazo
+    if (this.esRondaRelampago) {
+      // Al terminar los 15 segundos en relámpago, se pasa a evaluar quién adivinó
+      this.relampagoPalabraRevelada = true;
+      this.faseTurno = 'relampago_evaluando';
+      this.saveToStorage();
+      return;
+    }
+
     if (this.cartaActual) {
-      this.cartasRondaRestantes.push(this.cartaActual);
+      this.cartasRondaRestantes.unshift(this.cartaActual);
       this.cartaActual = null;
     }
     this.faseTurno = 'tiempo_agotado';
@@ -203,24 +412,70 @@ export class GameState {
   }
 
   /**
-   * Pasa el turno al siguiente equipo.
+   * En Ronda Relámpago: asigna los 3 puntos al equipo ganador (o a nadie).
+   * @param {string|null} ganadorEquipoId - ID del equipo o null si nadie adivinó.
+   */
+  resolverCartaRelampago(ganadorEquipoId) {
+    if (!this.esRondaRelampago) return;
+
+    if (ganadorEquipoId) {
+      const eq = this.equipos.find((e) => e.id === ganadorEquipoId);
+      if (eq) {
+        eq.puntos += 3;
+        this.ultimoAcierto = {
+          carta: this.cartaActual,
+          equipoId: eq.id,
+          puntos: 3,
+          esRelampago: true
+        };
+      }
+    } else {
+      this.ultimoAcierto = null;
+    }
+
+    // Pasar a la siguiente carta de la relámpago
+    this.relampagoTurnoIndex += 1;
+
+    // ¿Terminaron todos los turnos relámpago?
+    if (this.relampagoTurnoIndex >= this.relampagoTurnos.length) {
+      this.faseTurno = 'ronda_terminada';
+    } else {
+      this.faseTurno = 'listo';
+      this.cartaActual = null;
+    }
+
+    this.saveToStorage();
+  }
+
+  /**
+   * Pasa el turno al siguiente equipo en rondas normales.
    */
   siguienteTurno() {
     this.equipoTurnoIndex = (this.equipoTurnoIndex + 1) % this.equipos.length;
     this.cartaActual = null;
     this.faseTurno = 'listo';
+    this.ultimoAcierto = null;
     this.saveToStorage();
   }
 
   /**
-   * Pasa a la siguiente ronda barajando de nuevo todas las cartas de la partida.
+   * Avanza a la siguiente ronda (o finaliza partida si era la última).
    */
   pasarSiguienteRonda() {
-    if (this.rondaActual < TOTAL_RONDAS) {
-      this.rondaActual += 1;
-      this.cartasRondaRestantes = shuffle(this.cartasPartida);
+    if (this.rondaIndex + 1 < RONDAS_CONFIG.length) {
+      this.rondaIndex += 1;
       this.cartaActual = null;
-      this.equipoTurnoIndex = (this.equipoTurnoIndex + 1) % this.equipos.length;
+      this.ultimoAcierto = null;
+
+      if (this.esRondaRelampago) {
+        this.relampagoTurnoIndex = 0;
+        this.relampagoPalabraRevelada = false;
+      } else {
+        // Barajar de nuevo las cartas asignadas a la partida
+        this.cartasRondaRestantes = shuffle(this.cartasPartida);
+        this.equipoTurnoIndex = (this.equipoTurnoIndex + 1) % this.equipos.length;
+      }
+
       this.faseTurno = 'listo';
       this.saveToStorage();
     } else {
@@ -229,32 +484,39 @@ export class GameState {
     }
   }
 
-  /**
-   * Reinicia la partida por completo.
-   */
   terminarPartida() {
     this.enPartida = false;
     this.cartaActual = null;
     this.cartasRondaRestantes = [];
+    this.cartasPartida = [];
+    this.cartasRelampago = [];
     this.faseTurno = 'listo';
+    this.ultimoAcierto = null;
     this.saveToStorage();
   }
 
   // --- Persistencia ---
 
   saveToStorage() {
+    if (typeof localStorage === 'undefined') return;
     try {
       const data = {
         equipos: this.equipos,
         cantidadCartas: this.cantidadCartas,
         tiempoPorTurno: this.tiempoPorTurno,
+        filtros: this.filtros,
         cartasPartida: this.cartasPartida,
+        cartasRelampago: this.cartasRelampago,
         cartasRondaRestantes: this.cartasRondaRestantes,
         cartaActual: this.cartaActual,
-        rondaActual: this.rondaActual,
+        rondaIndex: this.rondaIndex,
         equipoTurnoIndex: this.equipoTurnoIndex,
         faseTurno: this.faseTurno,
-        enPartida: this.enPartida
+        enPartida: this.enPartida,
+        relampagoTurnos: this.relampagoTurnos,
+        relampagoTurnoIndex: this.relampagoTurnoIndex,
+        relampagoPalabraRevelada: this.relampagoPalabraRevelada,
+        ultimoAcierto: this.ultimoAcierto
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
@@ -263,30 +525,27 @@ export class GameState {
   }
 
   loadFromStorage() {
+    if (typeof localStorage === 'undefined') return;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const data = JSON.parse(raw);
-      if (Array.isArray(data.equipos) && data.equipos.length >= 2) {
-        this.equipos = data.equipos;
-      }
-      if (typeof data.cantidadCartas === 'number') {
-        this.cantidadCartas = data.cantidadCartas;
-      }
-      if (typeof data.tiempoPorTurno === 'number') {
-        this.tiempoPorTurno = data.tiempoPorTurno;
-      }
-      if (Array.isArray(data.cartasPartida)) {
-        this.cartasPartida = data.cartasPartida;
-      }
-      if (Array.isArray(data.cartasRondaRestantes)) {
-        this.cartasRondaRestantes = data.cartasRondaRestantes;
-      }
+      if (Array.isArray(data.equipos) && data.equipos.length >= 2) this.equipos = data.equipos;
+      if (typeof data.cantidadCartas === 'number') this.cantidadCartas = data.cantidadCartas;
+      if (typeof data.tiempoPorTurno === 'number') this.tiempoPorTurno = data.tiempoPorTurno;
+      if (data.filtros) this.filtros = data.filtros;
+      if (Array.isArray(data.cartasPartida)) this.cartasPartida = data.cartasPartida;
+      if (Array.isArray(data.cartasRelampago)) this.cartasRelampago = data.cartasRelampago;
+      if (Array.isArray(data.cartasRondaRestantes)) this.cartasRondaRestantes = data.cartasRondaRestantes;
       this.cartaActual = data.cartaActual || null;
-      this.rondaActual = data.rondaActual || 1;
+      this.rondaIndex = data.rondaIndex || 0;
       this.equipoTurnoIndex = data.equipoTurnoIndex || 0;
       this.faseTurno = data.faseTurno || 'listo';
       this.enPartida = Boolean(data.enPartida);
+      if (Array.isArray(data.relampagoTurnos)) this.relampagoTurnos = data.relampagoTurnos;
+      this.relampagoTurnoIndex = data.relampagoTurnoIndex || 0;
+      this.relampagoPalabraRevelada = Boolean(data.relampagoPalabraRevelada);
+      this.ultimoAcierto = data.ultimoAcierto || null;
     } catch (e) {
       console.warn('No se pudo leer el estado previo de localStorage:', e);
     }

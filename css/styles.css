@@ -445,8 +445,7 @@ body {
 .playing-card {
   width: 100%;
   max-width: 360px;
-  aspect-ratio: 5 / 7;
-  max-height: 380px;
+  min-height: 340px;
   background: var(--card-bg);
   color: var(--card-text);
   border-radius: var(--radius-card);
@@ -455,18 +454,35 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem 1.35rem;
   position: relative;
   user-select: none;
   transition: transform 0.15s ease;
 }
 
+.playing-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.playing-card-dificultad {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1a162b;
+  color: #ffffff;
+  font-weight: var(--font-weight-black);
+  font-size: 0.95rem;
+}
+
 .playing-card-category {
   display: inline-block;
-  align-self: flex-start;
-  background: var(--card-category-bg);
-  color: var(--card-category-text);
-  padding: 0.35rem 0.85rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: var(--font-weight-bold);
@@ -474,13 +490,86 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* Colores de categorías */
+.elem-rojo {
+  background: #ffe5e5;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.elem-verde {
+  background: #e6f9ed;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+
+.elem-violeta {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+}
+
 .playing-card-name {
-  font-size: 2.1rem;
+  font-size: 1.95rem;
   font-weight: var(--font-weight-black);
   text-align: center;
   line-height: 1.2;
   word-break: break-word;
   color: #1a162b;
+  margin: 1rem 0;
+}
+
+/* Caja de palabra prohibida */
+.forbidden-box {
+  background: #fff1f2;
+  border: 1.5px dashed #f43f5e;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.forbidden-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: #e11d48;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.15rem;
+}
+
+.forbidden-word {
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-black);
+  color: #9f1239;
+}
+
+/* Elementos en la Ronda Relámpago */
+.relampago-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0.75rem 0;
+}
+
+.relampago-row {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.relampago-row-categoria {
+  font-size: 0.7rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.relampago-row-texto {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-black);
 }
 
 .playing-card-footer {
@@ -490,6 +579,63 @@ body {
   font-size: 0.85rem;
   font-weight: var(--font-weight-medium);
   color: #8c7e72;
+  border-top: 1px solid #ebdccc;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Barra de botones de acción del turno */
+.game-bottom-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.game-top-actions-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.game-primary-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 0.75rem;
+}
+
+.game-primary-actions-single {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+/* Chips de filtros */
+.chip-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+}
+
+.filter-chip {
+  min-height: 36px;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-medium);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--bg-surface-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.filter-chip.active {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  color: #120e24;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Acciones de la partida (Alcance del pulgar) */
