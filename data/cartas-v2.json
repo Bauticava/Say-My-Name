@@ -1,1 +1,27 @@
-ff
+[
+  {
+    "id": 1,
+    "elementos": [
+      { "texto": "Felices los 4", "categoria": "Canción", "color": "rojo" },
+      { "texto": "Gerard Piqué", "categoria": "Deportista", "color": "verde" },
+      { "texto": "Ojos bien cerrados", "categoria": "Película", "color": "violeta" }
+    ],
+    "palabraClave": "Infidelidad",
+    "dificultad": 2
+  },
+  {
+    "id": 2,
+    "elementos": [
+      { "texto": "Pasapalabra", "categoria": "Televisión", "color": "rojo" },
+      { "texto": "Dora la Exploradora", "categoria": "Personaje de Ficción", "color": "verde" },
+      { "texto": "Indianápolis", "categoria": "Lugar", "color": "violeta" }
+    ],
+    "palabraClave": "Pista",
+    "dificultad": 3
+  },
+  {
+    "id": 3,
+    "elementos": [
+      { "texto": "El juego del calamar", "categoria": "Serie", "color": "rojo" },
+      { "texto": "Kim Jong-un", "categoria": "Celebridad", "color": "verde" },
+      { "texto": "BTS", "categoria": "Banda", "color": "violeta" }
