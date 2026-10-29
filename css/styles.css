@@ -975,3 +975,192 @@ body {
   }
 }
 
+/* ==========================================================================
+   Overlay y Animación de Fin de Temporizador ("¡TIEMPO!")
+   ========================================================================== */
+.time-up-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at center, #b91c1c 0%, #7f1d1d 60%, #450a0a 100%);
+  animation: timeUpRedBloom 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  cursor: pointer;
+  user-select: none;
+}
+
+.time-up-overlay.time-up-closing {
+  animation: timeUpFadeOut 0.25s ease-out forwards;
+}
+
+.time-up-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: timeUpScaleBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.time-up-badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 2px;
+  color: #fef08a;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.time-up-title {
+  font-size: clamp(3.2rem, 14vw, 5.2rem);
+  font-weight: 950;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.8),
+    0 0 40px #ef4444,
+    0 0 70px #b91c1c;
+  margin-bottom: 0.65rem;
+}
+
+.time-up-sub {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-medium);
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.5px;
+}
+
+@keyframes timeUpRedBloom {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes timeUpScaleBounce {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes timeUpFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.05); }
+}
+
+/* Tensión en los últimos 5 segundos */
+body.body-timer-urgent {
+  animation: urgentEdgePulse 0.9s infinite alternate ease-in-out;
+}
+
+@keyframes urgentEdgePulse {
+  from {
+    box-shadow: inset 0 0 0 0px transparent;
+  }
+  to {
+    box-shadow: inset 0 0 28px 8px rgba(239, 68, 68, 0.5);
+  }
+}
+
+/* Colores de fondo para la carta física durante el juego */
+.playing-card.card-theme-rojo {
+  background: linear-gradient(175deg, #fff5f5 0%, #fee2e2 100%);
+  border-color: #fca5a5;
+  box-shadow: 0 16px 36px rgba(185, 28, 28, 0.22), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.playing-card.card-theme-verde {
+  background: linear-gradient(175deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #86efac;
+  box-shadow: 0 16px 36px rgba(4, 120, 87, 0.22), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.playing-card.card-theme-violeta {
+  background: linear-gradient(175deg, #faf5ff 0%, #f3e8ff 100%);
+  border-color: #d8b4fe;
+  box-shadow: 0 16px 36px rgba(107, 33, 168, 0.22), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones de descarte de carta */
+.playing-card.card-exit-acierto {
+  animation: cardSwipeRight 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes cardSwipeRight {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(125%, -20px, 0) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+.playing-card.card-exit-paso {
+  animation: cardSwipeDown 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes cardSwipeDown {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 110px, 0) scale(0.85);
+    opacity: 0;
+  }
+}
+
+/* Podio ascendente y confeti */
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.podium-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.45s ease-out, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.podium-item.podium-reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.podium-winner-glow {
+  box-shadow: 0 0 25px rgba(251, 176, 52, 0.45);
+  border-color: var(--accent-secondary) !important;
+  background: rgba(251, 176, 52, 0.16) !important;
+}
+

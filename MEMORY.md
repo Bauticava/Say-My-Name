@@ -155,8 +155,19 @@ En la pantalla `#configuracion`:
     - Se removieron los textos entre paréntesis `(titulos)`, `(personas)` y `(mix)`.
     - Eliminación del filtro de categorías específicas para simplificar la interfaz.
     - Selector de cantidad de cartas con `<input type="number">` directo para escribir el número exacto, complementado con botones `[-]`, `[+]` y accesos directos de presets `[10]`, `[15]`, `[20]`, `[Máx]`.
+  - **Animación "¡TIEMPO!" y Tensión de Reloj**:
+    - Al terminar el temporizador, overlay fullscreen con resplandor rojo (`timeUpRedBloom`), tipografía "¡TIEMPO!" en escala elástica con text-shadow luminoso y vibración/alarma sincronizada. Toque en pantalla para avanzar inmediatamente o auto-cierre en 1.4s.
+    - Tensión en los últimos 5 segundos: borde de pantalla pulsando en rojo (`body-timer-urgent`) y sonido sintetizado de tic-tac en Web Audio API.
+  - **Color de fondo de cartas y Animación de Descarte**:
+    - Fondo de la carta en juego con gradiente y sombras del color de su categoría (`.card-theme-rojo`, `.card-theme-verde`, `.card-theme-violeta`), reemplazando el fondo blanco plano.
+    - Animación física de descarte: giro y deslizamiento a la derecha (`.card-exit-acierto`) en aciertos con tono alegre; deslizamiento hacia abajo (`.card-exit-paso`) en paso y error con sus respectivos sonidos.
+  - **Pantalla de Pase de Teléfono**:
+    - Pantalla de inicio de turno limpia con mensaje: *"Turno de: [Equipo]"*, *"Pasale el teléfono a quien vaya a dar pistas en este turno"* y botón destacado **"¡Arrancar!"**.
+  - **Podio Ascendente y Confeti**:
+    - Al terminar la Ronda 3, revelación progresiva de posiciones en orden ascendente (desde el último puesto hasta coronar al ganador).
+    - El primer puesto se revela con fanfarria sonora, glow dorado y lluvia de confeti en `<canvas>` nativo ligero (sin dependencias).
   - **Service Worker**:
-    - Actualizada la versión de caché a `cartas-v6`.
+    - Actualizada la versión de caché a `cartas-v7`.
 
 
 ---

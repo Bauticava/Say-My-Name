@@ -37,16 +37,54 @@ export function renderPartida(container, router) {
         digitsEl.textContent = formatTime(secs);
         if (secs <= 5) {
           digitsEl.classList.add('timer-urgent');
+          document.body.classList.add('body-timer-urgent');
         } else {
           digitsEl.classList.remove('timer-urgent');
+          document.body.classList.remove('body-timer-urgent');
         }
       }
     },
     onEnd: () => {
-      gameState.tiempoAgotado();
-      renderCurrentPhase();
+      document.body.classList.remove('body-timer-urgent');
+      mostrarAnimacionTiempo(() => {
+        gameState.tiempoAgotado();
+        renderCurrentPhase();
+      });
     }
   });
+
+  function mostrarAnimacionTiempo(callback) {
+    document.body.classList.remove('body-timer-urgent');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'time-up-overlay';
+    overlay.id = 'time-up-overlay';
+    overlay.innerHTML = `
+      <div class="time-up-content">
+        <span class="time-up-badge">Fin del turno</span>
+        <h1 class="time-up-title">¡TIEMPO!</h1>
+        <p class="time-up-sub">Se acabó el tiempo</p>
+      </div>
+    `;
+
+    let cerrado = false;
+    const cerrar = () => {
+      if (cerrado) return;
+      cerrado = true;
+      overlay.classList.add('time-up-closing');
+      setTimeout(() => {
+        if (overlay.parentNode) {
+          overlay.parentNode.removeChild(overlay);
+        }
+        callback();
+      }, 200);
+    };
+
+    overlay.addEventListener('click', cerrar);
+    document.body.appendChild(overlay);
+
+    setTimeout(cerrar, 1400);
+  }
 
   function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -55,6 +93,7 @@ export function renderPartida(container, router) {
   }
 
   function renderCurrentPhase() {
+    document.body.classList.remove('body-timer-urgent');
     container.innerHTML = '';
     const config = gameState.rondaActualConfig;
 
@@ -146,25 +185,21 @@ export function renderPartida(container, router) {
 
           <hr style="border: none; border-top: 1px solid var(--bg-surface-border); margin: 1.25rem 0;" />
 
-          <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 0.35rem;">
-            ${esRelampago ? 'Lee un integrante de:' : 'Es el turno de:'}
+          <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.35rem;">
+            ${esRelampago ? 'Lee un integrante de:' : 'Turno de:'}
           </p>
-          <h2 style="font-size: 2.1rem; font-weight: var(--font-weight-black); color: var(--text-primary); margin-bottom: 0.35rem;">
+          <h2 style="font-size: 2.2rem; font-weight: var(--font-weight-black); color: var(--accent-secondary); margin-bottom: 0.5rem;">
             ${escapeHtml(gameState.equipoActual.nombre)}
           </h2>
 
-          ${esRelampago ? `
-            <p style="font-size: 0.95rem; color: var(--accent-secondary); font-weight: bold; margin-bottom: 1.75rem;">
-              Carta ${turnoRel.pasada} de 2 para este equipo (¡Lee en voz alta!)
-            </p>
-          ` : `
-            <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.75rem;">
-              Quedan ${gameState.cartasRondaRestantes.length} cartas en el mazo de esta ronda.
-            </p>
-          `}
+          <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.75rem;">
+            ${esRelampago
+              ? `Carta ${turnoRel.pasada} de 2 para este equipo (¡Lee en voz alta!).`
+              : 'Pasale el teléfono a quien vaya a dar pistas en este turno.'}
+          </p>
 
-          <button id="btn-iniciar-turno" class="btn btn-primary btn-large btn-block" type="button">
-            ⏱️ Iniciar turno (${duracion}s)
+          <button id="btn-iniciar-turno" class="btn btn-primary btn-large btn-block" type="button" style="font-size: 1.25rem;">
+            ¡Arrancar! (${duracion}s)
           </button>
         </div>
       </section>
@@ -217,7 +252,7 @@ export function renderPartida(container, router) {
         <!-- Escenario de la carta física -->
         <div class="card-stage" aria-live="assertive">
           ${carta && elemento ? `
-            <div class="playing-card" id="current-card">
+            <div class="playing-card card-theme-${colorElem}" id="current-card">
               <div class="playing-card-header">
                 <span class="playing-card-category elem-${colorElem}">
                   ${escapeHtml(elemento.categoria || 'Elemento')}
@@ -332,24 +367,54 @@ export function renderPartida(container, router) {
 
     // Paso
     container.querySelector('#btn-paso')?.addEventListener('click', () => {
-      gameState.pasarCarta();
-      if (gameState.faseTurno === 'turno_terminado_pase') {
-        activeTimer.pause();
+      activeTimer.playPassSound();
+      const cardEl = container.querySelector('#current-card');
+      if (cardEl) {
+        cardEl.classList.add('card-exit-paso');
+        setTimeout(() => {
+          gameState.pasarCarta();
+          if (gameState.faseTurno === 'turno_terminado_pase') {
+            activeTimer.pause();
+          }
+          renderCurrentPhase();
+        }, 190);
+      } else {
+        gameState.pasarCarta();
+        if (gameState.faseTurno === 'turno_terminado_pase') {
+          activeTimer.pause();
+        }
+        renderCurrentPhase();
       }
-      renderCurrentPhase();
     });
 
     // Acierto
     container.querySelector('#btn-acierto')?.addEventListener('click', () => {
-      gameState.acertarCarta();
-      if (
-        gameState.faseTurno === 'mazo_completado' ||
-        gameState.faseTurno === 'ronda_terminada' ||
-        gameState.faseTurno === 'turno_terminado_pase'
-      ) {
-        activeTimer.pause();
+      activeTimer.playSuccessSound();
+      const cardEl = container.querySelector('#current-card');
+      if (cardEl) {
+        cardEl.classList.add('card-exit-acierto');
+        setTimeout(() => {
+          gameState.acertarCarta();
+          if (
+            gameState.faseTurno === 'mazo_completado' ||
+            gameState.faseTurno === 'ronda_terminada' ||
+            gameState.faseTurno === 'turno_terminado_pase'
+          ) {
+            activeTimer.pause();
+          }
+          renderCurrentPhase();
+        }, 190);
+      } else {
+        gameState.acertarCarta();
+        if (
+          gameState.faseTurno === 'mazo_completado' ||
+          gameState.faseTurno === 'ronda_terminada' ||
+          gameState.faseTurno === 'turno_terminado_pase'
+        ) {
+          activeTimer.pause();
+        }
+        renderCurrentPhase();
       }
-      renderCurrentPhase();
     });
   }
 
@@ -692,35 +757,39 @@ export function renderPartida(container, router) {
     });
   }
 
-  // --- Fase: Partida Terminada (Podio y Marcador Final) ---
+  // --- Fase: Partida Terminada (Podio Ascendente y Marcador Final) ---
   function renderPartidaTerminada() {
+    document.body.classList.remove('body-timer-urgent');
     const ranking = [...gameState.equipos].sort((a, b) => b.puntos - a.puntos);
     const ganador = ranking[0];
     const esEmpate = ranking.length > 1 && ranking[0].puntos === ranking[1].puntos;
 
     container.innerHTML = `
       <section class="screen" aria-label="Fin de la partida">
-        <div class="surface-card" style="text-align: center; padding: 2.25rem 1.25rem; margin: auto 0;">
-          <div style="font-size: 4rem; margin-bottom: 0.5rem;">🏆</div>
-          <h2 style="font-size: 2rem; font-weight: var(--font-weight-black); margin-bottom: 0.25rem;">
+        <div class="surface-card" style="text-align: center; padding: 2.25rem 1.25rem; margin: auto 0; position: relative;">
+          <div style="font-size: 3.8rem; margin-bottom: 0.35rem;" id="podium-trophy">🏆</div>
+          <h2 id="podium-title" style="font-size: 2rem; font-weight: var(--font-weight-black); margin-bottom: 0.25rem;">
             ${esEmpate ? '¡Empate épico!' : `¡Ganó ${escapeHtml(ganador.nombre)}!`}
           </h2>
-          <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.75rem;">
+          <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1.75rem;">
             Se completaron todas las rondas de la partida.
           </p>
 
-          <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
-            ${ranking.map((eq, index) => `
-              <div class="team-item" style="${index === 0 ? 'border-color: var(--accent-secondary); background: rgba(251, 176, 52, 0.12);' : ''}">
-                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                  <span style="font-size: 1.25rem;">${index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}</span>
-                  <span style="font-weight: var(--font-weight-bold); font-size: 1.1rem;">${escapeHtml(eq.nombre)}</span>
+          <div id="podium-list" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+            ${ranking.map((eq, index) => {
+              const medalla = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+              return `
+                <div class="team-item podium-item" data-index="${index}" style="${index === 0 ? 'border-color: var(--accent-secondary);' : ''}">
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.3rem;">${medalla}</span>
+                    <span style="font-weight: var(--font-weight-bold); font-size: 1.1rem;">${escapeHtml(eq.nombre)}</span>
+                  </div>
+                  <span style="font-size: 1.2rem; font-weight: var(--font-weight-black); color: var(--text-primary);">
+                    ${eq.puntos} pts
+                  </span>
                 </div>
-                <span style="font-size: 1.2rem; font-weight: var(--font-weight-black); color: var(--text-primary);">
-                  ${eq.puntos} pts
-                </span>
-              </div>
-            `).join('')}
+              `;
+            }).join('')}
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.85rem;">
@@ -735,6 +804,41 @@ export function renderPartida(container, router) {
       </section>
     `;
 
+    // Animación ascendente: revelar desde el último puesto hasta el 1.º
+    const items = Array.from(container.querySelectorAll('.podium-item'));
+    const total = items.length;
+    let timeouts = [];
+
+    // Revelar de abajo hacia arriba (ascendente)
+    items.forEach((item, idxFromTop) => {
+      // Posición desde el fondo: último puesto primero, ganador al final
+      const idxFromBottom = total - 1 - idxFromTop;
+      const delay = 350 + idxFromBottom * 750;
+
+      const t = setTimeout(() => {
+        item.classList.add('podium-reveal');
+        if (idxFromTop === 0) {
+          // Ganador: glow dorado, fanfarria y confeti
+          item.classList.add('podium-winner-glow');
+          activeTimer.playFanfareSound();
+          dispararConfeti();
+        } else {
+          activeTimer.triggerHaptic([35]);
+        }
+      }, delay);
+      timeouts.push(t);
+    });
+
+    // Tap en la tarjeta revela todo de golpe si no quieren esperar
+    container.querySelector('.surface-card')?.addEventListener('click', () => {
+      timeouts.forEach(clearTimeout);
+      items.forEach((item, idx) => {
+        item.classList.add('podium-reveal');
+        if (idx === 0) item.classList.add('podium-winner-glow');
+      });
+      dispararConfeti();
+    }, { once: true });
+
     container.querySelector('#btn-volver-a-jugar')?.addEventListener('click', () => {
       router.navigate('configuracion');
     });
@@ -743,6 +847,72 @@ export function renderPartida(container, router) {
       gameState.terminarPartida();
       router.navigate('inicio');
     });
+  }
+
+  function dispararConfeti() {
+    if (document.getElementById('confetti-canvas')) return;
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const resize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resize);
+
+    const colors = ['#fbb034', '#ff5e36', '#10b981', '#6366f1', '#ec4899', '#ffffff'];
+    const particles = Array.from({ length: 90 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * -height * 0.4,
+      w: Math.random() * 8 + 4,
+      h: Math.random() * 6 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 3.5 + 2,
+      angle: Math.random() * 360,
+      vAngle: (Math.random() - 0.5) * 6
+    }));
+
+    let animId;
+    const loop = () => {
+      ctx.clearRect(0, 0, width, height);
+      let alive = false;
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.angle += p.vAngle;
+
+        if (p.y < height + 20) {
+          alive = true;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.angle * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+      });
+
+      if (alive) {
+        animId = requestAnimationFrame(loop);
+      } else {
+        cleanup();
+      }
+    };
+
+    const cleanup = () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+    };
+
+    animId = requestAnimationFrame(loop);
+    setTimeout(cleanup, 4500);
   }
 
   function escapeHtml(str) {
