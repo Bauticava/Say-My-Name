@@ -5,6 +5,7 @@
 
 import { gameState } from '../game.js';
 import { COLOR_TIPOS, cartaCumpleFiltros } from '../deck.js';
+import { customAlert } from './modal.js';
 
 let catalogoCartasCache = null;
 
@@ -28,12 +29,10 @@ export async function renderConfiguracion(container, router) {
   const cartasCustom = gameState.obtenerCartasCustom();
   const todasLasCartas = [...cartasEstaticas, ...cartasCustom];
 
-  // Extraer todas las categorías únicas disponibles en el catálogo
-  const categoriasDisponibles = Array.from(
-    new Set(
-      todasLasCartas.flatMap((c) => (c.elementos || []).map((e) => e.categoria)).filter(Boolean)
-    )
-  ).sort();
+  // Limpiar cualquier filtro previo de categorías específicas
+  if (gameState.filtros.categorias && gameState.filtros.categorias.length > 0) {
+    gameState.setFiltros({ categorias: [] });
+  }
 
   function updateUI() {
     // Calcular cuántas cartas cumplen los filtros activos
@@ -65,33 +64,34 @@ export async function renderConfiguracion(container, router) {
             🎯 Filtros de Cartas
           </h2>
 
-          <!-- Filtro por Tipo de Elemento -->
-          <div style="margin-bottom: 1rem;">
-            <label class="input-label" style="display: block; margin-bottom: 0.35rem;">
+          <!-- Filtro por Tipo de Elemento (Fila completa con colores individuales) -->
+          <div style="margin-bottom: 1.25rem;">
+            <label class="input-label" style="display: block; margin-bottom: 0.5rem;">
               Tipo de elemento
             </label>
-            <div class="chip-container">
+            <div class="btn-tipo-stack">
               ${Object.values(COLOR_TIPOS).map((tipo) => {
                 const activo = gameState.filtros.tipos.includes(tipo.id);
                 return `
                   <button 
-                    class="filter-chip btn-filtro-tipo ${activo ? 'active' : ''}" 
+                    class="btn-tipo-card ${activo ? 'active' : ''}" 
                     data-tipo="${tipo.id}" 
                     type="button"
                   >
-                    ${tipo.label} (${tipo.id})
+                    <span>${tipo.label}</span>
+                    <span class="btn-tipo-indicator"></span>
                   </button>
                 `;
               }).join('')}
             </div>
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">
               Si no seleccionás ninguno, entran todos los tipos.
             </p>
           </div>
 
           <!-- Filtro por Dificultad (1 a 5) -->
-          <div style="margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <div style="margin-bottom: 0.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
               <label class="input-label">Dificultad máxima</label>
               <span id="label-dificultad" style="font-weight: bold; color: var(--accent-secondary);">
                 Hasta nivel ${gameState.filtros.dificultadMax || 5}
@@ -103,37 +103,11 @@ export async function renderConfiguracion(container, router) {
                   class="btn btn-secondary btn-filtro-dif ${gameState.filtros.dificultadMax === lvl ? 'btn-warning' : ''}" 
                   data-lvl="${lvl}" 
                   type="button" 
-                  style="flex: 1; padding: 0.5rem 0.2rem; font-size: 0.9rem;"
+                  style="flex: 1; padding: 0.6rem 0.2rem; font-size: 0.95rem;"
                 >
                   ${lvl}
                 </button>
               `).join('')}
-            </div>
-          </div>
-
-          <!-- Filtro por Categorías Específicas -->
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
-              <label class="input-label">Categorías específicas</label>
-              ${gameState.filtros.categorias.length > 0 ? `
-                <button id="btn-limpiar-cat" class="icon-btn" style="font-size: 0.8rem; color: var(--accent-danger);" type="button">
-                  Limpiar (${gameState.filtros.categorias.length})
-                </button>
-              ` : ''}
-            </div>
-            <div class="chip-container" style="max-height: 120px; overflow-y: auto; padding-bottom: 0.25rem;">
-              ${categoriasDisponibles.map((cat) => {
-                const activo = gameState.filtros.categorias.includes(cat);
-                return `
-                  <button 
-                    class="filter-chip btn-filtro-cat ${activo ? 'active' : ''}" 
-                    data-cat="${escapeHtml(cat)}" 
-                    type="button"
-                  >
-                    ${escapeHtml(cat)}
-                  </button>
-                `;
-              }).join('')}
             </div>
           </div>
 
@@ -157,9 +131,19 @@ export async function renderConfiguracion(container, router) {
 
           <div class="setting-counter">
             <button id="btn-menos-cartas" class="counter-btn" type="button" aria-label="Menos cartas" ${!alcanzanCartas ? 'disabled style="opacity:0.4"' : ''}>-</button>
-            <div style="text-align: center;">
-              <span id="valor-cartas" class="counter-value">${alcanzanCartas ? gameState.cantidadCartas : 0}</span>
-              <span style="font-size: 0.85rem; color: var(--text-secondary); display: block;">cartas</span>
+            <div class="counter-input-wrap">
+              <input
+                id="input-cantidad-cartas"
+                class="counter-input"
+                type="number"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                min="5"
+                max="${maximoCartasPrincipal}"
+                value="${alcanzanCartas ? gameState.cantidadCartas : 0}"
+                ${!alcanzanCartas ? 'disabled style="opacity:0.4"' : ''}
+              />
+              <span class="counter-unit">cartas</span>
             </div>
             <button id="btn-mas-cartas" class="counter-btn" type="button" aria-label="Más cartas" ${!alcanzanCartas ? 'disabled style="opacity:0.4"' : ''}>+</button>
           </div>
@@ -230,8 +214,8 @@ export async function renderConfiguracion(container, router) {
       window.history.back();
     });
 
-    // Filtros de Tipo
-    const botonesTipo = container.querySelectorAll('.btn-filtro-tipo');
+    // Filtros de Tipo de Elemento (Títulos, Personas, Mix)
+    const botonesTipo = container.querySelectorAll('.btn-tipo-card');
     botonesTipo.forEach((btn) => {
       btn.addEventListener('click', () => {
         const tipo = btn.getAttribute('data-tipo');
@@ -246,7 +230,7 @@ export async function renderConfiguracion(container, router) {
       });
     });
 
-    // Filtros de Dificultad
+    // Filtros de Dificultad (1 a 5)
     const botonesDif = container.querySelectorAll('.btn-filtro-dif');
     botonesDif.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -256,38 +240,59 @@ export async function renderConfiguracion(container, router) {
       });
     });
 
-    // Filtros de Categoría
-    const botonesCat = container.querySelectorAll('.btn-filtro-cat');
-    botonesCat.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const cat = btn.getAttribute('data-cat');
-        let nuevasCat = [...gameState.filtros.categorias];
-        if (nuevasCat.includes(cat)) {
-          nuevasCat = nuevasCat.filter((c) => c !== cat);
-        } else {
-          nuevasCat.push(cat);
+    // Input directo para escribir cantidad de cartas
+    const inputCartas = container.querySelector('#input-cantidad-cartas');
+    if (inputCartas) {
+      inputCartas.addEventListener('input', () => {
+        const val = parseInt(inputCartas.value, 10);
+        if (!isNaN(val) && val >= 1) {
+          const clamped = Math.min(val, maximoCartasPrincipal);
+          gameState.setCantidadCartas(clamped);
+
+          // Actualizar highlights de botones preset sin regenerar el DOM
+          container.querySelectorAll('.btn-preset-cartas').forEach((b) => {
+            const p = parseInt(b.getAttribute('data-preset'), 10);
+            if (p === clamped) {
+              b.style.borderColor = 'var(--accent-secondary)';
+              b.style.color = 'var(--accent-secondary)';
+            } else {
+              b.style.borderColor = '';
+              b.style.color = '';
+            }
+          });
         }
-        gameState.setFiltros({ categorias: nuevasCat });
-        updateUI();
       });
-    });
 
-    container.querySelector('#btn-limpiar-cat')?.addEventListener('click', () => {
-      gameState.setFiltros({ categorias: [] });
-      updateUI();
-    });
+      const validarValorFinal = () => {
+        let val = parseInt(inputCartas.value, 10);
+        if (isNaN(val) || val < 5) {
+          val = Math.min(5, maximoCartasPrincipal);
+        } else if (val > maximoCartasPrincipal) {
+          val = maximoCartasPrincipal;
+        }
+        gameState.setCantidadCartas(val);
+        inputCartas.value = val;
+      };
 
-    // Contador de cartas
+      inputCartas.addEventListener('change', validarValorFinal);
+      inputCartas.addEventListener('blur', validarValorFinal);
+    }
+
+    // Botones de incremento y decremento
     container.querySelector('#btn-menos-cartas')?.addEventListener('click', () => {
       if (gameState.cantidadCartas > 5) {
-        gameState.setCantidadCartas(gameState.cantidadCartas - 5);
+        const nuevo = Math.max(5, gameState.cantidadCartas - 1);
+        gameState.setCantidadCartas(nuevo);
+        if (inputCartas) inputCartas.value = nuevo;
         updateUI();
       }
     });
 
     container.querySelector('#btn-mas-cartas')?.addEventListener('click', () => {
       if (gameState.cantidadCartas < maximoCartasPrincipal) {
-        gameState.setCantidadCartas(Math.min(gameState.cantidadCartas + 5, maximoCartasPrincipal));
+        const nuevo = Math.min(gameState.cantidadCartas + 1, maximoCartasPrincipal);
+        gameState.setCantidadCartas(nuevo);
+        if (inputCartas) inputCartas.value = nuevo;
         updateUI();
       }
     });
@@ -301,7 +306,7 @@ export async function renderConfiguracion(container, router) {
       });
     });
 
-    // Tiempo
+    // Tiempo por turno
     const botonesTiempo = container.querySelectorAll('.btn-tiempo');
     botonesTiempo.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -312,22 +317,15 @@ export async function renderConfiguracion(container, router) {
     });
 
     // Comenzar partida
-    container.querySelector('#btn-comenzar')?.addEventListener('click', () => {
+    container.querySelector('#btn-comenzar')?.addEventListener('click', async () => {
       if (!alcanzanCartas) return;
       try {
         gameState.iniciarNuevaPartida(todasLasCartas);
         router.navigate('partida');
       } catch (err) {
-        alert(err.message);
+        await customAlert(err.message, 'Atención');
       }
     });
-  }
-
-  function escapeHtml(str) {
-    if (typeof str !== 'string') return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
   }
 
   updateUI();

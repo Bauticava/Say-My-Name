@@ -2,16 +2,79 @@
  * Pantalla de Reglas (#reglas)
  */
 
+function formatInline(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>');
+}
+
 function simpleMarkdownToHtml(md) {
-  return md
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^\- (.*$)/gim, '<li>$1</li>')
-    .replace(/<li>.*<\/li>/gims, (match) => `<ul>${match}</ul>`)
-    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-    .replace(/\n{2,}/g, '</p><p>')
-    .replace(/---/g, '<hr style="border:none;border-top:1px solid var(--bg-surface-border);margin:1.25rem 0;" />');
+  const lines = md.split('\n');
+  let html = '';
+  let inList = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
+    const line = rawLine.trim();
+
+    if (!line) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      continue;
+    }
+
+    if (line === '---') {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
+      html += '<hr class="rules-divider" />';
+      continue;
+    }
+
+    if (line.startsWith('# ')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h1>${formatInline(line.slice(2))}</h1>`;
+      continue;
+    }
+
+    if (line.startsWith('## ')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h2>${formatInline(line.slice(3))}</h2>`;
+      continue;
+    }
+
+    if (line.startsWith('### ')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h3>${formatInline(line.slice(4))}</h3>`;
+      continue;
+    }
+
+    if (line.startsWith('- ') || line.startsWith('* ') || /^\d+\.\s/.test(line)) {
+      if (!inList) {
+        html += '<ul class="rules-list">';
+        inList = true;
+      }
+      const itemContent = line.replace(/^(-\s+|\*\s+|\d+\.\s+)/, '');
+      html += `<li>${formatInline(itemContent)}</li>`;
+      continue;
+    }
+
+    // Párrafo de texto normal
+    if (inList) {
+      html += '</ul>';
+      inList = false;
+    }
+    html += `<p>${formatInline(line)}</p>`;
+  }
+
+  if (inList) {
+    html += '</ul>';
+  }
+
+  return html;
 }
 
 export async function renderReglas(container, router) {
@@ -21,7 +84,7 @@ export async function renderReglas(container, router) {
         <button id="btn-volver" class="header-back-btn" type="button" aria-label="Volver">
           ←
         </button>
-        <h1>Reglas</h1>
+        <h1>Say My Name</h1>
         <div style="width: 44px;"></div>
       </header>
 

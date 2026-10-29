@@ -18,8 +18,8 @@ export function renderEquipos(container, router) {
           <div style="width: 44px;"></div>
         </header>
 
-        <p class="hero-subtitle" style="margin-bottom: 1.25rem;">
-          Armá al menos 2 equipos para la partida. Podés cambiarles el nombre o agregar más.
+        <p class="hero-subtitle" style="margin-bottom: 1.25rem; text-align: center;">
+          Armá al menos 2 equipos para la partida.
         </p>
 
         <!-- Formulario para agregar equipo -->

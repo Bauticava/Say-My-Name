@@ -672,32 +672,182 @@ body {
 .rules-container {
   color: var(--text-secondary);
   line-height: 1.6;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+.rules-container h1 {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  text-align: left;
 }
 
 .rules-container h2 {
   color: var(--text-primary);
-  font-size: 1.25rem;
-  margin-top: 1.25rem;
+  font-size: 1.2rem;
+  margin-top: 1.35rem;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .rules-container h3 {
   color: var(--accent-secondary);
   font-size: 1.05rem;
-  margin-top: 1rem;
-  margin-bottom: 0.25rem;
+  margin-top: 1.15rem;
+  margin-bottom: 0.35rem;
+  text-align: left;
 }
 
-.rules-container p, .rules-container ul {
+.rules-container p {
   margin-bottom: 0.75rem;
+  text-align: justify;
 }
 
-.rules-container ul {
+.rules-container ul.rules-list {
   padding-left: 1.25rem;
+  margin-bottom: 0.85rem;
+  list-style-type: disc;
 }
 
 .rules-container li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.45rem;
+  text-align: justify;
+  line-height: 1.55;
+}
+
+.rules-container strong {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.rules-divider {
+  border: none;
+  border-top: 1px solid var(--bg-surface-border);
+  margin: 1.35rem 0;
+}
+
+/* Filtros de Tipo de Elemento en Fila Completa */
+.btn-tipo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.btn-tipo-card {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--bg-surface-border);
+  color: var(--text-secondary);
+  font-family: var(--font-family);
+  font-size: 1.05rem;
+  font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.btn-tipo-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-tipo-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-surface-border);
+  transition: all 0.2s ease;
+}
+
+/* Estado activo por categoría: Rojo, Verde, Violeta */
+.btn-tipo-card[data-tipo="titulos"].active {
+  background: rgba(220, 38, 38, 0.22);
+  border-color: #ef4444;
+  color: #ffffff;
+  font-weight: var(--font-weight-bold);
+}
+
+.btn-tipo-card[data-tipo="titulos"].active .btn-tipo-indicator {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+}
+
+.btn-tipo-card[data-tipo="personas"].active {
+  background: rgba(22, 163, 74, 0.22);
+  border-color: #22c55e;
+  color: #ffffff;
+  font-weight: var(--font-weight-bold);
+}
+
+.btn-tipo-card[data-tipo="personas"].active .btn-tipo-indicator {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+}
+
+.btn-tipo-card[data-tipo="mix"].active {
+  background: rgba(147, 51, 234, 0.22);
+  border-color: #a855f7;
+  color: #ffffff;
+  font-weight: var(--font-weight-bold);
+}
+
+.btn-tipo-card[data-tipo="mix"].active .btn-tipo-indicator {
+  background: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
+}
+
+/* Input para escribir cantidad de cartas */
+.counter-input-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+}
+
+.counter-input {
+  width: 90px;
+  text-align: center;
+  font-family: var(--font-family);
+  font-size: 1.6rem;
+  font-weight: var(--font-weight-black);
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  padding: 0.1rem 0;
+  border-radius: 0;
+  transition: border-color 0.2s ease;
+}
+
+.counter-input:focus {
+  border-bottom-color: var(--accent-secondary);
+}
+
+.counter-input::-webkit-outer-spin-button,
+.counter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.counter-input {
+  -moz-appearance: textfield;
+}
+
+.counter-unit {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: -2px;
 }
 
 /* Marcador / Scoreboard */

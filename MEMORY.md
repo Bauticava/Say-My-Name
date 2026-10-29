@@ -139,19 +139,25 @@ En la pantalla `#configuracion`:
 
 ## 9. Historial de Cambios Recientes
 
-- **2026-10-28**:
-  - Creación inicial de PWA, Service Worker y módulos de UI.
-  - Creación de sistema de modales customizados (`js/ui/modal.js`).
-  - Migración de `data/cartas.json` al nuevo esquema de 3 elementos con colores, palabra clave y dificultad.
-  - Implementación de `RONDAS_CONFIG` en `js/game.js` con las 4 rondas (Ronda 1, 2, Relámpago y 3).
-  - Implementación de reglas de botones dinámicos por ronda (acierto, paso, error, deshacer).
-  - Implementación de la Ronda Relámpago con 15 segundos y selector de puntaje de 3 puntos.
-  - Creación del Modo Desarrollador con datalist y exportación JSON.
-  - Sistema de filtros en configuración por tipo, categoría y dificultad.
-  - Actualización de marca visual: nuevo logo e iconos PWA retro marquesina.
-  - **Palabra clave visible en Relámpago**: Quien lee la carta ahora visualiza la palabra clave para validar respuestas mientras corre el temporizador de 15 segundos.
-  - **Fin de turno automático al pasar todas las cartas**: Si un equipo saltea todas las cartas restantes de la ronda, su turno finaliza automáticamente.
-  - Activado modo de trabajo **100% local** (sin push a GitHub).
+- **2026-10-29**:
+  - **Pantalla Equipos**:
+    - Simplificación del texto a *"Armá al menos 2 equipos para la partida."* y centrado prolijo.
+  - **Pantalla Reglas**:
+    - Título unificado a *"Say My Name"* tanto en el encabezado como dentro del documento de reglas.
+    - Texto justificado (`text-align: justify;`) para aprovechar el ancho completo de la tarjeta con lectura limpia.
+    - Eliminación de emojis excesivos para un diseño más sobrio.
+    - Estructuración limpia de los 3 elementos (Rojo, Verde y Violeta) uno debajo del otro, sin amontonamiento ni saltos extraños de línea.
+    - Redacción de reglas mucho más concisa y directa.
+    - Corrección en el parser markdown para anidamiento y formateo correcto de listas.
+  - **Pantalla Configuración**:
+    - Filtros de Tipo de Elemento transformados a filas completas (Títulos, Personas, Mix), más grandes y apilados verticalmente.
+    - Cada tipo adopta el color correspondiente al seleccionarse: Rojo (`#ef4444`), Verde (`#22c55e`) y Violeta (`#a855f7`) con indicadores luminosos.
+    - Se removieron los textos entre paréntesis `(titulos)`, `(personas)` y `(mix)`.
+    - Eliminación del filtro de categorías específicas para simplificar la interfaz.
+    - Selector de cantidad de cartas con `<input type="number">` directo para escribir el número exacto, complementado con botones `[-]`, `[+]` y accesos directos de presets `[10]`, `[15]`, `[20]`, `[Máx]`.
+  - **Service Worker**:
+    - Actualizada la versión de caché a `cartas-v6`.
+
 
 ---
 
@@ -162,3 +168,4 @@ En la pantalla `#configuracion`:
 - **Próximas tareas según feedback del usuario**:
   - Seguir iterando sobre las pruebas en dispositivos móviles en red local.
   - Ajustes de UX/UI o balance de cartas según pruebas reales.
+
