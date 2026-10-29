@@ -187,7 +187,7 @@ En la pantalla `#configuracion`:
 ## 10. Estado Actual y Próximos Pasos
 
 - **Servidor local**: `node dev-server.js` (puerto 3000 / IP local).
-- **Branch Git**: `main` (limpio localmente, 1 commit adelante de `origin/main`).
+- **Branch Git**: `main` (sincronizado con `origin/main` en GitHub).
 - **Próximas tareas según feedback del usuario**:
   - Seguir iterando sobre las pruebas en dispositivos móviles en red local.
   - Ajustes de UX/UI o balance de cartas según pruebas reales.
