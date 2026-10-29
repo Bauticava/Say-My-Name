@@ -3,7 +3,7 @@
  * Permite agregar, renombrar y quitar equipos con validaciones completas.
  */
 
-import { gameState } from '../game.js';
+import { gameState, PALETA_EQUIPOS } from '../game.js';
 import { customAlert, customConfirm, customPrompt } from './modal.js';
 
 export function renderEquipos(container, router) {
@@ -49,8 +49,18 @@ export function renderEquipos(container, router) {
 
           <div id="lista-equipos">
             ${gameState.equipos.map((eq, index) => `
-              <div class="team-item" data-id="${eq.id}">
-                <span class="team-item-name">${index + 1}. ${escapeHtml(eq.nombre)}</span>
+              <div class="team-item" data-id="${eq.id}" style="border-left: 4px solid ${eq.color || '#f59e0b'};">
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                  <button 
+                    class="team-color-dot btn-cambiar-color" 
+                    data-id="${eq.id}" 
+                    type="button" 
+                    style="background-color: ${eq.color || '#f59e0b'};" 
+                    title="Tocar para cambiar color de equipo"
+                    aria-label="Cambiar color del equipo ${escapeHtml(eq.nombre)}"
+                  ></button>
+                  <span class="team-item-name">${index + 1}. ${escapeHtml(eq.nombre)}</span>
+                </div>
                 <div class="team-actions">
                   <button class="icon-btn btn-editar" data-id="${eq.id}" type="button" aria-label="Renombrar ${escapeHtml(eq.nombre)}">
                     ✏️
@@ -166,6 +176,22 @@ export function renderEquipos(container, router) {
               message: err.message
             });
           }
+        }
+      });
+    });
+
+    // Cambiar color de equipo
+    container.querySelectorAll('.btn-cambiar-color').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const eq = gameState.equipos.find((e) => e.id === id);
+        if (eq) {
+          const currentIdx = PALETA_EQUIPOS.findIndex(
+            (c) => c.hex.toLowerCase() === (eq.color || '').toLowerCase()
+          );
+          const nextIdx = (currentIdx + 1) % PALETA_EQUIPOS.length;
+          gameState.cambiarColorEquipo(id, PALETA_EQUIPOS[nextIdx].hex);
+          updateUI();
         }
       });
     });

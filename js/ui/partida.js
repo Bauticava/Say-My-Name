@@ -86,6 +86,97 @@ export function renderPartida(container, router) {
     setTimeout(cerrar, 1400);
   }
 
+  function initSwipeGesture(cardEl, { onAcierto, onPaso, puedePasar }) {
+    if (!cardEl) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+
+    const startDrag = (x, y) => {
+      startX = x;
+      startY = y;
+      isDragging = true;
+      cardEl.style.transition = 'none';
+    };
+
+    const moveDrag = (x, y) => {
+      if (!isDragging) return;
+      let dx = x - startX;
+      let dy = y - startY;
+
+      // Resistencia elástica si se arrastra hacia la izquierda o hacia arriba
+      if (dx < 0) dx = dx * 0.15;
+      if (dy < 0) dy = dy * 0.15;
+      if (!puedePasar && dy > 0) dy = dy * 0.1;
+
+      const rot = (dx * 0.05).toFixed(2);
+      cardEl.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg)`;
+    };
+
+    const endDrag = (x, y) => {
+      if (!isDragging) return;
+      isDragging = false;
+
+      let dx = x - startX;
+      let dy = y - startY;
+      const threshold = 80;
+
+      if (dx >= threshold && dx > dy) {
+        // Swipe a la derecha -> ¡Acierto!
+        cardEl.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
+        cardEl.style.transform = 'translate3d(130%, -20px, 0) rotate(16deg)';
+        cardEl.style.opacity = '0';
+        onAcierto();
+      } else if (dy >= threshold && dy > dx && puedePasar) {
+        // Swipe hacia abajo -> Paso
+        cardEl.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
+        cardEl.style.transform = 'translate3d(0, 120px, 0) scale(0.85)';
+        cardEl.style.opacity = '0';
+        onPaso();
+      } else {
+        // Retorno elástico
+        cardEl.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+        cardEl.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
+      }
+    };
+
+    // Eventos táctiles
+    cardEl.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      startDrag(t.clientX, t.clientY);
+    }, { passive: true });
+
+    cardEl.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const t = e.touches[0];
+      moveDrag(t.clientX, t.clientY);
+    }, { passive: true });
+
+    cardEl.addEventListener('touchend', (e) => {
+      const t = e.changedTouches[0];
+      endDrag(t.clientX, t.clientY);
+    });
+
+    cardEl.addEventListener('touchcancel', (e) => {
+      const t = e.changedTouches[0];
+      endDrag(t.clientX, t.clientY);
+    });
+
+    // Eventos de ratón (desktop)
+    cardEl.addEventListener('mousedown', (e) => {
+      startDrag(e.clientX, e.clientY);
+      const onMouseMove = (ev) => moveDrag(ev.clientX, ev.clientY);
+      const onMouseUp = (ev) => {
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        endDrag(ev.clientX, ev.clientY);
+      };
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
   function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -167,12 +258,22 @@ export function renderPartida(container, router) {
 
         <!-- Marcador actual -->
         <div class="scoreboard">
-          ${gameState.equipos.map((eq, i) => `
-            <div class="score-box ${i === (esRelampago ? turnoRel.equipoIndex : gameState.equipoTurnoIndex) ? 'active' : ''}">
-              <div class="score-box-name">${escapeHtml(eq.nombre)}</div>
-              <div class="score-box-points">${eq.puntos} pts</div>
-            </div>
-          `).join('')}
+          ${gameState.equipos.map((eq, i) => {
+            const esActivo = i === (esRelampago ? (turnoRel ? turnoRel.equipoIndex : 0) : gameState.equipoTurnoIndex);
+            const eqColor = eq.color || '#f59e0b';
+            return `
+              <div 
+                class="score-box ${esActivo ? 'active' : ''}" 
+                style="${esActivo ? `border-color: ${eqColor}; box-shadow: 0 0 12px ${eqColor}44;` : ''}"
+              >
+                <div class="score-box-name" style="display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                  <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: ${eqColor}; flex-shrink: 0;"></span>
+                  <span>${escapeHtml(eq.nombre)}</span>
+                </div>
+                <div class="score-box-points" style="${esActivo ? `color: ${eqColor};` : ''}">${eq.puntos} pts</div>
+              </div>
+            `;
+          }).join('')}
         </div>
 
         <div class="surface-card" style="margin-top: 1rem; text-align: center; padding: 2rem 1.25rem;">
@@ -233,7 +334,9 @@ export function renderPartida(container, router) {
           <div class="round-pill">
             <span>${config.icono} ${escapeHtml(config.nombre)}</span>
           </div>
-          <span class="turn-pill">Turno: ${escapeHtml(gameState.equipoActual.nombre)}</span>
+          <span class="turn-pill" style="border-left: 3px solid ${gameState.equipoActual.color || 'var(--accent-secondary)'}; padding-left: 0.5rem;">
+            Turno: <strong style="color: ${gameState.equipoActual.color || 'var(--accent-secondary)'};">${escapeHtml(gameState.equipoActual.nombre)}</strong>
+          </span>
         </header>
 
         <!-- Temporizador central -->
@@ -416,6 +519,38 @@ export function renderPartida(container, router) {
         renderCurrentPhase();
       }
     });
+
+    // Gesto de arrastre táctil (Swipe)
+    const cardEl = container.querySelector('#current-card');
+    if (cardEl) {
+      initSwipeGesture(cardEl, {
+        puedePasar,
+        onAcierto: () => {
+          activeTimer.playSuccessSound();
+          setTimeout(() => {
+            gameState.acertarCarta();
+            if (
+              gameState.faseTurno === 'mazo_completado' ||
+              gameState.faseTurno === 'ronda_terminada' ||
+              gameState.faseTurno === 'turno_terminado_pase'
+            ) {
+              activeTimer.pause();
+            }
+            renderCurrentPhase();
+          }, 180);
+        },
+        onPaso: () => {
+          activeTimer.playPassSound();
+          setTimeout(() => {
+            gameState.pasarCarta();
+            if (gameState.faseTurno === 'turno_terminado_pase') {
+              activeTimer.pause();
+            }
+            renderCurrentPhase();
+          }, 180);
+        }
+      });
+    }
   }
 
   // --- Fase: Jugando Ronda Relámpago ---
@@ -775,13 +910,19 @@ export function renderPartida(container, router) {
             Se completaron todas las rondas de la partida.
           </p>
 
-          <div id="podium-list" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+          <div id="podium-list" style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
             ${ranking.map((eq, index) => {
               const medalla = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+              const eqColor = eq.color || '#f59e0b';
               return `
-                <div class="team-item podium-item" data-index="${index}" style="${index === 0 ? 'border-color: var(--accent-secondary);' : ''}">
+                <div 
+                  class="team-item podium-item" 
+                  data-index="${index}" 
+                  style="${index === 0 ? 'border-color: var(--accent-secondary);' : ''} border-left: 4px solid ${eqColor};"
+                >
                   <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="font-size: 1.3rem;">${medalla}</span>
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: ${eqColor}; flex-shrink: 0;"></span>
                     <span style="font-weight: var(--font-weight-bold); font-size: 1.1rem;">${escapeHtml(eq.nombre)}</span>
                   </div>
                   <span style="font-size: 1.2rem; font-weight: var(--font-weight-black); color: var(--text-primary);">
@@ -790,6 +931,50 @@ export function renderPartida(container, router) {
                 </div>
               `;
             }).join('')}
+          </div>
+
+          <!-- Botón y contenedor de desglose por rondas -->
+          <button id="btn-toggle-desglose" class="btn btn-secondary btn-block" type="button" style="margin-bottom: 1.25rem;">
+            📊 Ver detalle por rondas
+          </button>
+
+          <div id="desglose-rondas-container" style="display: none; margin-bottom: 1.5rem; text-align: left;">
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--bg-surface-border); border-radius: var(--radius-md); padding: 0.85rem; overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                <thead>
+                  <tr style="border-bottom: 1px solid var(--bg-surface-border); color: var(--text-secondary);">
+                    <th style="padding: 0.4rem 0.2rem; text-align: left;">Ronda</th>
+                    ${gameState.equipos.map((eq) => `
+                      <th style="padding: 0.4rem 0.2rem; text-align: right; color: ${eq.color || '#fff'};">
+                        ${escapeHtml(eq.nombre)}
+                      </th>
+                    `).join('')}
+                  </tr>
+                </thead>
+                <tbody>
+                  ${RONDAS_CONFIG.map((r) => `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                      <td style="padding: 0.5rem 0.2rem; color: var(--text-secondary);">
+                        ${r.icono} ${escapeHtml(r.nombre.split(':')[0])}
+                      </td>
+                      ${gameState.equipos.map((eq) => `
+                        <td style="padding: 0.5rem 0.2rem; text-align: right; font-weight: bold; color: var(--text-primary);">
+                          +${(gameState.puntosPorRonda && gameState.puntosPorRonda[r.id] && gameState.puntosPorRonda[r.id][eq.id]) || 0}
+                        </td>
+                      `).join('')}
+                    </tr>
+                  `).join('')}
+                  <tr style="font-weight: bold; border-top: 2px solid var(--bg-surface-border);">
+                    <td style="padding: 0.6rem 0.2rem; color: var(--accent-secondary);">TOTAL</td>
+                    ${gameState.equipos.map((eq) => `
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-size: 1rem; color: ${eq.color || 'var(--accent-secondary)'};">
+                        ${eq.puntos} pts
+                      </td>
+                    `).join('')}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 0.85rem;">
@@ -838,6 +1023,18 @@ export function renderPartida(container, router) {
       });
       dispararConfeti();
     }, { once: true });
+
+    // Toggle desglose de puntos por ronda
+    const btnToggleDesglose = container.querySelector('#btn-toggle-desglose');
+    const desgloseEl = container.querySelector('#desglose-rondas-container');
+    if (btnToggleDesglose && desgloseEl) {
+      btnToggleDesglose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const estaOculto = desgloseEl.style.display === 'none';
+        desgloseEl.style.display = estaOculto ? 'block' : 'none';
+        btnToggleDesglose.textContent = estaOculto ? '🔼 Ocultar detalle' : '📊 Ver detalle por rondas';
+      });
+    }
 
     container.querySelector('#btn-volver-a-jugar')?.addEventListener('click', () => {
       router.navigate('configuracion');

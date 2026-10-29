@@ -56,14 +56,23 @@ export const RONDAS_CONFIG = [
   }
 ];
 
+export const PALETA_EQUIPOS = [
+  { id: 'ambar', hex: '#f59e0b', nombre: 'Ámbar' },
+  { id: 'esmeralda', hex: '#10b981', nombre: 'Esmeralda' },
+  { id: 'azul', hex: '#3b82f6', nombre: 'Azul' },
+  { id: 'purpura', hex: '#8b5cf6', nombre: 'Púrpura' },
+  { id: 'coral', hex: '#f43f5e', nombre: 'Coral' },
+  { id: 'cian', hex: '#06b6d4', nombre: 'Cian' }
+];
+
 const STORAGE_KEY = 'say_my_name_game_state_v2';
 const CARTAS_DEV_STORAGE_KEY = 'say_my_name_custom_cards_v1';
 
 export class GameState {
   constructor() {
     this.equipos = [
-      { id: 'eq-1', nombre: 'Equipo 1', puntos: 0 },
-      { id: 'eq-2', nombre: 'Equipo 2', puntos: 0 }
+      { id: 'eq-1', nombre: 'Equipo 1', color: PALETA_EQUIPOS[0].hex, puntos: 0 },
+      { id: 'eq-2', nombre: 'Equipo 2', color: PALETA_EQUIPOS[1].hex, puntos: 0 }
     ];
     this.cantidadCartas = 15;
     this.tiempoPorTurno = 60; // segundos para rondas tradicionales
@@ -82,6 +91,9 @@ export class GameState {
     this.cartaActual = null;
     this.rondaIndex = 0; // 0: Ronda 1, 1: Ronda 2, 2: Relámpago, 3: Ronda 3
     this.equipoTurnoIndex = 0;
+
+    // Desglose de puntos por ronda: { [rondaId]: { [equipoId]: number } }
+    this.puntosPorRonda = {};
 
     // Estado del turno
     // 'listo' | 'jugando' | 'tiempo_agotado' | 'turno_terminado_error' | 'turno_terminado_pase' | 'mazo_completado' | 'relampago_evaluando' | 'ronda_terminada' | 'partida_terminada'
@@ -135,19 +147,29 @@ export class GameState {
     return { valid: true, error: null, sanitized };
   }
 
-  agregarEquipo(nombre) {
+  agregarEquipo(nombre, color = null) {
     const validacion = this.validarNombreEquipo(nombre);
     if (!validacion.valid) {
       throw new Error(validacion.error);
     }
+    const colorAsignado = color || PALETA_EQUIPOS[this.equipos.length % PALETA_EQUIPOS.length].hex;
     const nuevoEquipo = {
       id: `eq-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       nombre: validacion.sanitized,
+      color: colorAsignado,
       puntos: 0
     };
     this.equipos.push(nuevoEquipo);
     this.saveToStorage();
     return nuevoEquipo;
+  }
+
+  cambiarColorEquipo(id, nuevoColor) {
+    const eq = this.equipos.find((e) => e.id === id);
+    if (eq && nuevoColor) {
+      eq.color = nuevoColor;
+      this.saveToStorage();
+    }
   }
 
   renombrarEquipo(id, nuevoNombre) {
@@ -227,7 +249,14 @@ export class GameState {
     const customCards = this.obtenerCartasCustom();
     const todos = [...catalogoCompleto, ...customCards];
 
-    // Resetear puntos
+    // Resetear puntos e historial por ronda
+    this.puntosPorRonda = {};
+    RONDAS_CONFIG.forEach((r) => {
+      this.puntosPorRonda[r.id] = {};
+      this.equipos.forEach((eq) => {
+        this.puntosPorRonda[r.id][eq.id] = 0;
+      });
+    });
     this.equipos.forEach((eq) => {
       eq.puntos = 0;
     });
@@ -310,6 +339,9 @@ export class GameState {
     const puntos = this.rondaActualConfig.puntosPorAcierto || 1;
     if (this.equipoActual) {
       this.equipoActual.puntos += puntos;
+      const rId = this.rondaActualConfig.id;
+      if (!this.puntosPorRonda[rId]) this.puntosPorRonda[rId] = {};
+      this.puntosPorRonda[rId][this.equipoActual.id] = (this.puntosPorRonda[rId][this.equipoActual.id] || 0) + puntos;
     }
 
     // Guardar para "Deshacer"
@@ -391,6 +423,10 @@ export class GameState {
     const eq = this.equipos.find((e) => e.id === equipoId);
     if (eq) {
       eq.puntos = Math.max(0, eq.puntos - puntos);
+      const rId = esRelampago ? 'ronda_relampago' : this.rondaActualConfig.id;
+      if (this.puntosPorRonda[rId] && this.puntosPorRonda[rId][equipoId]) {
+        this.puntosPorRonda[rId][equipoId] = Math.max(0, this.puntosPorRonda[rId][equipoId] - puntos);
+      }
     }
 
     if (esRelampago) {
@@ -451,6 +487,9 @@ export class GameState {
       const eq = this.equipos.find((e) => e.id === ganadorEquipoId);
       if (eq) {
         eq.puntos += 3;
+        const rId = 'ronda_relampago';
+        if (!this.puntosPorRonda[rId]) this.puntosPorRonda[rId] = {};
+        this.puntosPorRonda[rId][eq.id] = (this.puntosPorRonda[rId][eq.id] || 0) + 3;
         this.ultimoAcierto = {
           carta: this.cartaActual,
           equipoId: eq.id,
@@ -549,7 +588,8 @@ export class GameState {
         relampagoTurnos: this.relampagoTurnos,
         relampagoTurnoIndex: this.relampagoTurnoIndex,
         relampagoPalabraRevelada: this.relampagoPalabraRevelada,
-        ultimoAcierto: this.ultimoAcierto
+        ultimoAcierto: this.ultimoAcierto,
+        puntosPorRonda: this.puntosPorRonda
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {
@@ -563,7 +603,15 @@ export class GameState {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const data = JSON.parse(raw);
-      if (Array.isArray(data.equipos) && data.equipos.length >= 2) this.equipos = data.equipos;
+      if (Array.isArray(data.equipos) && data.equipos.length >= 2) {
+        this.equipos = data.equipos;
+        // Asegurar que cada equipo tenga un color válido
+        this.equipos.forEach((eq, idx) => {
+          if (!eq.color) {
+            eq.color = PALETA_EQUIPOS[idx % PALETA_EQUIPOS.length].hex;
+          }
+        });
+      }
       if (typeof data.cantidadCartas === 'number') this.cantidadCartas = data.cantidadCartas;
       if (typeof data.tiempoPorTurno === 'number') this.tiempoPorTurno = data.tiempoPorTurno;
       if (data.filtros) this.filtros = data.filtros;
@@ -580,6 +628,9 @@ export class GameState {
       this.relampagoTurnoIndex = data.relampagoTurnoIndex || 0;
       this.relampagoPalabraRevelada = Boolean(data.relampagoPalabraRevelada);
       this.ultimoAcierto = data.ultimoAcierto || null;
+      if (data.puntosPorRonda && typeof data.puntosPorRonda === 'object') {
+        this.puntosPorRonda = data.puntosPorRonda;
+      }
     } catch (e) {
       console.warn('No se pudo leer el estado previo de localStorage:', e);
     }

@@ -166,8 +166,20 @@ En la pantalla `#configuracion`:
   - **Podio Ascendente y Confeti**:
     - Al terminar la Ronda 3, revelación progresiva de posiciones en orden ascendente (desde el último puesto hasta coronar al ganador).
     - El primer puesto se revela con fanfarria sonora, glow dorado y lluvia de confeti en `<canvas>` nativo ligero (sin dependencias).
+  - **Gesto táctil de arrastre (Swipe) en cartas**:
+    - Arrastre a la derecha $\ge 80\text{px}$ $\to$ ¡Acierto! con inclinación y salida lateral.
+    - Arrastre hacia abajo $\ge 80\text{px}$ $\to$ Paso (habilitado en rondas que permiten paso; bloqueado con resistencia elástica en Ronda 1).
+    - Retorno elástico suave si se suelta sin superar el umbral. Compatible con gestos táctiles en mobile y arrastre de ratón en desktop.
+  - **Color identificador para cada equipo**:
+    - Paleta de 6 colores vibrantes (`PALETA_EQUIPOS`: Ámbar, Esmeralda, Azul, Púrpura, Coral, Cian).
+    - Selector táctil de color (círculo interactivo) en la pantalla de Equipos para alternar entre colores.
+    - Integración cromática del equipo en la barra de turnos, cajas de marcador y tarjetas del podio.
+  - **Desglose de puntos por ronda en el Podio**:
+    - Al finalizar la partida, botón *"📊 Ver detalle por rondas"* que despliega una tabla comparativa con los puntos obtenidos por cada equipo en Ronda 1, Ronda 2, Relámpago y Ronda 3.
+  - **Botón inteligente de instalación PWA**:
+    - Detecta el evento `beforeinstallprompt` y estado standalone. Solo se muestra en `#inicio` si la app no está instalada, y desaparece en cuanto se instala (`appinstalled`).
   - **Service Worker**:
-    - Actualizada la versión de caché a `cartas-v7`.
+    - Actualizada la versión de caché a `cartas-v8`.
 
 
 ---

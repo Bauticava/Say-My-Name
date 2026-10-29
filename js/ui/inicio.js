@@ -3,8 +3,14 @@
  */
 
 import { gameState } from '../game.js';
+import { deferredInstallPrompt } from '../app.js';
 import { customConfirm } from './modal.js';
 import { abrirModoDesarrollador } from './dev-mode.js';
+
+function esModoStandalone() {
+  if (typeof window === 'undefined') return false;
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || Boolean(navigator.standalone);
+}
 
 export function renderInicio(container, router) {
   const tienePartidaEnCurso = gameState.enPartida;
@@ -32,6 +38,9 @@ export function renderInicio(container, router) {
           `}
           <button id="btn-reglas" class="btn btn-secondary btn-block" type="button">
             Reglas del Juego
+          </button>
+          <button id="btn-instalar-app" class="btn btn-secondary btn-block" type="button" style="display: ${!esModoStandalone() && deferredInstallPrompt ? 'block' : 'none'}; border-color: var(--accent-secondary); color: var(--accent-secondary);">
+            📲 Instalar aplicación
           </button>
         </div>
       </div>
@@ -69,6 +78,30 @@ export function renderInicio(container, router) {
   btnReglas?.addEventListener('click', () => {
     router.navigate('reglas');
   });
+
+  // Botón de instalación PWA
+  const btnInstalar = container.querySelector('#btn-instalar-app');
+  if (btnInstalar) {
+    btnInstalar.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          btnInstalar.style.display = 'none';
+        }
+      }
+    });
+
+    const onPromptAvailable = () => {
+      if (!esModoStandalone() && btnInstalar) {
+        btnInstalar.style.display = 'block';
+      }
+    };
+    window.addEventListener('pwa-prompt-available', onPromptAvailable);
+    window.addEventListener('pwa-app-installed', () => {
+      if (btnInstalar) btnInstalar.style.display = 'none';
+    });
+  }
 
   // Activación discreta del Modo Desarrollador (5 toques en el logo)
   let devTapCount = 0;

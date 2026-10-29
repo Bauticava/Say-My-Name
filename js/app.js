@@ -10,6 +10,22 @@ import { renderEquipos } from './ui/equipos.js';
 import { renderConfiguracion } from './ui/configuracion.js';
 import { renderPartida } from './ui/partida.js';
 
+// Gestión del prompt de instalación de PWA
+export let deferredInstallPrompt = null;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    window.dispatchEvent(new CustomEvent('pwa-prompt-available'));
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    window.dispatchEvent(new CustomEvent('pwa-app-installed'));
+  });
+}
+
 // Registrar Service Worker para soporte offline
 function registrarServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -45,8 +61,10 @@ function iniciarApp() {
   registrarServiceWorker();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', iniciarApp);
-} else {
-  iniciarApp();
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarApp);
+  } else {
+    iniciarApp();
+  }
 }
