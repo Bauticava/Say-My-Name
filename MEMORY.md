@@ -182,7 +182,10 @@ En la pantalla `#configuracion`:
   - **Botón inteligente de instalación PWA**:
     - Detecta el evento `beforeinstallprompt` y estado standalone. Solo se muestra en `#inicio` si la app no está instalada, y desaparece en cuanto se instala (`appinstalled`).
   - **Service Worker**:
-    - Actualizada la versión de caché a `cartas-v14`.
+    - Actualizada la versión de caché a `cartas-v15`.
+  - **Navegación directa al Menú Inicial (`#inicio`)**:
+    - Al abandonar una partida activa (sea por botón "✕" o por el gesto atrás del teléfono tras confirmar), se redirige directamente a `#inicio` en lugar de la pantalla anterior del historial.
+    - La flecha de retroceso en `#configuracion` ahora vuelve directo a `#inicio`.
   - **Pantalla Principal (`#inicio`) con Palabras Voladoras y Pie de Donaciones**:
     - Sin tocar el logo ni los botones, se sumó una capa de fondo (`z-index: 0`) donde palabras reales del mazo vuelan por detrás del logo y botones (`z-index: 3`).
     - **Trayectorias desparramadas**: Las palabras ahora viajan en trayectorias variadas (de arriba a abajo, de abajo a arriba, y diagonales cruzadas) con ángulos de inclinación pronunciados.

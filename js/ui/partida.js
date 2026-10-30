@@ -312,8 +312,20 @@ export function renderPartida(container, router) {
       </section>
     `;
 
-    container.querySelector('#btn-abandonar')?.addEventListener('click', () => {
-      window.history.back();
+    container.querySelector('#btn-abandonar')?.addEventListener('click', async () => {
+      const confirma = await customConfirm({
+        title: '¿Abandonar la partida?',
+        message: 'Se mantendrá el progreso en este dispositivo para que puedas retomarla después.',
+        confirmText: 'Abandonar',
+        cancelText: 'Seguir jugando',
+        danger: true
+      });
+      if (confirma) {
+        if (activeTimer) {
+          activeTimer.destroy();
+        }
+        router.navigate('inicio');
+      }
     });
 
     container.querySelector('#btn-iniciar-turno')?.addEventListener('click', () => {

@@ -211,7 +211,7 @@ export async function renderConfiguracion(container, router) {
 
   function bindEvents(cartasFiltradas, maximoCartasPrincipal, alcanzanCartas) {
     container.querySelector('#btn-volver')?.addEventListener('click', () => {
-      window.history.back();
+      router.navigate('inicio');
     });
 
     // Filtros de Tipo de Elemento (Títulos, Personas, Mix)

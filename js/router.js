@@ -74,7 +74,7 @@ export class Router {
 
       if (confirma) {
         wakeLockManager.release();
-        this.navigate(targetScreen);
+        this.navigate('inicio');
       }
       return;
     }
