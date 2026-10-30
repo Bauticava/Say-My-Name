@@ -2,301 +2,3367 @@
   {
     "id": 1,
     "elementos": [
-      { "texto": "Felices los 4", "categoria": "Canción", "color": "rojo" },
-      { "texto": "Gerard Piqué", "categoria": "Deportista", "color": "verde" },
-      { "texto": "Ojos bien cerrados", "categoria": "Película", "color": "violeta" }
+      {
+        "texto": "AGÁRRENSE DE LAS MANOS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MAU Y RICKY",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "HUGO CHÁVEZ",
+        "categoria": "Celebridad",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Infidelidad",
-    "dificultad": 2
+    "palabraClave": "VENEZUELA",
+    "dificultad": 3
   },
   {
     "id": 2,
     "elementos": [
-      { "texto": "Pasapalabra", "categoria": "Televisión", "color": "rojo" },
-      { "texto": "Dora la Exploradora", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Indianápolis", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "EL BRUJITO DE GULUBÚ",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOUIS PASTEUR",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "SPUTNIK",
+        "categoria": "Satélite",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Pista",
-    "dificultad": 3
+    "palabraClave": "VACUNA",
+    "dificultad": 2
   },
   {
     "id": 3,
     "elementos": [
-      { "texto": "El juego del calamar", "categoria": "Serie", "color": "rojo" },
-      { "texto": "Kim Jong-un", "categoria": "Celebridad", "color": "verde" },
-      { "texto": "BTS", "categoria": "Banda", "color": "violeta" }
+      {
+        "texto": "EL SERRUCHO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MARTILLO HAMMER",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "LA MAZA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Corea",
-    "dificultad": 2
+    "palabraClave": "HERRAMIENTA",
+    "dificultad": 4
   },
   {
     "id": 4,
     "elementos": [
-      { "texto": "Santa Cláusula", "categoria": "Película", "color": "rojo" },
-      { "texto": "Ralph Lauren", "categoria": "Celebridad", "color": "verde" },
-      { "texto": "Base Marambio", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "THE LEGO MOVIE",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "BARBIE",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "BUZZ LIGHTYEAR",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Polo",
-    "dificultad": 3
+    "palabraClave": "JUGUETE",
+    "dificultad": 4
   },
   {
     "id": 5,
     "elementos": [
-      { "texto": "Muchachos", "categoria": "Canción", "color": "rojo" },
-      { "texto": "Lionel Messi", "categoria": "Deportista", "color": "verde" },
-      { "texto": "Obelisco de Buenos Aires", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "PASAPALABRA",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "DORA LA EXPLORADORA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "INDIANÁPOLIS",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Campeón",
-    "dificultad": 1
+    "palabraClave": "PISTA",
+    "dificultad": 3
   },
   {
     "id": 6,
     "elementos": [
-      { "texto": "El Padrino", "categoria": "Película", "color": "rojo" },
-      { "texto": "Al Capone", "categoria": "Personaje Histórico", "color": "verde" },
-      { "texto": "Sicilia", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "POLICÍAS EN ACCIÓN",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "MIGUE GRANADOS",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "BIZARRAP",
+        "categoria": "Músico",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Mafia",
-    "dificultad": 2
+    "palabraClave": "GORRA",
+    "dificultad": 3
   },
   {
     "id": 7,
     "elementos": [
-      { "texto": "Bohemian Rhapsody", "categoria": "Canción", "color": "rojo" },
-      { "texto": "Freddie Mercury", "categoria": "Músico", "color": "verde" },
-      { "texto": "Corona Real", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "EL JUEGO DEL CALAMAR",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "KIM JONG-UN",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "BTS",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Queen",
-    "dificultad": 1
+    "palabraClave": "COREA",
+    "dificultad": 2
   },
   {
     "id": 8,
     "elementos": [
-      { "texto": "Volver al Futuro", "categoria": "Película", "color": "rojo" },
-      { "texto": "Albert Einstein", "categoria": "Científico", "color": "verde" },
-      { "texto": "Reloj Cucú", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "GASOLEROS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "RODRIGO DE PAUL",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "LOS AUTOS LOCOS",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Tiempo",
-    "dificultad": 2
+    "palabraClave": "MOTOR",
+    "dificultad": 4
   },
   {
     "id": 9,
     "elementos": [
-      { "texto": "Harry Potter y la piedra filosofal", "categoria": "Película", "color": "rojo" },
-      { "texto": "Merlín", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Varita", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "LOS SIMULADORES",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "PINKY Y CEREBRO",
+        "categoria": "Personajes de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL COYOTE Y EL CORRECAMINOS",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Magia",
-    "dificultad": 1
+    "palabraClave": "PLAN",
+    "dificultad": 3
   },
   {
     "id": 10,
     "elementos": [
-      { "texto": "Thriller", "categoria": "Álbum", "color": "rojo" },
-      { "texto": "Frankenstein", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Cementerio", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "SANTA CLÁUSULA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "RALPH LAUREN",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "BASE MARAMBIO",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Monstruo",
-    "dificultad": 2
+    "palabraClave": "POLO",
+    "dificultad": 3
   },
   {
     "id": 11,
     "elementos": [
-      { "texto": "Star Wars: Una nueva esperanza", "categoria": "Película", "color": "rojo" },
-      { "texto": "Neil Armstrong", "categoria": "Celebridad", "color": "verde" },
-      { "texto": "Vía Láctea", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "LA GOTA FRÍA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "TORMENTA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "SIN GAMULÁN",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Espacio",
-    "dificultad": 2
+    "palabraClave": "LLUVIA",
+    "dificultad": 4
   },
   {
     "id": 12,
     "elementos": [
-      { "texto": "De Música Ligera", "categoria": "Canción", "color": "rojo" },
-      { "texto": "Gustavo Cerati", "categoria": "Músico", "color": "verde" },
-      { "texto": "Sifón de Soda", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "DEVÓRAME OTRA VEZ",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "SWEENEY TODD",
+        "categoria": "Película",
+        "color": "verde"
+      },
+      {
+        "texto": "EL SILENCIO DE LOS INOCENTES",
+        "categoria": "Película",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Soda",
-    "dificultad": 1
+    "palabraClave": "CANÍBAL",
+    "dificultad": 3
   },
   {
     "id": 13,
     "elementos": [
-      { "texto": "El Secreto de sus Ojos", "categoria": "Película", "color": "rojo" },
-      { "texto": "Sherlock Holmes", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Lupa", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "THUNDERCATS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "LEÓN GIECO",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "EL GATO VOLADOR",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Detective",
+    "palabraClave": "FELINO",
     "dificultad": 2
   },
   {
     "id": 14,
     "elementos": [
-      { "texto": "Breaking Bad", "categoria": "Serie", "color": "rojo" },
-      { "texto": "Marie Curie", "categoria": "Científica", "color": "verde" },
-      { "texto": "Tabla Periódica", "categoria": "Concepto", "color": "violeta" }
+      {
+        "texto": "ASEREJÉ",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "CHARLI D'AMELIO",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "KE",
+        "categoria": "Música",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Química",
+    "palabraClave": "TIKTOK",
     "dificultad": 3
   },
   {
     "id": 15,
     "elementos": [
-      { "texto": "Jurassic Park", "categoria": "Película", "color": "rojo" },
-      { "texto": "Godzilla", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Fósil", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "AMONG US",
+        "categoria": "Videojuego",
+        "color": "rojo"
+      },
+      {
+        "texto": "ALIEN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL HALCÓN MILENARIO",
+        "categoria": "Objeto",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Dinosaurio",
-    "dificultad": 1
+    "palabraClave": "NAVE",
+    "dificultad": 3
   },
   {
     "id": 16,
     "elementos": [
-      { "texto": "La Casa de Papel", "categoria": "Serie", "color": "rojo" },
-      { "texto": "Robin Hood", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Caja Fuerte", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "TONTO Y RETONTO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "TOM Y JERRY",
+        "categoria": "Personajes de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "THELMA Y LOUISE",
+        "categoria": "Película",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Robo",
-    "dificultad": 2
+    "palabraClave": "DÚO / DOS",
+    "dificultad": 4
   },
   {
     "id": 17,
     "elementos": [
-      { "texto": "Titanic", "categoria": "Película", "color": "rojo" },
-      { "texto": "Capitán Garfio", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Triángulo de las Bermudas", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "GUACAMOLE",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LAS KETCHUP",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "CELIA CRUZ",
+        "categoria": "Música",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Barco",
-    "dificultad": 2
+    "palabraClave": "SALSA",
+    "dificultad": 4
   },
   {
     "id": 18,
     "elementos": [
-      { "texto": "Rayuela", "categoria": "Libro", "color": "rojo" },
-      { "texto": "Julio Cortázar", "categoria": "Escritor", "color": "verde" },
-      { "texto": "Torre Eiffel", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "EL PLAN PERFECTO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "LIONEL SCALONI",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "SUIZA",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "París",
-    "dificultad": 3
+    "palabraClave": "BANCO",
+    "dificultad": 2
   },
   {
     "id": 19,
     "elementos": [
-      { "texto": "El Rey León", "categoria": "Película", "color": "rojo" },
-      { "texto": "Tarzán", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Sabana Africana", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "INFRAMUNDO",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOS TRES CHANCHITOS",
+        "categoria": "Personajes de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "GIMNASIA Y ESGRIMA DE LA PLATA",
+        "categoria": "Institución",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Selva",
-    "dificultad": 1
+    "palabraClave": "LOBO",
+    "dificultad": 4
   },
   {
     "id": 20,
     "elementos": [
-      { "texto": "Los Simuladores", "categoria": "Serie", "color": "rojo" },
-      { "texto": "James Bond", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Disfraz", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "Y.M.C.A.",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOS WACHITURROS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "JOHNNIE WALKER",
+        "categoria": "Marca",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Misión",
-    "dificultad": 2
+    "palabraClave": "PASO",
+    "dificultad": 3
   },
   {
     "id": 21,
     "elementos": [
-      { "texto": "Yellow Submarine", "categoria": "Canción", "color": "rojo" },
-      { "texto": "The Beatles", "categoria": "Banda", "color": "verde" },
-      { "texto": "Big Ben", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "OKTUBRE",
+        "categoria": "Álbum",
+        "color": "rojo"
+      },
+      {
+        "texto": "JULIO IGLESIAS",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "AVRIL LAVIGNE",
+        "categoria": "Música",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Londres",
+    "palabraClave": "MES",
     "dificultad": 2
   },
   {
     "id": 22,
     "elementos": [
-      { "texto": "El Caballero de la Noche", "categoria": "Película", "color": "rojo" },
-      { "texto": "Batman", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Baticueva", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "EL SODERO DE MI VIDA",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "ISABEL \"COCA\" SARLI",
+        "categoria": "Actriz",
+        "color": "verde"
+      },
+      {
+        "texto": "OJALÁ QUE LLUEVA CAFÉ",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Murciélago",
-    "dificultad": 1
+    "palabraClave": "BEBIDA",
+    "dificultad": 4
   },
   {
     "id": 23,
     "elementos": [
-      { "texto": "Coco", "categoria": "Película", "color": "rojo" },
-      { "texto": "Frida Kahlo", "categoria": "Artista", "color": "verde" },
-      { "texto": "Mariachi", "categoria": "Música", "color": "violeta" }
+      {
+        "texto": "SEX AND THE CITY",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "CHEWBACCA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "CUANDO HARRY CONOCIÓ A SALLY",
+        "categoria": "Película",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "México",
-    "dificultad": 1
+    "palabraClave": "GEMIDO",
+    "dificultad": 3
   },
   {
     "id": 24,
     "elementos": [
-      { "texto": "Matrix", "categoria": "Película", "color": "rojo" },
-      { "texto": "Steve Jobs", "categoria": "Celebridad", "color": "verde" },
-      { "texto": "Internet", "categoria": "Concepto", "color": "violeta" }
+      {
+        "texto": "VENÍ RAQUEL",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "THE RAMONES",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "HEY JUDE",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Computadora",
-    "dificultad": 3
+    "palabraClave": "NOMBRE",
+    "dificultad": 4
   },
   {
     "id": 25,
     "elementos": [
-      { "texto": "Rocky", "categoria": "Película", "color": "rojo" },
-      { "texto": "Mike Tyson", "categoria": "Deportista", "color": "verde" },
-      { "texto": "Guante", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "LA OLA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ANGELA MERKEL",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "GOODBYE LENIN",
+        "categoria": "Película",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Boxeo",
-    "dificultad": 1
+    "palabraClave": "ALEMANIA",
+    "dificultad": 2
   },
   {
     "id": 26,
     "elementos": [
-      { "texto": "Gladiador", "categoria": "Película", "color": "rojo" },
-      { "texto": "Julio César", "categoria": "Personaje Histórico", "color": "verde" },
-      { "texto": "Coliseo", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "BRIDGERTON",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "THE CLASH",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "KINGSMAN",
+        "categoria": "Película",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Roma",
+    "palabraClave": "LONDRES",
     "dificultad": 2
   },
   {
     "id": 27,
     "elementos": [
-      { "texto": "Toy Story", "categoria": "Película", "color": "rojo" },
-      { "texto": "Barbie", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Lego", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "PARASITE (PARÁSITOS)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "MACAULAY CULKIN",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "DIÓGENES Y EL LINYERA",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Juguete",
-    "dificultad": 1
+    "palabraClave": "POBRE",
+    "dificultad": 2
   },
   {
     "id": 28,
     "elementos": [
-      { "texto": "Piratas del Caribe", "categoria": "Película", "color": "rojo" },
-      { "texto": "Barbanegra", "categoria": "Personaje Histórico", "color": "verde" },
-      { "texto": "Isla Desierta", "categoria": "Lugar", "color": "violeta" }
+      {
+        "texto": "LIFE OF PI (LA VIDA DE PI)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "SERGIO MASSA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "SANDOKÁN",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Tesoro",
-    "dificultad": 2
+    "palabraClave": "TIGRE",
+    "dificultad": 3
   },
   {
     "id": 29,
     "elementos": [
-      { "texto": "El Chavo del 8", "categoria": "Televisión", "color": "rojo" },
-      { "texto": "Don Ramón", "categoria": "Personaje de Ficción", "color": "verde" },
-      { "texto": "Barril", "categoria": "Objeto", "color": "violeta" }
+      {
+        "texto": "EUPHORIA",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "REVERENDO ALEGRÍA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "ORGULLO Y PREJUICIO",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Vecindad",
-    "dificultad": 1
+    "palabraClave": "SENTIMIENTO",
+    "dificultad": 3
   },
   {
     "id": 30,
     "elementos": [
-      { "texto": "Vivir Mi Vida", "categoria": "Canción", "color": "rojo" },
-      { "texto": "Shakira", "categoria": "Músico", "color": "verde" },
-      { "texto": "Carnaval", "categoria": "Evento", "color": "violeta" }
+      {
+        "texto": "ROSARIO TIJERAS",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "FITO PÁEZ",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "ROBERTO FONTANARROSA",
+        "categoria": "Escritor",
+        "color": "violeta"
+      }
     ],
-    "palabraClave": "Fiesta",
+    "palabraClave": "SANTA FE",
+    "dificultad": 4
+  },
+  {
+    "id": 31,
+    "elementos": [
+      {
+        "texto": "MANUELITA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "KYLIAN MBAPPÉ",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "DONATELLO",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TORTUGA",
+    "dificultad": 4
+  },
+  {
+    "id": 32,
+    "elementos": [
+      {
+        "texto": "PÁNICO Y LOCURA EN LAS VEGAS",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "JACK BLACK",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "LA GRAN APUESTA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CASINO",
+    "dificultad": 4
+  },
+  {
+    "id": 33,
+    "elementos": [
+      {
+        "texto": "THE LAST DANCE (EL ÚLTIMO BAILE)",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "ROBERT DE NIRO",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "WALL STREET",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TORO",
+    "dificultad": 3
+  },
+  {
+    "id": 34,
+    "elementos": [
+      {
+        "texto": "MI UNICORNIO AZUL",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOKI",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL LABERINTO DEL FAUNO",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CUERNOS",
+    "dificultad": 4
+  },
+  {
+    "id": 35,
+    "elementos": [
+      {
+        "texto": "CACTUS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "JUAN MANUEL DE ROSAS",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "PESCADO RABIOSO",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ESPINAS",
+    "dificultad": 4
+  },
+  {
+    "id": 36,
+    "elementos": [
+      {
+        "texto": "OOPS!... I DID IT AGAIN",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "UMBERTO ECO",
+        "categoria": "Escritor",
+        "color": "verde"
+      },
+      {
+        "texto": "MUÑECA RUSA",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "REPETICIÓN",
     "dificultad": 2
+  },
+  {
+    "id": 37,
+    "elementos": [
+      {
+        "texto": "BURBUJAS DE AMOR",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "GUSTAVO CERATI",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "IVÁN DRAGO",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "SODA",
+    "dificultad": 3
+  },
+  {
+    "id": 38,
+    "elementos": [
+      {
+        "texto": "TIRÁ PARA ARRIBA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "REMEDIOS DE ESCALADA",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "LA BILIRRUBINA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "SUBIR",
+    "dificultad": 4
+  },
+  {
+    "id": 39,
+    "elementos": [
+      {
+        "texto": "MINECRAFT",
+        "categoria": "Videojuego",
+        "color": "rojo"
+      },
+      {
+        "texto": "JUAN MÓNACO",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "EL PÁJARO LOCO",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PICO",
+    "dificultad": 3
+  },
+  {
+    "id": 40,
+    "elementos": [
+      {
+        "texto": "EL CUENTO DE LA CRIADA (THE HANDMAID'S TALE)",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "PAULINA COCINA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "HERMANOS A LA OBRA",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "HOGAR",
+    "dificultad": 2
+  },
+  {
+    "id": 41,
+    "elementos": [
+      {
+        "texto": "LA SUMA DE TODOS LOS MIEDOS (THE SUM OF ALL FEARS)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "DIVIDIDOS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "LA FAROLERA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CUENTA",
+    "dificultad": 3
+  },
+  {
+    "id": 42,
+    "elementos": [
+      {
+        "texto": "EL CÓDIGO ENIGMA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "SHELDON COOPER",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "NIKOLA TESLA",
+        "categoria": "Personaje Histórico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "GENIO",
+    "dificultad": 2
+  },
+  {
+    "id": 43,
+    "elementos": [
+      {
+        "texto": "LA GRANJA DE ZENÓN",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "MARTY MCFLY",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL POLLITO PÍO",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "GALLINA",
+    "dificultad": 4
+  },
+  {
+    "id": 44,
+    "elementos": [
+      {
+        "texto": "ATRÉVETE",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "PRINCESA MÉRIDA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "PADRE CORAJE",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "VALIENTE",
+    "dificultad": 4
+  },
+  {
+    "id": 45,
+    "elementos": [
+      {
+        "texto": "SHOWMATCH",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "GUIDO KACZKA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "WINDOWS",
+        "categoria": "Marca",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PROGRAMA",
+    "dificultad": 3
+  },
+  {
+    "id": 46,
+    "elementos": [
+      {
+        "texto": "NIÑERA A PRUEBA DE BALAS",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "AIRBAG",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "THE POLICE",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "SEGURIDAD",
+    "dificultad": 4
+  },
+  {
+    "id": 47,
+    "elementos": [
+      {
+        "texto": "ÓLEO DE UNA MUJER CON SOMBRERO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LEONARDO DA VINCI",
+        "categoria": "Artista",
+        "color": "verde"
+      },
+      {
+        "texto": "EL GUERNICA",
+        "categoria": "Obra de Arte",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PINTURA",
+    "dificultad": 4
+  },
+  {
+    "id": 48,
+    "elementos": [
+      {
+        "texto": "ROSA DE LEJOS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "LARGO",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "CERCA DE LA REVOLUCIÓN",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "DISTANCIA",
+    "dificultad": 4
+  },
+  {
+    "id": 49,
+    "elementos": [
+      {
+        "texto": "EL LIBRO DE LA SELVA",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "TROMPITA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "GANESHA",
+        "categoria": "Religión / Mitología",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ELEFANTE",
+    "dificultad": 4
+  },
+  {
+    "id": 50,
+    "elementos": [
+      {
+        "texto": "MALÉFICA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JUAN SEBASTIÁN VERÓN",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "HERMIONE GRANGER",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BRUJA",
+    "dificultad": 2
+  },
+  {
+    "id": 51,
+    "elementos": [
+      {
+        "texto": "COCO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "LA CHILINDRINA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "CIELITO LINDO",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MÉXICO",
+    "dificultad": 5
+  },
+  {
+    "id": 52,
+    "elementos": [
+      {
+        "texto": "HANNAH MONTANA",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "LALI ESPÓSITO",
+        "categoria": "Música",
+        "color": "verde"
+      },
+      {
+        "texto": "OPERACIÓN TRIUNFO",
+        "categoria": "Televisión",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CANTANTE",
+    "dificultad": 5
+  },
+  {
+    "id": 53,
+    "elementos": [
+      {
+        "texto": "ASADO Y FERNET",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "PAULO LONDRA",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "COSQUÍN ROCK",
+        "categoria": "Evento",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CÓRDOBA",
+    "dificultad": 5
+  },
+  {
+    "id": 54,
+    "elementos": [
+      {
+        "texto": "LAMENTO BOLIVIANO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "VINICIUS DE MORAES",
+        "categoria": "Escritor",
+        "color": "verde"
+      },
+      {
+        "texto": "LA SOLEDAD",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TRISTEZA",
+    "dificultad": 5
+  },
+  {
+    "id": 55,
+    "elementos": [
+      {
+        "texto": "HIMNO NACIONAL ARGENTINO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "SIMÓN BOLÍVAR",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "LA REVOLUCIÓN FRANCESA",
+        "categoria": "Evento Histórico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "LIBERTAD",
+    "dificultad": 5
+  },
+  {
+    "id": 56,
+    "elementos": [
+      {
+        "texto": "TOMATES VERDES FRITOS",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ROCÍO OLIVA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "COCINEROS ARGENTINOS",
+        "categoria": "Televisión",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ACEITE",
+    "dificultad": 3
+  },
+  {
+    "id": 57,
+    "elementos": [
+      {
+        "texto": "EL ENCARGADO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "DIEGO LATORRE",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "EMPIRE STATE",
+        "categoria": "Objeto",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "EDIFICIO",
+    "dificultad": 5
+  },
+  {
+    "id": 58,
+    "elementos": [
+      {
+        "texto": "LA SOCIEDAD DE LA NIEVE",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOS PUMAS",
+        "categoria": "Deportistas",
+        "color": "verde"
+      },
+      {
+        "texto": "NUEVA ZELANDA",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "RUGBY",
+    "dificultad": 5
+  },
+  {
+    "id": 59,
+    "elementos": [
+      {
+        "texto": "LAS CHICAS SUPERPODEROSAS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOS PALMERAS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "CHIPI CHIPI",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BOMBÓN",
+    "dificultad": 5
+  },
+  {
+    "id": 60,
+    "elementos": [
+      {
+        "texto": "CIEGA, SORDOMUDA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MR. BEAN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "NO LE DIJO NADA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "SILENCIO",
+    "dificultad": 5
+  },
+  {
+    "id": 61,
+    "elementos": [
+      {
+        "texto": "Y DALE ALEGRÍA A MI CORAZÓN",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "JOHANN SEBASTIAN BACH",
+        "categoria": "Compositor",
+        "color": "verde"
+      },
+      {
+        "texto": "TODO A PULMÓN",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ÓRGANO",
+    "dificultad": 5
+  },
+  {
+    "id": 62,
+    "elementos": [
+      {
+        "texto": "NO LLORES POR MÍ, ARGENTINA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LA ZIMBABWE",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "AVENIDA BRASIL",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PAÍS",
+    "dificultad": 5
+  },
+  {
+    "id": 63,
+    "elementos": [
+      {
+        "texto": "PERSIANA AMERICANA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "ASIA ARGENTO",
+        "categoria": "Actriz",
+        "color": "verde"
+      },
+      {
+        "texto": "ÁFRICA MÍA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CONTINENTE",
+    "dificultad": 5
+  },
+  {
+    "id": 64,
+    "elementos": [
+      {
+        "texto": "VIUDA NEGRA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JULIÁN ÁLVAREZ",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "TU VENENO",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ARAÑA",
+    "dificultad": 5
+  },
+  {
+    "id": 65,
+    "elementos": [
+      {
+        "texto": "¿QUIÉN SE HA TOMADO TODO EL VINO?",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "RON WEASLEY",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "UNA CERVEZA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ALCOHOL",
+    "dificultad": 5
+  },
+  {
+    "id": 66,
+    "elementos": [
+      {
+        "texto": "PETER PAN",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "LED ZEPPELIN",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "MARIPOSA TECKNICOLOR",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "VOLAR",
+    "dificultad": 5
+  },
+  {
+    "id": 67,
+    "elementos": [
+      {
+        "texto": "LA MOSCA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JÓVENES PORDIOSEROS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "LA CUCARACHA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BASURA",
+    "dificultad": 5
+  },
+  {
+    "id": 68,
+    "elementos": [
+      {
+        "texto": "¡GRANDE, PA!",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "CHICO BUARQUE",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "MI PEQUEÑO PONY",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TAMAÑO",
+    "dificultad": 5
+  },
+  {
+    "id": 69,
+    "elementos": [
+      {
+        "texto": "QUÉ TENDRÁ ESE PETISO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "ROBIN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "LA GRAN PIRÁMIDE",
+        "categoria": "Monumento",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MARAVILLA",
+    "dificultad": 5
+  },
+  {
+    "id": 70,
+    "elementos": [
+      {
+        "texto": "EXPERIENCIA RELIGIOSA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "GENESIS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "ANTIGUO TESTAMENTO",
+        "categoria": "Religión / Mitología",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BIBLIA",
+    "dificultad": 5
+  },
+  {
+    "id": 71,
+    "elementos": [
+      {
+        "texto": "QUEMARÁS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "NERÓN",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "QUE VENGAN LOS BOMBEROS",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "INCENDIO",
+    "dificultad": 5
+  },
+  {
+    "id": 72,
+    "elementos": [
+      {
+        "texto": "ALERTA ROJA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ÁNGEL DE LA GUARDA",
+        "categoria": "Religión / Mitología",
+        "color": "verde"
+      },
+      {
+        "texto": "¡CUIDADO! BEBÉ SUELTO",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PELIGRO",
+    "dificultad": 5
+  },
+  {
+    "id": 73,
+    "elementos": [
+      {
+        "texto": "¿DÓNDE ESTÁN LOS LADRONES?",
+        "categoria": "Álbum",
+        "color": "rojo"
+      },
+      {
+        "texto": "WALLY",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "PERDIDA (GONE GIRL)",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BÚSQUEDA",
+    "dificultad": 5
+  },
+  {
+    "id": 74,
+    "elementos": [
+      {
+        "texto": "EPITAFIOS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "SEPULTURA",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "TUMBAS DE LA GLORIA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CEMENTERIO",
+    "dificultad": 5
+  },
+  {
+    "id": 75,
+    "elementos": [
+      {
+        "texto": "LA PURGA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "MENDIETA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "NO TOCA BOTÓN",
+        "categoria": "Televisión",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "INODORO",
+    "dificultad": 5
+  },
+  {
+    "id": 76,
+    "elementos": [
+      {
+        "texto": "EL CONDE DE MONTECRISTO",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "JOHN WICK",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "ALEJANDRO DOLINA",
+        "categoria": "Escritor",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "VENGANZA",
+    "dificultad": 5
+  },
+  {
+    "id": 77,
+    "elementos": [
+      {
+        "texto": "MORTAL KOMBAT",
+        "categoria": "Videojuego",
+        "color": "rojo"
+      },
+      {
+        "texto": "AUGUSTO PINOCHET",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "EL LUCHADOR",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "GOLPE",
+    "dificultad": 5
+  },
+  {
+    "id": 78,
+    "elementos": [
+      {
+        "texto": "MUCHO RUIDO Y POCAS NUECES",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "CACHO CASTAÑA",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "DEMASIADO EGO",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CANTIDAD",
+    "dificultad": 5
+  },
+  {
+    "id": 79,
+    "elementos": [
+      {
+        "texto": "LOS MUPPETS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "EL TOPO GIGIO",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "NARIZOTA",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TÍTERE",
+    "dificultad": 5
+  },
+  {
+    "id": 80,
+    "elementos": [
+      {
+        "texto": "TWISTER (TORNADO)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "RÁFAGA",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "CLUB ATLÉTICO HURACÁN",
+        "categoria": "Institución",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "VIENTO",
+    "dificultad": 5
+  },
+  {
+    "id": 81,
+    "elementos": [
+      {
+        "texto": "MI NOVIA SE CAYÓ EN UN POZO CIEGO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "JULIÁN WEICH",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "LOS CALZONES ROTOS",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "AGUJERO",
+    "dificultad": 5
+  },
+  {
+    "id": 82,
+    "elementos": [
+      {
+        "texto": "NARIGÓN DEL SIGLO",
+        "categoria": "Álbum",
+        "color": "rojo"
+      },
+      {
+        "texto": "YAYO",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "LOLITA",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "APODO",
+    "dificultad": 5
+  },
+  {
+    "id": 83,
+    "elementos": [
+      {
+        "texto": "NO PODRÁS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "DR. NO",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "NADA FUE UN ERROR",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "NEGACIÓN",
+    "dificultad": 5
+  },
+  {
+    "id": 84,
+    "elementos": [
+      {
+        "texto": "ME CASÉ CON UN BOLUDO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "DR. TANGALANGA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "TONTA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "INSULTO",
+    "dificultad": 5
+  },
+  {
+    "id": 85,
+    "elementos": [
+      {
+        "texto": "TORO SALVAJE",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "PESO PLUMA",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "MUHAMMAD ALI",
+        "categoria": "Deportista",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BOXEO",
+    "dificultad": 5
+  },
+  {
+    "id": 86,
+    "elementos": [
+      {
+        "texto": "LA DELGADA LÍNEA ROJA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ANDRÉS CALAMARO",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "OLIVIA",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "FLACA",
+    "dificultad": 5
+  },
+  {
+    "id": 87,
+    "elementos": [
+      {
+        "texto": "SIMBAD EL MARINO",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "DANIEL PASSARELLA",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "JACK SPARROW",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CAPITÁN",
+    "dificultad": 5
+  },
+  {
+    "id": 88,
+    "elementos": [
+      {
+        "texto": "LA PELUQUERÍA DE DON MATEO",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "EL JOVEN MANOS DE TIJERA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "ME GUSTA ESE TAJO",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CORTE",
+    "dificultad": 5
+  },
+  {
+    "id": 89,
+    "elementos": [
+      {
+        "texto": "BOMBACHA VELOZ",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "CALVIN KLEIN",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "SE TE VE LA TANGA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "LENCERÍA",
+    "dificultad": 5
+  },
+  {
+    "id": 90,
+    "elementos": [
+      {
+        "texto": "MI ENFERMEDAD",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LAS PASTILLAS DEL ABUELO",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "SANA SANA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "REMEDIO",
+    "dificultad": 5
+  },
+  {
+    "id": 91,
+    "elementos": [
+      {
+        "texto": "LOBO SUELTO, CORDERO ATADO",
+        "categoria": "Álbum",
+        "color": "rojo"
+      },
+      {
+        "texto": "LANA DEL REY",
+        "categoria": "Música",
+        "color": "verde"
+      },
+      {
+        "texto": "EL PASTORCITO MENTIROSO",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "OVEJA",
+    "dificultad": 5
+  },
+  {
+    "id": 92,
+    "elementos": [
+      {
+        "texto": "ASERRÍN ASERRÁN",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "GROOT",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL ARCA DE NOÉ",
+        "categoria": "Religión / Mitología",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MADERA",
+    "dificultad": 5
+  },
+  {
+    "id": 93,
+    "elementos": [
+      {
+        "texto": "BIKINI A LUNARES AMARILLOS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MARCO POLO",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "NEVERMIND",
+        "categoria": "Álbum",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PILETA",
+    "dificultad": 5
+  },
+  {
+    "id": 94,
+    "elementos": [
+      {
+        "texto": "PAW PATROL",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "ACE VENTURA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "BAD BUNNY",
+        "categoria": "Músico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MASCOTA",
+    "dificultad": 5
+  },
+  {
+    "id": 95,
+    "elementos": [
+      {
+        "texto": "RELAX",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "OCTAVIO PAZ",
+        "categoria": "Escritor",
+        "color": "verde"
+      },
+      {
+        "texto": "LA TREGUA",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CALMA",
+    "dificultad": 5
+  },
+  {
+    "id": 96,
+    "elementos": [
+      {
+        "texto": "PLANTAS VS. ZOMBIES",
+        "categoria": "Videojuego",
+        "color": "rojo"
+      },
+      {
+        "texto": "MARÍA ELENA WALSH",
+        "categoria": "Escritora",
+        "color": "verde"
+      },
+      {
+        "texto": "BABILONIA",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "JARDÍN",
+    "dificultad": 5
+  },
+  {
+    "id": 97,
+    "elementos": [
+      {
+        "texto": "SOPA DE CARACOL",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "LUIS FONSI",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "ÁMAME EN CÁMARA LENTA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "DESPACIO",
+    "dificultad": 5
+  },
+  {
+    "id": 98,
+    "elementos": [
+      {
+        "texto": "TIRITANDO",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "BOLA DE NIEVE",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "SOLDADO DEL INVIERNO",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "FRÍO",
+    "dificultad": 5
+  },
+  {
+    "id": 99,
+    "elementos": [
+      {
+        "texto": "COSTUMBRES ARGENTINAS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "YERBA BRAVA",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "AMARGO Y DULCE",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MATE",
+    "dificultad": 5
+  },
+  {
+    "id": 100,
+    "elementos": [
+      {
+        "texto": "NOVEMBER RAIN (LLUVIA DE NOVIEMBRE)",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "GRETA THUNBERG",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "TRUENO",
+        "categoria": "Músico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CLIMA",
+    "dificultad": 2
+  },
+  {
+    "id": 101,
+    "elementos": [
+      {
+        "texto": "DON'T LOOK UP (NO MIRES ARRIBA)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "FRANCIS FORD COPPOLA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "IMPACTO PROFUNDO",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "APOCALIPSIS",
+    "dificultad": 3
+  },
+  {
+    "id": 102,
+    "elementos": [
+      {
+        "texto": "EL AMOR EN LOS TIEMPOS DEL CÓLERA",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "VIRUS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "LA PESTE NEGRA",
+        "categoria": "Enfermedad",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PANDEMIA",
+    "dificultad": 3
+  },
+  {
+    "id": 103,
+    "elementos": [
+      {
+        "texto": "TETRIS",
+        "categoria": "Videojuego",
+        "color": "rojo"
+      },
+      {
+        "texto": "MARIE KONDO",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "A GUARDAR, A GUARDAR",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ORDEN",
+    "dificultad": 3
+  },
+  {
+    "id": 104,
+    "elementos": [
+      {
+        "texto": "EL GRAN GATSBY",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "RICKY RICÓN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL GORDO DE NAVIDAD",
+        "categoria": "Premio",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MILLONARIO",
+    "dificultad": 3
+  },
+  {
+    "id": 105,
+    "elementos": [
+      {
+        "texto": "LITTLE MISS SUNSHINE (PEQUEÑA MISS SUNSHINE)",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "SANTIAGO DEL MORO",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "MISS SIMPATÍA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CONCURSO",
+    "dificultad": 2
+  },
+  {
+    "id": 106,
+    "elementos": [
+      {
+        "texto": "DUNA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "OASIS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "LA PLAYA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ARENA",
+    "dificultad": 3
+  },
+  {
+    "id": 107,
+    "elementos": [
+      {
+        "texto": "NO ME ARREPIENTO DE ESTE AMOR",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "DAMAS GRATIS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "COLOMBIA",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CUMBIA",
+    "dificultad": 2
+  },
+  {
+    "id": 108,
+    "elementos": [
+      {
+        "texto": "MASACRE EN TEXAS",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JAVIER MILEI",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "EL EJÉRCITO DE LOS MUERTOS",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MOTOSIERRA",
+    "dificultad": 4
+  },
+  {
+    "id": 109,
+    "elementos": [
+      {
+        "texto": "PLATA QUEMADA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "LOS LADRONES SUELTOS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "LEVANTANDO LAS MANOS",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ROBO",
+    "dificultad": 4
+  },
+  {
+    "id": 110,
+    "elementos": [
+      {
+        "texto": "GANGNAM STYLE",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MR. BEAST",
+        "categoria": "Internet",
+        "color": "verde"
+      },
+      {
+        "texto": "TE LO RESUMO ASÍ NOMÁS",
+        "categoria": "Internet",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "YOUTUBE",
+    "dificultad": 2
+  },
+  {
+    "id": 111,
+    "elementos": [
+      {
+        "texto": "NARUTO",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "BANDANA",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "AXL ROSE",
+        "categoria": "Músico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "VINCHA",
+    "dificultad": 3
+  },
+  {
+    "id": 112,
+    "elementos": [
+      {
+        "texto": "KARATE KID",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "BRUCE LEE",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "CANGURO",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PATADA",
+    "dificultad": 4
+  },
+  {
+    "id": 113,
+    "elementos": [
+      {
+        "texto": "THE OFFICE",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "SR. BURNS",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "PASANTE DE MODA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TRABAJO",
+    "dificultad": 3
+  },
+  {
+    "id": 114,
+    "elementos": [
+      {
+        "texto": "FULL HOUSE (TRES POR TRES)",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "LADY GAGA",
+        "categoria": "Música",
+        "color": "verde"
+      },
+      {
+        "texto": "REINA DE CORAZONES",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PÓKER",
+    "dificultad": 3
+  },
+  {
+    "id": 115,
+    "elementos": [
+      {
+        "texto": "EL CLAN",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JULIO CÉSAR",
+        "categoria": "Personaje Histórico",
+        "color": "verde"
+      },
+      {
+        "texto": "ÉL MATÓ A UN POLICÍA MOTORIZADO",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ASESINATO",
+    "dificultad": 4
+  },
+  {
+    "id": 116,
+    "elementos": [
+      {
+        "texto": "LA GUERRA DE LOS MUNDOS",
+        "categoria": "Literatura",
+        "color": "rojo"
+      },
+      {
+        "texto": "VÍCTOR HUGO MORALES",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "ÚLTIMOS CARTUCHOS",
+        "categoria": "Programa",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "RADIO",
+    "dificultad": 2
+  },
+  {
+    "id": 117,
+    "elementos": [
+      {
+        "texto": "LA CAMISA NEGRA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "CHRISTIAN DIOR",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "SECRETARIA EJECUTIVA",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TRAJE",
+    "dificultad": 4
+  },
+  {
+    "id": 118,
+    "elementos": [
+      {
+        "texto": "LUPIN",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "BEN STILLER",
+        "categoria": "Actor",
+        "color": "verde"
+      },
+      {
+        "texto": "LOUVRE",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MUSEO",
+    "dificultad": 2
+  },
+  {
+    "id": 119,
+    "elementos": [
+      {
+        "texto": "QUISIERA SER GRANDE",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ALBUS DUMBLEDORE",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "11 Y 6",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "EDAD",
+    "dificultad": 4
+  },
+  {
+    "id": 120,
+    "elementos": [
+      {
+        "texto": "JIJIJI",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "PACHU PEÑA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "PATÁN",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "RISA",
+    "dificultad": 3
+  },
+  {
+    "id": 121,
+    "elementos": [
+      {
+        "texto": "EL CARTERO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "IVÁN DE PINEDA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "WORDLE",
+        "categoria": "Videojuego",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PALABRA",
+    "dificultad": 2
+  },
+  {
+    "id": 122,
+    "elementos": [
+      {
+        "texto": "CINEMA PARADISO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "CELESTE CID",
+        "categoria": "Actriz",
+        "color": "verde"
+      },
+      {
+        "texto": "CASI ÁNGELES",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CIELO",
+    "dificultad": 2
+  },
+  {
+    "id": 123,
+    "elementos": [
+      {
+        "texto": "MI PERRO DINAMITA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "BOMBITA RODRÍGUEZ",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "HIROSHIMA",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "EXPLOSIÓN",
+    "dificultad": 4
+  },
+  {
+    "id": 124,
+    "elementos": [
+      {
+        "texto": "DIARIO DE UNA PASIÓN",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "CARRIE BRADSHAW",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "BAILANDO POR UN SUEÑO",
+        "categoria": "Televisión",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PAREJA",
+    "dificultad": 3
+  },
+  {
+    "id": 125,
+    "elementos": [
+      {
+        "texto": "LA VOZ",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "FRANK SINATRA",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "SIRENA",
+        "categoria": "Religión / Mitología",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CANTO",
+    "dificultad": 3
+  },
+  {
+    "id": 126,
+    "elementos": [
+      {
+        "texto": "ENCANTO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JUANA VIALE",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "ABUELAS DE PLAZA DE MAYO",
+        "categoria": "Organización",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "NIETO/A",
+    "dificultad": 3
+  },
+  {
+    "id": 127,
+    "elementos": [
+      {
+        "texto": "EVERY BREATH YOU TAKE (CADA RESPIRO QUE TOMES)",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "MICHAEL JORDAN",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "MANÁ",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "AIRE",
+    "dificultad": 3
+  },
+  {
+    "id": 128,
+    "elementos": [
+      {
+        "texto": "PEACEMAKER (PACIFICADOR)",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "DAFT PUNK",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "VIKINGOS",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CASCO",
+    "dificultad": 2
+  },
+  {
+    "id": 129,
+    "elementos": [
+      {
+        "texto": "THE MANDALORIAN",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "SELENA GÓMEZ",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "ORLANDO",
+        "categoria": "Lugar",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "DISNEY",
+    "dificultad": 3
+  },
+  {
+    "id": 130,
+    "elementos": [
+      {
+        "texto": "PROJECT RUNWAY (PASARELA A LA FAMA)",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "L-GANTE",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "ROPA CARA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MODA",
+    "dificultad": 2
+  },
+  {
+    "id": 131,
+    "elementos": [
+      {
+        "texto": "AMOR A LA MEXICANA",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "EL POLACO",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "“EL TURCO” GARCÍA",
+        "categoria": "Celebridad",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "NACIONALIDAD",
+    "dificultad": 4
+  },
+  {
+    "id": 132,
+    "elementos": [
+      {
+        "texto": "¡VIVEN!",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "KOBE BRYANT",
+        "categoria": "Deportista",
+        "color": "verde"
+      },
+      {
+        "texto": "LADY DI (PRINCESA DIANA)",
+        "categoria": "Personaje Histórico",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ACCIDENTE",
+    "dificultad": 2
+  },
+  {
+    "id": 133,
+    "elementos": [
+      {
+        "texto": "LOCO POR MARY",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "DON JUAN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "TINDER",
+        "categoria": "Aplicación",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CITA",
+    "dificultad": 3
+  },
+  {
+    "id": 134,
+    "elementos": [
+      {
+        "texto": "LOS PIRATAS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "PIERRE NODOYUNA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "RINCÓN DEL VAGO",
+        "categoria": "Internet",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "TRAMPA",
+    "dificultad": 3
+  },
+  {
+    "id": 135,
+    "elementos": [
+      {
+        "texto": "ALTA SUCIEDAD",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "TRAPITO",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "LA MANCHA DE ROLANDO",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "LIMPIEZA / LIMPIAR",
+    "dificultad": 4
+  },
+  {
+    "id": 136,
+    "elementos": [
+      {
+        "texto": "GAMBITO DE DAMA",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "DIEGO TORRES",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "GARRY KASPAROV",
+        "categoria": "Celebridad",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "AJEDREZ",
+    "dificultad": 2
+  },
+  {
+    "id": 137,
+    "elementos": [
+      {
+        "texto": "EL CABALLERO DE LA NOCHE",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "SAURON",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "SOMBRAS",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "OSCURO / OSCURIDAD",
+    "dificultad": 4
+  },
+  {
+    "id": 138,
+    "elementos": [
+      {
+        "texto": "LA SOCIEDAD DE LOS POETAS MUERTOS",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "SPLINTER",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "SEÑOR MIYAGI",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MAESTRO",
+    "dificultad": 2
+  },
+  {
+    "id": 139,
+    "elementos": [
+      {
+        "texto": "EL APRENDIZ",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "JEFF BEZOS",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "SHARK TANK (TANQUE DE TIBURONES)",
+        "categoria": "Serie",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "EMPRESA",
+    "dificultad": 2
+  },
+  {
+    "id": 140,
+    "elementos": [
+      {
+        "texto": "ÉRASE UNA VEZ EN HOLLYWOOD",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "BOJACK HORSEMAN",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "BIRDMAN",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "ACTOR",
+    "dificultad": 4
+  },
+  {
+    "id": 141,
+    "elementos": [
+      {
+        "texto": "HAMILTON",
+        "categoria": "Teatro",
+        "color": "rojo"
+      },
+      {
+        "texto": "QUENTIN TARANTINO",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "JON SNOW",
+        "categoria": "Personaje de Ficción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BASTARDO",
+    "dificultad": 3
+  },
+  {
+    "id": 142,
+    "elementos": [
+      {
+        "texto": "EL EXTRAÑO MUNDO DE JACK",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "MIKE WAZOWSKI",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "LABERINTO",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PESADILLA",
+    "dificultad": 2
+  },
+  {
+    "id": 143,
+    "elementos": [
+      {
+        "texto": "SOY CORDOBÉS",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "PAMPITA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "SALTA PEQUEÑA LANGOSTA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PROVINCIA",
+    "dificultad": 4
+  },
+  {
+    "id": 144,
+    "elementos": [
+      {
+        "texto": "CRUELLA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "DARÍO BARASSI",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "EL ROBO DEL SIGLO",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CIEN",
+    "dificultad": 2
+  },
+  {
+    "id": 145,
+    "elementos": [
+      {
+        "texto": "GRADUADOS",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "NAHUELITO",
+        "categoria": "Religión / Mitología",
+        "color": "verde"
+      },
+      {
+        "texto": "COMO AGUA PARA CHOCOLATE",
+        "categoria": "Literatura",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "BARILOCHE",
+    "dificultad": 2
+  },
+  {
+    "id": 146,
+    "elementos": [
+      {
+        "texto": "V INVASIÓN EXTRATERRESTRE",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "EL CAZADOR DE COCODRILOS",
+        "categoria": "Serie",
+        "color": "verde"
+      },
+      {
+        "texto": "MONTY PYTHON",
+        "categoria": "Artistas",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "REPTIL",
+    "dificultad": 3
+  },
+  {
+    "id": 147,
+    "elementos": [
+      {
+        "texto": "UN MISIL EN MI PLACARD",
+        "categoria": "Canción",
+        "color": "rojo"
+      },
+      {
+        "texto": "THE CARPENTERS",
+        "categoria": "Banda",
+        "color": "verde"
+      },
+      {
+        "texto": "PINGÜINOS EN LA CAMA",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MUEBLE",
+    "dificultad": 4
+  },
+  {
+    "id": 148,
+    "elementos": [
+      {
+        "texto": "PORNO Y HELADO",
+        "categoria": "Serie",
+        "color": "rojo"
+      },
+      {
+        "texto": "CHARLOTTE CANIGGIA",
+        "categoria": "Celebridad",
+        "color": "verde"
+      },
+      {
+        "texto": "ARROZ CON LECHE",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "POSTRE",
+    "dificultad": 5
+  },
+  {
+    "id": 149,
+    "elementos": [
+      {
+        "texto": "MAMMA MIA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "TÍO COSA",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "LOS ABUELOS DE LA NADA",
+        "categoria": "Banda",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "PARIENTE",
+    "dificultad": 3
+  },
+  {
+    "id": 150,
+    "elementos": [
+      {
+        "texto": "MI VILLANO FAVORITO",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "VOLDEMORT",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "EL COLESTEROL",
+        "categoria": "Canción",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "MALO",
+    "dificultad": 3
+  },
+  {
+    "id": 151,
+    "elementos": [
+      {
+        "texto": "UN DÍA DE FURIA",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "ANSIEDAD",
+        "categoria": "Personaje de Ficción",
+        "color": "verde"
+      },
+      {
+        "texto": "MUJERES AL BORDE DE UN ATAQUE DE NERVIOS",
+        "categoria": "Película",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "STRESS",
+    "dificultad": 5
+  },
+  {
+    "id": 152,
+    "elementos": [
+      {
+        "texto": "EL EXPRESO POLAR",
+        "categoria": "Película",
+        "color": "rojo"
+      },
+      {
+        "texto": "JUAN LUIS GUERRA",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "BARISTA",
+        "categoria": "Oficio",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "CAFÉ",
+    "dificultad": 2
+  },
+  {
+    "id": 153,
+    "elementos": [
+      {
+        "texto": "FELIZ DOMINGO PARA LA JUVENTUD",
+        "categoria": "Televisión",
+        "color": "rojo"
+      },
+      {
+        "texto": "ABEL PINTOS",
+        "categoria": "Músico",
+        "color": "verde"
+      },
+      {
+        "texto": "LA DOBLE NELSON",
+        "categoria": "Lucha Libre",
+        "color": "violeta"
+      }
+    ],
+    "palabraClave": "LLAVE",
+    "dificultad": 3
   }
 ]

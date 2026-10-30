@@ -12,11 +12,146 @@ function esModoStandalone() {
   return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || Boolean(navigator.standalone);
 }
 
+const PALABRAS_FALLBACK = [
+  'HARRY POTTER',
+  'RIVER PLATE',
+  'LIONEL MESSI',
+  'BREAKING BAD',
+  'EL PADRINO',
+  'DIEGO MARADONA',
+  'LOS SIMPSONS',
+  'STAR WARS',
+  'SHREK',
+  'SPIDER-MAN',
+  'TOY STORY',
+  'FREDDIE MERCURY',
+  'FRIENDS',
+  'BOCA JUNIORS',
+  'TITANIC',
+  'STRANGER THINGS',
+  'BATMAN',
+  'MICHAEL JACKSON',
+  'VOLVER AL FUTURO',
+  'SHAKIRA'
+];
+
+const COLORES_PALABRAS = [
+  '#3b82f6', // Azul (como HARRY POTTER en el boceto)
+  '#22c55e', // Verde (como RIVER PLATE en el boceto)
+  '#f59e0b', // Naranja/Ámbar (como MESSI en el boceto)
+  '#ec4899', // Rosa/Magenta (como BREAKING BAD en el boceto)
+  '#a855f7', // Violeta
+  '#ef4444', // Rojo
+  '#06b6d4'  // Cian
+];
+
+let palabrasCatalogoCache = null;
+
+async function obtenerPalabrasDeCartas() {
+  if (palabrasCatalogoCache && palabrasCatalogoCache.length > 0) {
+    return palabrasCatalogoCache;
+  }
+  try {
+    const res = await fetch('data/cartas.json');
+    if (!res.ok) throw new Error('No se pudo cargar cartas.json');
+    const cartas = await res.json();
+    const extraidas = [];
+    cartas.forEach((c) => {
+      if (Array.isArray(c.elementos)) {
+        c.elementos.forEach((el) => {
+          if (el.texto && el.texto.length <= 24) {
+            extraidas.push(el.texto.toUpperCase());
+          }
+        });
+      }
+    });
+    if (extraidas.length > 0) {
+      palabrasCatalogoCache = extraidas;
+      return extraidas;
+    }
+  } catch {
+    // Usar fallback si falla
+  }
+  return PALABRAS_FALLBACK;
+}
+
+function iniciarPalabrasVoladoras(layerEl) {
+  if (!layerEl) return;
+
+  let palabras = [...PALABRAS_FALLBACK];
+  obtenerPalabrasDeCartas().then((lista) => {
+    if (lista && lista.length > 0) {
+      palabras = lista;
+    }
+  });
+
+  // Dividir la altura en carriles para distribuir las palabras por toda la pantalla
+  const carrilesY = [8, 18, 30, 44, 58, 70, 80];
+  let carrilIdx = 0;
+
+  function crearPalabra(initialDelaySec = 0) {
+    if (!document.body.contains(layerEl)) return;
+
+    const texto = palabras[Math.floor(Math.random() * palabras.length)];
+    const color = COLORES_PALABRAS[Math.floor(Math.random() * COLORES_PALABRAS.length)];
+
+    // Carril vertical base + pequeña variación
+    const baseY = carrilesY[carrilIdx % carrilesY.length];
+    carrilIdx += 1;
+    const startY = baseY + (Math.random() * 8 - 4);
+    const deltaY = (Math.random() * 28 - 14); // Sube o baja en diagonal
+    const endY = startY + deltaY;
+
+    // Dirección: izquierda a derecha o derecha a izquierda
+    const haciaDerecha = Math.random() > 0.45;
+    const startX = haciaDerecha ? -38 : 112;
+    const endX = haciaDerecha ? 112 : -38;
+
+    // Ángulo de inclinación variado (-36° a +36°, evitando ángulos casi planos)
+    const signoAngulo = Math.random() > 0.5 ? 1 : -1;
+    const angulo = signoAngulo * Math.floor(14 + Math.random() * 22);
+
+    // Duración del vuelo (entre 9s y 13.5s)
+    const duracion = (9 + Math.random() * 4.5).toFixed(2);
+
+    const span = document.createElement('span');
+    span.className = 'flying-card-word';
+    span.textContent = texto;
+    span.style.color = color;
+    span.style.setProperty('--start-x', `${startX}vw`);
+    span.style.setProperty('--start-y', `${startY}vh`);
+    span.style.setProperty('--end-x', `${endX}vw`);
+    span.style.setProperty('--end-y', `${endY}vh`);
+    span.style.setProperty('--rot', `${angulo}deg`);
+    span.style.animationDuration = `${duracion}s`;
+    if (initialDelaySec < 0) {
+      span.style.animationDelay = `${initialDelaySec}s`;
+    }
+
+    span.addEventListener('animationend', () => {
+      span.remove();
+      if (document.body.contains(layerEl)) {
+        crearPalabra(0);
+      }
+    });
+
+    layerEl.appendChild(span);
+  }
+
+  // Sembrar 7 palabras iniciales ya en vuelo en distintas fases
+  for (let i = 0; i < 7; i++) {
+    crearPalabra(-(i * 1.6 + 0.5));
+  }
+}
+
 export function renderInicio(container, router) {
   const tienePartidaEnCurso = gameState.enPartida;
 
   container.innerHTML = `
-    <section class="screen" aria-label="Pantalla de inicio">
+    <section class="screen inicio-screen" aria-label="Pantalla de inicio">
+      <!-- Fondo de palabras de cartas volando por detrás del logo y botones -->
+      <div class="hero-flying-words" id="hero-flying-words" aria-hidden="true"></div>
+
       <div class="hero">
         <div class="hero-logo-wrapper" id="hero-logo-tap" title="Say My Name">
           <img src="icons/logo.png" alt="Say My Name" class="hero-marquee-img" />
@@ -44,8 +179,30 @@ export function renderInicio(container, router) {
           </button>
         </div>
       </div>
+
+      <footer class="hero-donation-footer">
+        Se aceptan donaciones al alias <span class="donation-alias" id="copy-alias" title="Tocar para copiar alias">bauticavallera</span>
+      </footer>
     </section>
   `;
+
+  // Iniciar animación de palabras voladoras por detrás
+  const flyingLayer = container.querySelector('#hero-flying-words');
+  iniciarPalabrasVoladoras(flyingLayer);
+
+  // Copiar alias al tocarlo (opcional y cómodo)
+  const aliasEl = container.querySelector('#copy-alias');
+  aliasEl?.addEventListener('click', () => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('bauticavallera').then(() => {
+        const original = aliasEl.textContent;
+        aliasEl.textContent = '¡bauticavallera (copiado!)';
+        setTimeout(() => {
+          aliasEl.textContent = original;
+        }, 1600);
+      }).catch(() => {});
+    }
+  });
 
   if (tienePartidaEnCurso) {
     const btnReanudar = container.querySelector('#btn-reanudar');

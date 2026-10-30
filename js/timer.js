@@ -126,6 +126,36 @@ export class GameTimer {
   }
 
   /**
+   * Sonido de retroceso / deshacer acción.
+   */
+  playUndoSound() {
+    try {
+      this._ensureAudioContext();
+      this.triggerHaptic([30]);
+      if (!this.audioContext) return;
+
+      const now = this.audioContext.currentTime;
+      const osc = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(480, now + 0.12);
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+      osc.connect(gain);
+      gain.connect(this.audioContext.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.15);
+    } catch {
+      // Degradación silenciosa
+    }
+  }
+
+  /**
    * Sonido grave de falta / error ("buzzer").
    */
   playErrorSound() {

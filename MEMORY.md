@@ -22,7 +22,7 @@ Funciona como **aplicación compañera** de un juego de cartas presencial: reemp
 | **Stack** | Vanilla ES Modules (`js/app.js`, `js/router.js`, `js/deck.js`, `js/game.js`, `js/timer.js`, `js/wakelock.js`, `js/ui/*.js`). Cero dependencias en runtime. |
 | **Navegación** | History API con hash (`#inicio`, `#reglas`, `#equipos`, `#configuracion`, `#partida`). Escucha de `popstate`. El gesto "atrás" del teléfono siempre debe funcionar. En `#partida` se intercepta para pedir confirmación con modal propio. |
 | **Alertas / Modales** | Cero `window.alert`, `window.confirm` o `window.prompt` nativos. Se utiliza `js/ui/modal.js` con diseño integrado a la estética de la app. |
-| **Offline / PWA** | Service Worker (`sw.js`) con caché versionada (`cartas-v5` actual). Cada cambio en estáticos requiere subir la versión. `manifest.webmanifest` con rutas relativas (`./`). |
+| **Offline / PWA** | Service Worker (`sw.js`) con caché versionada (`cartas-v9` actual). Cada cambio en estáticos requiere subir la versión. `manifest.webmanifest` con rutas relativas (`./`). |
 | **Temporizador** | Basado estrictamente en marcas de tiempo `Date.now()`, nunca en ticks de `setInterval`. Aviso con Web Audio API y `navigator.vibrate`. |
 | **Pantalla activa** | Screen Wake Lock API (`navigator.wakeLock.request('screen')`) activo durante la partida y reactivado en `visibilitychange`. |
 | **UX / UI** | Mobile-first, objetivos táctiles $\ge 44 \times 44\text{ px}$, soporte para safe-area-insets, voseo rioplatense en textos. |
@@ -168,18 +168,43 @@ En la pantalla `#configuracion`:
     - El primer puesto se revela con fanfarria sonora, glow dorado y lluvia de confeti en `<canvas>` nativo ligero (sin dependencias).
   - **Gesto táctil de arrastre (Swipe) en cartas**:
     - Arrastre a la derecha $\ge 80\text{px}$ $\to$ ¡Acierto! con inclinación y salida lateral.
-    - Arrastre hacia abajo $\ge 80\text{px}$ $\to$ Paso (habilitado en rondas que permiten paso; bloqueado con resistencia elástica en Ronda 1).
+    - Arrastre hacia arriba $\ge 80\text{px}$ (`dy <= -80`) $\to$ Paso (habilitado en rondas que permiten paso; bloqueado con resistencia elástica en Ronda 1).
     - Retorno elástico suave si se suelta sin superar el umbral. Compatible con gestos táctiles en mobile y arrastre de ratón en desktop.
+  - **Ronda Relámpago y Ronda de Desempate**:
+    - Botón `"⚡ ¡Ya adivinaron! / Pasar tiempo →"` en Ronda Relámpago para finalizar los 15 segundos inmediatamente cuando un equipo acierta antes de que suene la alarma.
+    - **Ronda de Desempate (`RONDA_DESEMPATE_CONFIG`)**: Si al finalizar la Ronda 3 hay 2 o más equipos empatados en el 1.° puesto, se activa automáticamente una Ronda de Desempate con el formato de Ronda Relámpago (1 carta de reserva para leer por cada equipo en el empate).
   - **Color identificador para cada equipo**:
     - Paleta de 6 colores vibrantes (`PALETA_EQUIPOS`: Ámbar, Esmeralda, Azul, Púrpura, Coral, Cian).
     - Selector táctil de color (círculo interactivo) en la pantalla de Equipos para alternar entre colores.
     - Integración cromática del equipo en la barra de turnos, cajas de marcador y tarjetas del podio.
   - **Desglose de puntos por ronda en el Podio**:
-    - Al finalizar la partida, botón *"📊 Ver detalle por rondas"* que despliega una tabla comparativa con los puntos obtenidos por cada equipo en Ronda 1, Ronda 2, Relámpago y Ronda 3.
+    - Al finalizar la partida, botón *"📊 Ver detalle por rondas"* que despliega una tabla comparativa con los puntos obtenidos por cada equipo en Ronda 1, Ronda 2, Relámpago, Ronda 3 y Desempate (si hubo).
   - **Botón inteligente de instalación PWA**:
     - Detecta el evento `beforeinstallprompt` y estado standalone. Solo se muestra en `#inicio` si la app no está instalada, y desaparece en cuanto se instala (`appinstalled`).
   - **Service Worker**:
-    - Actualizada la versión de caché a `cartas-v8`.
+    - Actualizada la versión de caché a `cartas-v13`.
+  - **Pantalla Principal (`#inicio`) con Palabras Voladoras y Pie de Donaciones**:
+    - Sin tocar el logo ni los botones, se sumó una capa de fondo (`z-index: 0`) donde palabras reales extraídas del mazo de cartas vuelan en diagonal con distintos ángulos y colores pasando **por detrás** del logo y de los botones (`z-index: 3`).
+    - Al pie de la pantalla se agregó *"Se aceptan donaciones al alias bauticavallera"* (con opción de copiar el alias al tocarlo).
+  - **Bloqueo de Pull-to-Refresh**:
+    - Se agregó `overscroll-behavior-y: none` en `html, body` y `touch-action: none` con `e.preventDefault()` al arrastrar la carta en juego para evitar que el gesto de deslizar hacia abajo ("Paso") dispare la actualización de página del navegador móvil.
+  - **Rediseño Minimalista de Pantallas de Rondas (1, 2 y 3)**:
+    - **Header superior**: Formato directo `RONDA X - EQUIPO` en tipografía prominente y sin elementos distractores.
+    - **Temporizador central e Iconografía SVG**: Reloj numérico grande flanqueado por botones circulares con íconos vectoriales SVG limpios (Pausa/Reanudar en azul y Reiniciar con flecha circular en rojo). Cero emojis.
+    - **Tarjeta física de categoría sólida**:
+      - Fondo de color plano, saturado y fuerte según la categoría activa: Rojo (`#dc2626`), Verde (`#16a34a`) o Violeta (`#7c3aed`).
+      - Parte superior: Nombre de la categoría centrado y badge circular negro con borde blanco a la derecha indicando las cartas restantes en el mazo.
+      - Centro: Palabra a adivinar en tipografía blanca de gran tamaño y máximo contraste.
+      - Parte inferior interna: Botón circular blanco con ícono SVG de retroceso (Deshacer) a la izquierda, y píldora negra con borde blanco que aloja la palabra prohibida.
+    - **Botonera inferior al alcance del pulgar**:
+      - **Ronda 1**: Botón izquierdo rojo con ícono SVG de cruz "✕" para terminar turno por error (sin texto) y botón derecho verde con tilde SVG "✓" para acierto (+1).
+      - **Rondas 2 y 3**: Botón izquierdo naranja con texto "PASO". Al pulsarlo rápidamente pasa la carta; si se mantiene presionado (long-press), una animación progresiva de barrido en rojo llena el botón hasta convertirlo en "Terminar turno", vibrando y finalizando el turno por falta.
+      - Botón de retroceso conectado a `deshacerUltimaAccion()` que recupera tanto el acierto como el paso previo con animación y sonido característico.
+  - **Catálogo Oficial de 153 Cartas Reales**:
+    - Se procesaron las 153 fotografías del mazo físico original (`data/Cards-20261029T212046Z-1-001/Cards/`).
+    - Se extrajeron con 100% de fidelidad todos los elementos con su texto, color (`rojo`, `verde`, `violeta`), categoría original (42 categorías representadas), palabra clave y nivel de dificultad (2 a 5).
+    - Se actualizó `data/cartas.json` reemplazando los datos de prueba por el mazo oficial completo de 153 cartas del juego.
+
 
 
 ---

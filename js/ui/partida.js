@@ -3,7 +3,7 @@
  * Mazo de cartas, temporizador, rondas configurables, ronda relámpago, deshacer y marcador.
  */
 
-import { gameState, RONDAS_CONFIG } from '../game.js';
+import { gameState, RONDAS_CONFIG, RONDA_DESEMPATE_CONFIG } from '../game.js';
 import { GameTimer } from '../timer.js';
 import { customConfirm } from './modal.js';
 
@@ -105,10 +105,10 @@ export function renderPartida(container, router) {
       let dx = x - startX;
       let dy = y - startY;
 
-      // Resistencia elástica si se arrastra hacia la izquierda o hacia arriba
+      // Resistencia elástica si se arrastra hacia la izquierda o hacia abajo
       if (dx < 0) dx = dx * 0.15;
-      if (dy < 0) dy = dy * 0.15;
-      if (!puedePasar && dy > 0) dy = dy * 0.1;
+      if (dy > 0) dy = dy * 0.15;
+      if (!puedePasar && dy < 0) dy = dy * 0.1;
 
       const rot = (dx * 0.05).toFixed(2);
       cardEl.style.transform = `translate3d(${dx}px, ${dy}px, 0) rotate(${rot}deg)`;
@@ -122,16 +122,16 @@ export function renderPartida(container, router) {
       let dy = y - startY;
       const threshold = 80;
 
-      if (dx >= threshold && dx > dy) {
+      if (dx >= threshold && dx > Math.abs(dy)) {
         // Swipe a la derecha -> ¡Acierto!
         cardEl.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
         cardEl.style.transform = 'translate3d(130%, -20px, 0) rotate(16deg)';
         cardEl.style.opacity = '0';
         onAcierto();
-      } else if (dy >= threshold && dy > dx && puedePasar) {
-        // Swipe hacia abajo -> Paso
+      } else if (dy <= -threshold && Math.abs(dy) > Math.abs(dx) && puedePasar) {
+        // Swipe hacia arriba -> Paso
         cardEl.style.transition = 'transform 0.22s ease-out, opacity 0.22s ease-out';
-        cardEl.style.transform = 'translate3d(0, 120px, 0) scale(0.85)';
+        cardEl.style.transform = 'translate3d(0, -120px, 0) scale(0.85)';
         cardEl.style.opacity = '0';
         onPaso();
       } else {
@@ -149,9 +149,10 @@ export function renderPartida(container, router) {
 
     cardEl.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
+      if (e.cancelable) e.preventDefault();
       const t = e.touches[0];
       moveDrag(t.clientX, t.clientY);
-    }, { passive: true });
+    }, { passive: false });
 
     cardEl.addEventListener('touchend', (e) => {
       const t = e.changedTouches[0];
@@ -180,7 +181,10 @@ export function renderPartida(container, router) {
   function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins > 0 ? mins + ':' : ''}${secs < 10 && mins > 0 ? '0' : ''}${secs}s`;
+    if (mins > 0) {
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+    return `${secs}`;
   }
 
   function renderCurrentPhase() {
@@ -295,7 +299,9 @@ export function renderPartida(container, router) {
 
           <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.75rem;">
             ${esRelampago
-              ? `Carta ${turnoRel.pasada} de 2 para este equipo (¡Lee en voz alta!).`
+              ? (gameState.enDesempate
+                  ? `Carta única de desempate para este equipo (${gameState.relampagoTurnoIndex + 1} de ${gameState.relampagoTurnos.length} en total — ¡Lee en voz alta!).`
+                  : `Carta ${turnoRel.pasada} de 2 para este equipo (¡Lee en voz alta!).`)
               : 'Pasale el teléfono a quien vaya a dar pistas en este turno.'}
           </p>
 
@@ -326,89 +332,101 @@ export function renderPartida(container, router) {
     const elemento = carta ? (carta.elementoAsignado || carta.elementos[0]) : null;
     const colorElem = elemento ? elemento.color : 'rojo';
     const puedePasar = Boolean(config.permitePaso);
-    const hayAciertoParaDeshacer = Boolean(gameState.ultimoAcierto);
+    const puedeDeshacer = Boolean(gameState.ultimaAccion);
+
+    // SVGs limpios sin emojis
+    const svgPause = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+    const svgPlay = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+    const svgRestart = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`;
+    const svgUndo = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>`;
+    const svgCheck = `<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+    const svgCross = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
 
     container.innerHTML = `
-      <section class="screen" aria-label="Partida en curso">
-        <header class="game-top-bar">
-          <div class="round-pill">
-            <span>${config.icono} ${escapeHtml(config.nombre)}</span>
-          </div>
-          <span class="turn-pill" style="border-left: 3px solid ${gameState.equipoActual.color || 'var(--accent-secondary)'}; padding-left: 0.5rem;">
-            Turno: <strong style="color: ${gameState.equipoActual.color || 'var(--accent-secondary)'};">${escapeHtml(gameState.equipoActual.nombre)}</strong>
-          </span>
-        </header>
-
-        <!-- Temporizador central -->
-        <div class="timer-container" aria-live="polite">
-          <div id="timer-digits" class="timer-digits">${formatTime(segundosRestantes)}</div>
-          <div style="display: flex; gap: 0.75rem; margin-top: 0.35rem;">
-            <button id="btn-pausar" class="btn btn-secondary" style="padding: 0.3rem 0.85rem; font-size: 0.85rem;" type="button">
-              ${activeTimer.isPaused ? '▶️ Continuar' : '⏸️ Pausa'}
-            </button>
-            <button id="btn-reiniciar-timer" class="btn btn-secondary" style="padding: 0.3rem 0.85rem; font-size: 0.85rem;" type="button">
-              🔄 Reiniciar
-            </button>
-          </div>
+      <section class="screen" aria-label="Partida en curso" style="padding-top: 0.5rem;">
+        <!-- Header minimalista: Ronda y Equipo -->
+        <div class="game-turn-header">
+          ${escapeHtml(config.nombre.toUpperCase())} - ${escapeHtml(gameState.equipoActual.nombre.toUpperCase())}
         </div>
 
-        <!-- Escenario de la carta física -->
+        <!-- Temporizador y controles SVG -->
+        <div class="game-timer-row" aria-live="polite">
+          <button id="btn-pausar" class="btn-timer-pause" type="button" aria-label="${activeTimer.isPaused ? 'Continuar' : 'Pausar'}" title="${activeTimer.isPaused ? 'Continuar' : 'Pausar'}">
+            ${activeTimer.isPaused ? svgPlay : svgPause}
+          </button>
+          
+          <div id="timer-digits" class="game-timer-number ${segundosRestantes <= 5 ? 'timer-urgent' : ''}">
+            ${formatTime(segundosRestantes)}
+          </div>
+
+          <button id="btn-reiniciar-timer" class="btn-timer-restart" type="button" aria-label="Reiniciar temporizador" title="Reiniciar temporizador">
+            ${svgRestart}
+          </button>
+        </div>
+
+        <!-- Escenario de la carta física limpia -->
         <div class="card-stage" aria-live="assertive">
           ${carta && elemento ? `
-            <div class="playing-card card-theme-${colorElem}" id="current-card">
-              <div class="playing-card-header">
-                <span class="playing-card-category elem-${colorElem}">
+            <div class="playing-card-clean card-theme-${colorElem}" id="current-card">
+              <!-- Header de la carta: Categoría y Contador de cartas restantes en mazo -->
+              <div class="card-header-minimal">
+                <div class="card-category-title">
                   ${escapeHtml(elemento.categoria || 'Elemento')}
-                </span>
-                <span class="playing-card-dificultad" title="Dificultad ${carta.dificultad || 1}">
-                  ${carta.dificultad || 1}
-                </span>
+                </div>
+                <div class="card-deck-count-badge" title="${cartasRestantes} cartas restantes en mazo">
+                  ${cartasRestantes}
+                </div>
               </div>
 
-              <div class="playing-card-name">
+              <!-- Palabra principal a adivinar -->
+              <div class="card-word-target">
                 ${escapeHtml(elemento.texto)}
               </div>
 
-              <div class="forbidden-box">
-                <span class="forbidden-label">⚠️ Palabra Prohibida</span>
-                <span class="forbidden-word">${escapeHtml(carta.palabraClave)}</span>
-              </div>
+              <!-- Fila inferior: Deshacer y Palabra prohibida -->
+              <div class="card-bottom-row">
+                <button 
+                  id="btn-deshacer" 
+                  class="card-undo-btn ${!puedeDeshacer ? 'disabled' : ''}" 
+                  type="button" 
+                  aria-label="Deshacer última acción" 
+                  title="Deshacer última acción"
+                  ${!puedeDeshacer ? 'disabled' : ''}
+                >
+                  ${svgUndo}
+                </button>
 
-              <div class="playing-card-footer">
-                <span>Ronda ${config.numero}</span>
-                <span>Restan ${cartasRestantes} en mazo</span>
+                <div class="card-forbidden-pill">
+                  ${escapeHtml(carta.palabraClave)}
+                </div>
               </div>
             </div>
           ` : `
-            <div class="surface-card" style="text-align: center; padding: 2rem;">
-              <p>No quedan cartas en esta ronda.</p>
+            <div class="surface-card" style="text-align: center; padding: 2rem; max-width: 350px; margin: 0 auto;">
+              <p style="color: #ffffff; font-size: 1.1rem; font-weight: bold;">No quedan cartas en esta ronda.</p>
             </div>
           `}
         </div>
 
-        <!-- Botonera de acciones (Alcance del pulgar) -->
-        <div class="game-bottom-actions-container">
-          <div class="game-top-actions-row">
-            ${hayAciertoParaDeshacer ? `
-              <button id="btn-deshacer" class="btn btn-secondary" style="flex: 1; padding: 0.5rem; font-size: 0.9rem;" type="button">
-                ↩ Deshacer acierto
-              </button>
-            ` : ''}
-            <button id="btn-error" class="btn btn-danger" style="${hayAciertoParaDeshacer ? 'flex: 1;' : 'width: 100%;'} padding: 0.5rem; font-size: 0.9rem;" type="button">
-              🚫 Terminar turno por error
+        <!-- Botonera inferior limpia (Alcance del pulgar) -->
+        <div class="game-bottom-actions-clean">
+          ${puedePasar ? `
+            <!-- Botón Paso (Ronda 2 y 3) con animación hold para terminar turno -->
+            <button id="btn-paso" class="action-btn-clean btn-action-paso" type="button" aria-label="Pasar carta (o mantener para terminar turno)">
+              <div class="hold-fill-layer"></div>
+              <span class="paso-label">PASO</span>
             </button>
-          </div>
+          ` : `
+            <!-- Botón Terminar turno por error (Ronda 1) -->
+            <button id="btn-error" class="action-btn-clean btn-action-terminar" type="button" aria-label="Terminar turno por error">
+              ${svgCross}
+            </button>
+          `}
 
-          <div class="${puedePasar ? 'game-primary-actions-row' : 'game-primary-actions-single'}">
-            ${puedePasar ? `
-              <button id="btn-paso" class="btn btn-secondary btn-large" type="button" aria-label="Pasar carta">
-                ↪ Paso
-              </button>
-            ` : ''}
-            <button id="btn-acierto" class="btn btn-success btn-large" type="button" aria-label="Carta acertada (+1 punto)">
-              ✓ ¡Acierto! (+1)
-            </button>
-          </div>
+          <!-- Botón ¡Acierto! -->
+          <button id="btn-acierto" class="action-btn-clean btn-action-acierto" type="button" aria-label="Carta acertada (+1 punto)">
+            ${svgCheck}
+          </button>
         </div>
       </section>
     `;
@@ -442,25 +460,34 @@ export function renderPartida(container, router) {
       renderCurrentPhase();
     });
 
-    // Deshacer
+    // Deshacer acción previa (acierto o paso)
     container.querySelector('#btn-deshacer')?.addEventListener('click', () => {
-      gameState.deshacerUltimoAcierto();
-      renderCurrentPhase();
+      if (!gameState.ultimaAccion) return;
+      activeTimer.playUndoSound();
+      const ok = gameState.deshacerUltimaAccion();
+      if (ok) {
+        renderCurrentPhase();
+        const newCard = container.querySelector('#current-card');
+        if (newCard) {
+          newCard.classList.add('card-enter-undo');
+        }
+      }
     });
 
-    // Terminar turno por error (palabra prohibida dicha)
+    // Botón Error (Ronda 1)
     container.querySelector('#btn-error')?.addEventListener('click', async () => {
       const estabaCorriendo = activeTimer.isRunning;
       if (estabaCorriendo) activeTimer.pause();
       const confirma = await customConfirm({
         title: '¿Terminar turno por error?',
-        message: 'Si se dijo la palabra prohibida o se cometió una falta, la carta vuelve al fondo del mazo y el turno termina.',
-        confirmText: 'Sí, cometer falta',
+        message: 'Si se dijo la palabra prohibida o se cometió una falta, la carta vuelve al mazo y el turno termina.',
+        confirmText: 'Terminar turno',
         cancelText: 'Continuar turno',
         danger: true
       });
       if (confirma) {
         activeTimer.destroy();
+        activeTimer.playErrorSound();
         gameState.terminarTurnoPorError();
         renderCurrentPhase();
       } else if (estabaCorriendo) {
@@ -468,27 +495,82 @@ export function renderPartida(container, router) {
       }
     });
 
-    // Paso
-    container.querySelector('#btn-paso')?.addEventListener('click', () => {
-      activeTimer.playPassSound();
-      const cardEl = container.querySelector('#current-card');
-      if (cardEl) {
-        cardEl.classList.add('card-exit-paso');
+    // Botón Paso con pulsación larga para terminar turno (Rondas 2 y 3)
+    const btnPaso = container.querySelector('#btn-paso');
+    if (btnPaso) {
+      let holdTimeout = null;
+      let isHoldConverted = false;
+
+      const triggerConvertAndEndTurn = () => {
+        isHoldConverted = true;
+        btnPaso.classList.add('converted');
+        const pasoLabel = btnPaso.querySelector('.paso-label');
+        if (pasoLabel) {
+          pasoLabel.innerHTML = svgCross;
+        }
+        activeTimer.playErrorSound();
         setTimeout(() => {
+          activeTimer.destroy();
+          gameState.terminarTurnoPorError();
+          renderCurrentPhase();
+        }, 220);
+      };
+
+      const startHold = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        isHoldConverted = false;
+        btnPaso.classList.add('holding');
+        holdTimeout = setTimeout(triggerConvertAndEndTurn, 950);
+      };
+
+      const cancelHold = () => {
+        if (holdTimeout) {
+          clearTimeout(holdTimeout);
+          holdTimeout = null;
+        }
+        btnPaso.classList.remove('holding');
+      };
+
+      const endHold = (e) => {
+        if (holdTimeout) {
+          clearTimeout(holdTimeout);
+          holdTimeout = null;
+        }
+        btnPaso.classList.remove('holding');
+
+        if (!isHoldConverted) {
+          // Fue un tap / click normal: Pasar carta
+          ejecutarPaso();
+        }
+      };
+
+      const ejecutarPaso = () => {
+        activeTimer.playPassSound();
+        const cardEl = container.querySelector('#current-card');
+        if (cardEl) {
+          cardEl.classList.add('card-exit-paso');
+          setTimeout(() => {
+            gameState.pasarCarta();
+            if (gameState.faseTurno === 'turno_terminado_pase') {
+              activeTimer.pause();
+            }
+            renderCurrentPhase();
+          }, 190);
+        } else {
           gameState.pasarCarta();
           if (gameState.faseTurno === 'turno_terminado_pase') {
             activeTimer.pause();
           }
           renderCurrentPhase();
-        }, 190);
-      } else {
-        gameState.pasarCarta();
-        if (gameState.faseTurno === 'turno_terminado_pase') {
-          activeTimer.pause();
         }
-        renderCurrentPhase();
-      }
-    });
+      };
+
+      // Eventos pointer / touch / mouse
+      btnPaso.addEventListener('pointerdown', startHold);
+      btnPaso.addEventListener('pointerup', endHold);
+      btnPaso.addEventListener('pointerleave', cancelHold);
+      btnPaso.addEventListener('pointercancel', cancelHold);
+    }
 
     // Acierto
     container.querySelector('#btn-acierto')?.addEventListener('click', () => {
@@ -553,18 +635,21 @@ export function renderPartida(container, router) {
     }
   }
 
-  // --- Fase: Jugando Ronda Relámpago ---
+  // --- Fase: Jugando Ronda Relámpago / Desempate ---
   function renderRelampagoJugando(config) {
     const carta = gameState.cartaActual;
     const turnoRel = gameState.relampagoTurnos[gameState.relampagoTurnoIndex];
+    const esDesempate = gameState.enDesempate;
 
     container.innerHTML = `
-      <section class="screen" aria-label="Ronda relámpago">
+      <section class="screen" aria-label="${escapeHtml(config.nombre)}">
         <header class="game-top-bar">
           <div class="round-pill">
-            <span>⚡ Ronda Relámpago</span>
+            <span>${config.icono} ${escapeHtml(config.nombre)}</span>
           </div>
-          <span class="turn-pill">Lee: ${escapeHtml(gameState.equipoActual.nombre)} (${turnoRel.pasada}/2)</span>
+          <span class="turn-pill">
+            Lee: ${escapeHtml(gameState.equipoActual.nombre)} ${esDesempate ? `(${gameState.relampagoTurnoIndex + 1}/${gameState.relampagoTurnos.length})` : `(${turnoRel ? turnoRel.pasada : 1}/2)`}
+          </span>
         </header>
 
         <!-- Temporizador 15s -->
@@ -606,27 +691,43 @@ export function renderPartida(container, router) {
               </div>
 
               <div class="playing-card-footer">
-                <span>Relámpago</span>
+                <span>${esDesempate ? 'Desempate' : 'Relámpago'}</span>
                 <span>Carta ${gameState.relampagoTurnoIndex + 1} de ${gameState.relampagoTurnos.length}</span>
               </div>
             </div>
           ` : ''}
         </div>
+
+        <!-- Botón para terminar los 15 segundos si alguien adivinó antes -->
+        <div style="margin-top: 0.85rem;">
+          <button id="btn-terminar-relampago" class="btn btn-primary btn-large btn-block" type="button">
+            ⚡ ¡Ya adivinaron! / Pasar tiempo →
+          </button>
+        </div>
       </section>
     `;
+
+    container.querySelector('#btn-terminar-relampago')?.addEventListener('click', () => {
+      activeTimer.destroy();
+      activeTimer.playSuccessSound();
+      gameState.tiempoAgotado();
+      renderCurrentPhase();
+    });
   }
 
-  // --- Fase: Evaluación Ronda Relámpago (Quién adivinó) ---
+  // --- Fase: Evaluación Ronda Relámpago / Desempate (Quién adivinó) ---
   function renderRelampagoEvaluando() {
     const carta = gameState.cartaActual;
-    const turnoRel = gameState.relampagoTurnos[gameState.relampagoTurnoIndex];
+    const equiposCandidatos = gameState.enDesempate && gameState.equiposDesempateIds.length >= 2
+      ? gameState.equipos.filter((eq) => gameState.equiposDesempateIds.includes(eq.id))
+      : gameState.equipos;
 
     container.innerHTML = `
       <section class="screen" aria-label="Resultado de carta relámpago">
         <div class="surface-card" style="text-align: center; padding: 1.75rem 1.25rem; margin: auto 0;">
-          <div style="font-size: 3rem; margin-bottom: 0.35rem;">⚡</div>
+          <div style="font-size: 3rem; margin-bottom: 0.35rem;">${gameState.enDesempate ? '🔥' : '⚡'}</div>
           <h2 style="font-size: 1.6rem; font-weight: var(--font-weight-black); margin-bottom: 0.25rem;">
-            ¡Tiempo finalizado!
+            ¡Definición de la carta!
           </h2>
           <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
             La palabra clave de esta carta era:
@@ -647,7 +748,7 @@ export function renderPartida(container, router) {
           </h3>
 
           <div style="display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.5rem;">
-            ${gameState.equipos.map((eq) => `
+            ${equiposCandidatos.map((eq) => `
               <button 
                 class="btn btn-secondary btn-asignar-relampago btn-large" 
                 data-id="${eq.id}" 
@@ -689,6 +790,10 @@ export function renderPartida(container, router) {
 
   // --- Fase: Mazo Completado (Fin de turno por mazo agotado) ---
   function renderMazoCompletado(config) {
+    const esUltimaRonda = !gameState.enDesempate && gameState.rondaIndex + 1 >= RONDAS_CONFIG.length;
+    const empatados = esUltimaRonda ? gameState.obtenerEquiposEmpatadosPrimerPuesto() : [];
+    const hayDesempate = empatados.length >= 2;
+
     container.innerHTML = `
       <section class="screen" aria-label="Mazo completado">
         <div class="surface-card" style="text-align: center; padding: 2rem 1.25rem; margin: auto 0;">
@@ -714,8 +819,19 @@ export function renderPartida(container, router) {
             `).join('')}
           </div>
 
+          ${hayDesempate ? `
+            <div class="surface-card" style="background: var(--bg-surface-elevated); text-align: left; margin-bottom: 1.5rem; border-color: var(--accent-secondary);">
+              <p style="font-size: 0.85rem; color: var(--accent-secondary); font-weight: bold; text-transform: uppercase;">
+                🔥 ¡Empate en el 1.° puesto! (${empatados.map((e) => escapeHtml(e.nombre)).join(' vs ')})
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Se jugará una Ronda de Desempate: 1 carta tipo Relámpago para leer por cada equipo en el empate.
+              </p>
+            </div>
+          ` : ''}
+
           <button id="btn-concluir-ronda" class="btn btn-primary btn-large btn-block" type="button">
-            Concluir Ronda y continuar →
+            ${hayDesempate ? 'Comenzar Ronda de Desempate 🔥 →' : (esUltimaRonda ? 'Ver Resultados Finales 🏆' : 'Concluir Ronda y continuar →')}
           </button>
         </div>
       </section>
@@ -845,7 +961,9 @@ export function renderPartida(container, router) {
   // --- Fase: Fin de Ronda ---
   function renderRondaTerminada(config) {
     const siguienteRondaIdx = gameState.rondaIndex + 1;
-    const proxConfig = RONDAS_CONFIG[siguienteRondaIdx];
+    const proxConfig = !gameState.enDesempate ? RONDAS_CONFIG[siguienteRondaIdx] : null;
+    const empatados = !proxConfig ? gameState.obtenerEquiposEmpatadosPrimerPuesto() : [];
+    const hayDesempate = empatados.length >= 2;
 
     container.innerHTML = `
       <section class="screen" aria-label="Ronda terminada">
@@ -876,6 +994,19 @@ export function renderPartida(container, router) {
 
             <button id="btn-siguiente-ronda" class="btn btn-primary btn-large btn-block" type="button">
               Comenzar ${escapeHtml(proxConfig.nombre)} →
+            </button>
+          ` : hayDesempate ? `
+            <div class="surface-card" style="background: var(--bg-surface-elevated); text-align: left; margin-bottom: 1.5rem; border-color: var(--accent-secondary);">
+              <p style="font-size: 0.85rem; color: var(--accent-secondary); font-weight: bold; text-transform: uppercase;">
+                🔥 ¡Sigue el empate en el 1.° puesto! (${empatados.map((e) => escapeHtml(e.nombre)).join(' vs ')})
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                Se jugará una Ronda de Desempate: 1 carta tipo Relámpago para leer por cada equipo empatado.
+              </p>
+            </div>
+
+            <button id="btn-siguiente-ronda" class="btn btn-primary btn-large btn-block" type="button">
+              Comenzar Ronda de Desempate 🔥 →
             </button>
           ` : `
             <button id="btn-siguiente-ronda" class="btn btn-primary btn-large btn-block" type="button">
@@ -952,7 +1083,10 @@ export function renderPartida(container, router) {
                   </tr>
                 </thead>
                 <tbody>
-                  ${RONDAS_CONFIG.map((r) => `
+                  ${[
+                    ...RONDAS_CONFIG,
+                    ...(gameState.puntosPorRonda && gameState.puntosPorRonda[RONDA_DESEMPATE_CONFIG.id] ? [RONDA_DESEMPATE_CONFIG] : [])
+                  ].map((r) => `
                     <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                       <td style="padding: 0.5rem 0.2rem; color: var(--text-secondary);">
                         ${r.icono} ${escapeHtml(r.nombre.split(':')[0])}

@@ -56,6 +56,20 @@ export const RONDAS_CONFIG = [
   }
 ];
 
+export const RONDA_DESEMPATE_CONFIG = {
+  id: 'ronda_desempate',
+  numero: '🔥',
+  nombre: 'Ronda de Desempate',
+  icono: '🔥',
+  reglaResumen: 'Un integrante de cada equipo empatado lee 1 carta con los 3 elementos. Todos compiten en 15 segundos por adivinar la palabra clave.',
+  mostrarUnSoloElemento: false,
+  acciones: ['revelar_relampago', 'deshacer'],
+  puntosPorAcierto: 3,
+  duracionSegundos: 15,
+  esRelampago: true,
+  esDesempate: true
+};
+
 export const PALETA_EQUIPOS = [
   { id: 'ambar', hex: '#f59e0b', nombre: 'Ámbar' },
   { id: 'esmeralda', hex: '#10b981', nombre: 'Esmeralda' },
@@ -100,23 +114,37 @@ export class GameState {
     this.faseTurno = 'listo';
     this.enPartida = false;
 
-    // Relámpago seguimiento
+    // Relámpago y Desempate seguimiento
     this.relampagoTurnos = []; // Array con { equipoIndex, pasada: 1|2, carta }
     this.relampagoTurnoIndex = 0;
     this.relampagoPalabraRevelada = false;
+    this.enDesempate = false;
+    this.equiposDesempateIds = [];
+    this.cartasReservaDesempate = [];
 
     // Historial para "Deshacer"
     this.ultimoAcierto = null; // { carta, equipoId, puntos, fasePrevia }
+    this.ultimaAccion = null; // { tipo: 'acierto'|'paso', carta, equipoId, puntos }
 
     this.loadFromStorage();
   }
 
   get rondaActualConfig() {
+    if (this.enDesempate) {
+      return RONDA_DESEMPATE_CONFIG;
+    }
     return RONDAS_CONFIG[this.rondaIndex] || RONDAS_CONFIG[0];
   }
 
   get esRondaRelampago() {
     return Boolean(this.rondaActualConfig?.esRelampago);
+  }
+
+  obtenerEquiposEmpatadosPrimerPuesto() {
+    if (!this.equipos || this.equipos.length < 2) return [];
+    const maxPuntos = Math.max(...this.equipos.map((e) => e.puntos));
+    const empatados = this.equipos.filter((e) => e.puntos === maxPuntos);
+    return empatados.length >= 2 ? empatados : [];
   }
 
   get equipoActual() {
@@ -278,6 +306,12 @@ export class GameState {
     const cantidadPrincipal = Math.min(this.cantidadCartas, cartasDisponiblesPrincipal.length);
     const cartasSeleccionadas = cartasDisponiblesPrincipal.slice(0, cantidadPrincipal);
 
+    // Guardar el resto de cartas barajadas como reserva por si hay Ronda de Desempate
+    const sobrantesFiltradas = cartasDisponiblesPrincipal.slice(cantidadPrincipal);
+    const idsUsados = new Set([...this.cartasRelampago, ...cartasSeleccionadas, ...sobrantesFiltradas].map((c) => c.id));
+    const restoCatalogo = shuffle(todos.filter((c) => !idsUsados.has(c.id)));
+    this.cartasReservaDesempate = [...sobrantesFiltradas, ...restoCatalogo];
+
     // Asignar y fijar el elemento para rondas 1 a 3
     this.cartasPartida = cartasSeleccionadas.map((c) => ({
       ...c,
@@ -299,6 +333,8 @@ export class GameState {
 
     // Inicializar ronda 1
     this.rondaIndex = 0;
+    this.enDesempate = false;
+    this.equiposDesempateIds = [];
     this.cartasRondaRestantes = shuffle(this.cartasPartida);
     this.cartasPasadasEnTurno = [];
     this.cartaActual = null;
@@ -306,6 +342,7 @@ export class GameState {
     this.faseTurno = 'listo';
     this.enPartida = true;
     this.ultimoAcierto = null;
+    this.ultimaAccion = null;
     this.relampagoTurnoIndex = 0;
     this.relampagoPalabraRevelada = false;
 
@@ -351,6 +388,13 @@ export class GameState {
       puntos,
       esRelampago: false
     };
+    this.ultimaAccion = {
+      tipo: 'acierto',
+      carta: this.cartaActual,
+      equipoId: this.equipoActual.id,
+      puntos,
+      esRelampago: false
+    };
 
     // ¿Quedan más cartas sin ver en el mazo de la ronda?
     if (this.cartasRondaRestantes.length === 0) {
@@ -380,6 +424,10 @@ export class GameState {
 
     // Agregar la carta actual a las pasadas en este turno
     this.cartasPasadasEnTurno.push(this.cartaActual);
+    this.ultimaAccion = {
+      tipo: 'paso',
+      carta: this.cartaActual
+    };
     this.cartaActual = null;
 
     // ¿Quedan más cartas sin ver en el mazo de la ronda?
@@ -419,11 +467,11 @@ export class GameState {
   deshacerUltimoAcierto() {
     if (!this.ultimoAcierto) return false;
 
-    const { carta, equipoId, puntos, esRelampago } = this.ultimoAcierto;
+    const { carta, equipoId, puntos, esRelampago, rondaId } = this.ultimoAcierto;
     const eq = this.equipos.find((e) => e.id === equipoId);
     if (eq) {
       eq.puntos = Math.max(0, eq.puntos - puntos);
-      const rId = esRelampago ? 'ronda_relampago' : this.rondaActualConfig.id;
+      const rId = rondaId || (esRelampago ? 'ronda_relampago' : this.rondaActualConfig.id);
       if (this.puntosPorRonda[rId] && this.puntosPorRonda[rId][equipoId]) {
         this.puntosPorRonda[rId][equipoId] = Math.max(0, this.puntosPorRonda[rId][equipoId] - puntos);
       }
@@ -449,8 +497,44 @@ export class GameState {
     // Restaurar la carta deshecha como carta activa
     this.cartaActual = carta;
     this.ultimoAcierto = null;
+    this.ultimaAccion = null;
     this.saveToStorage();
     return true;
+  }
+
+  /**
+   * Deshace la última acción del turno (sea acierto o paso).
+   * Devuelve la carta previa a la pantalla sin alterar el temporizador.
+   */
+  deshacerUltimaAccion() {
+    if (!this.ultimaAccion) return false;
+
+    if (this.ultimaAccion.tipo === 'acierto') {
+      return this.deshacerUltimoAcierto();
+    }
+
+    if (this.ultimaAccion.tipo === 'paso') {
+      const { carta } = this.ultimaAccion;
+      const idx = this.cartasPasadasEnTurno.indexOf(carta);
+      if (idx !== -1) {
+        this.cartasPasadasEnTurno.splice(idx, 1);
+      }
+
+      if (this.faseTurno === 'turno_terminado_pase') {
+        this.faseTurno = 'jugando';
+      }
+
+      if (this.cartaActual) {
+        this.cartasRondaRestantes.push(this.cartaActual);
+      }
+
+      this.cartaActual = carta;
+      this.ultimaAccion = null;
+      this.saveToStorage();
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -477,34 +561,35 @@ export class GameState {
   }
 
   /**
-   * En Ronda Relámpago: asigna los 3 puntos al equipo ganador (o a nadie).
+   * En Ronda Relámpago o Desempate: asigna los 3 puntos al equipo ganador (o a nadie).
    * @param {string|null} ganadorEquipoId - ID del equipo o null si nadie adivinó.
    */
   resolverCartaRelampago(ganadorEquipoId) {
     if (!this.esRondaRelampago) return;
 
+    const rId = this.enDesempate ? 'ronda_desempate' : 'ronda_relampago';
     if (ganadorEquipoId) {
       const eq = this.equipos.find((e) => e.id === ganadorEquipoId);
       if (eq) {
         eq.puntos += 3;
-        const rId = 'ronda_relampago';
         if (!this.puntosPorRonda[rId]) this.puntosPorRonda[rId] = {};
         this.puntosPorRonda[rId][eq.id] = (this.puntosPorRonda[rId][eq.id] || 0) + 3;
         this.ultimoAcierto = {
           carta: this.cartaActual,
           equipoId: eq.id,
           puntos: 3,
-          esRelampago: true
+          esRelampago: true,
+          rondaId: rId
         };
       }
     } else {
       this.ultimoAcierto = null;
     }
 
-    // Pasar a la siguiente carta de la relámpago
+    // Pasar a la siguiente carta de la relámpago / desempate
     this.relampagoTurnoIndex += 1;
 
-    // ¿Terminaron todos los turnos relámpago?
+    // ¿Terminaron todos los turnos?
     if (this.relampagoTurnoIndex >= this.relampagoTurnos.length) {
       this.faseTurno = 'ronda_terminada';
     } else {
@@ -512,6 +597,49 @@ export class GameState {
       this.cartaActual = null;
     }
 
+    this.saveToStorage();
+  }
+
+  /**
+   * Prepara e inicia una Ronda de Desempate con 1 carta por cada equipo empatado en el 1.° puesto.
+   */
+  iniciarRondaDesempate(equiposEmpatados) {
+    this.enDesempate = true;
+    this.equiposDesempateIds = equiposEmpatados.map((e) => e.id);
+
+    if (!this.puntosPorRonda['ronda_desempate']) {
+      this.puntosPorRonda['ronda_desempate'] = {};
+      this.equipos.forEach((eq) => {
+        this.puntosPorRonda['ronda_desempate'][eq.id] = 0;
+      });
+    }
+
+    // Si la reserva se agotó, reciclar cartas barajadas de la partida
+    if (!Array.isArray(this.cartasReservaDesempate) || this.cartasReservaDesempate.length < equiposEmpatados.length) {
+      this.cartasReservaDesempate = [
+        ...(this.cartasReservaDesempate || []),
+        ...shuffle(this.cartasPartida)
+      ];
+    }
+
+    // 1 carta para leer por cada equipo en el empate
+    this.relampagoTurnos = equiposEmpatados.map((eq) => {
+      const eqIdx = this.equipos.findIndex((e) => e.id === eq.id);
+      const carta = this.cartasReservaDesempate.shift() || this.cartasPartida[0];
+      return {
+        equipoIndex: eqIdx !== -1 ? eqIdx : 0,
+        pasada: 1,
+        carta
+      };
+    });
+
+    this.relampagoTurnoIndex = 0;
+    this.relampagoPalabraRevelada = false;
+    this.cartaActual = null;
+    this.cartasPasadasEnTurno = [];
+    this.ultimoAcierto = null;
+    this.ultimaAccion = null;
+    this.faseTurno = 'listo';
     this.saveToStorage();
   }
 
@@ -524,18 +652,20 @@ export class GameState {
     this.cartasPasadasEnTurno = [];
     this.faseTurno = 'listo';
     this.ultimoAcierto = null;
+    this.ultimaAccion = null;
     this.saveToStorage();
   }
 
   /**
-   * Avanza a la siguiente ronda (o finaliza partida si era la última).
+   * Avanza a la siguiente ronda (o activa desempate / finaliza partida si era la última).
    */
   pasarSiguienteRonda() {
-    if (this.rondaIndex + 1 < RONDAS_CONFIG.length) {
+    if (!this.enDesempate && this.rondaIndex + 1 < RONDAS_CONFIG.length) {
       this.rondaIndex += 1;
       this.cartaActual = null;
       this.cartasPasadasEnTurno = [];
       this.ultimoAcierto = null;
+      this.ultimaAccion = null;
 
       if (this.esRondaRelampago) {
         this.relampagoTurnoIndex = 0;
@@ -549,13 +679,23 @@ export class GameState {
       this.faseTurno = 'listo';
       this.saveToStorage();
     } else {
-      this.faseTurno = 'partida_terminada';
-      this.saveToStorage();
+      // Terminó la Ronda 3 (o una Ronda de Desempate): verificar si hay empate en el 1.° puesto
+      const empatados = this.obtenerEquiposEmpatadosPrimerPuesto();
+      if (empatados.length >= 2) {
+        this.iniciarRondaDesempate(empatados);
+      } else {
+        this.enDesempate = false;
+        this.faseTurno = 'partida_terminada';
+        this.saveToStorage();
+      }
     }
   }
 
   terminarPartida() {
     this.enPartida = false;
+    this.enDesempate = false;
+    this.equiposDesempateIds = [];
+    this.cartasReservaDesempate = [];
     this.cartaActual = null;
     this.cartasRondaRestantes = [];
     this.cartasPasadasEnTurno = [];
@@ -563,6 +703,7 @@ export class GameState {
     this.cartasRelampago = [];
     this.faseTurno = 'listo';
     this.ultimoAcierto = null;
+    this.ultimaAccion = null;
     this.saveToStorage();
   }
 
@@ -588,6 +729,9 @@ export class GameState {
         relampagoTurnos: this.relampagoTurnos,
         relampagoTurnoIndex: this.relampagoTurnoIndex,
         relampagoPalabraRevelada: this.relampagoPalabraRevelada,
+        enDesempate: this.enDesempate,
+        equiposDesempateIds: this.equiposDesempateIds,
+        cartasReservaDesempate: this.cartasReservaDesempate,
         ultimoAcierto: this.ultimoAcierto,
         puntosPorRonda: this.puntosPorRonda
       };
@@ -627,6 +771,9 @@ export class GameState {
       if (Array.isArray(data.relampagoTurnos)) this.relampagoTurnos = data.relampagoTurnos;
       this.relampagoTurnoIndex = data.relampagoTurnoIndex || 0;
       this.relampagoPalabraRevelada = Boolean(data.relampagoPalabraRevelada);
+      this.enDesempate = Boolean(data.enDesempate);
+      if (Array.isArray(data.equiposDesempateIds)) this.equiposDesempateIds = data.equiposDesempateIds;
+      if (Array.isArray(data.cartasReservaDesempate)) this.cartasReservaDesempate = data.cartasReservaDesempate;
       this.ultimoAcierto = data.ultimoAcierto || null;
       if (data.puntosPorRonda && typeof data.puntosPorRonda === 'object') {
         this.puntosPorRonda = data.puntosPorRonda;
