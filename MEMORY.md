@@ -182,9 +182,11 @@ En la pantalla `#configuracion`:
   - **Botón inteligente de instalación PWA**:
     - Detecta el evento `beforeinstallprompt` y estado standalone. Solo se muestra en `#inicio` si la app no está instalada, y desaparece en cuanto se instala (`appinstalled`).
   - **Service Worker**:
-    - Actualizada la versión de caché a `cartas-v13`.
+    - Actualizada la versión de caché a `cartas-v14`.
   - **Pantalla Principal (`#inicio`) con Palabras Voladoras y Pie de Donaciones**:
-    - Sin tocar el logo ni los botones, se sumó una capa de fondo (`z-index: 0`) donde palabras reales extraídas del mazo de cartas vuelan en diagonal con distintos ángulos y colores pasando **por detrás** del logo y de los botones (`z-index: 3`).
+    - Sin tocar el logo ni los botones, se sumó una capa de fondo (`z-index: 0`) donde palabras reales del mazo vuelan por detrás del logo y botones (`z-index: 3`).
+    - **Trayectorias desparramadas**: Las palabras ahora viajan en trayectorias variadas (de arriba a abajo, de abajo a arriba, y diagonales cruzadas) con ángulos de inclinación pronunciados.
+    - **Formato apilado para frases compuestas**: Frases de más de una palabra (como "HARRY POTTER" o "GAME OF THRONES") se dividen en renglones apilados centrados con `white-space: pre-line`.
     - Al pie de la pantalla se agregó *"Se aceptan donaciones al alias bauticavallera"* (con opción de copiar el alias al tocarlo).
   - **Bloqueo de Pull-to-Refresh**:
     - Se agregó `overscroll-behavior-y: none` en `html, body` y `touch-action: none` con `e.preventDefault()` al arrastrar la carta en juego para evitar que el gesto de deslizar hacia abajo ("Paso") dispare la actualización de página del navegador móvil.

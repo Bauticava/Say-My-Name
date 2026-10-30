@@ -92,36 +92,60 @@ function iniciarPalabrasVoladoras(layerEl) {
   function crearPalabra(initialDelaySec = 0) {
     if (!document.body.contains(layerEl)) return;
 
-    const texto = palabras[Math.floor(Math.random() * palabras.length)];
+    const rawTexto = palabras[Math.floor(Math.random() * palabras.length)];
     const color = COLORES_PALABRAS[Math.floor(Math.random() * COLORES_PALABRAS.length)];
 
-    // Carril vertical base + pequeña variación
-    const baseY = carrilesY[carrilIdx % carrilesY.length];
-    carrilIdx += 1;
-    const startY = baseY + (Math.random() * 8 - 4);
-    const deltaY = (Math.random() * 28 - 14); // Sube o baja en diagonal
-    const endY = startY + deltaY;
+    // Si tiene más de una palabra, separar cada palabra en un renglón (ej: HARRY / POTTER o GAME / OF / THRONES)
+    const partes = rawTexto.trim().split(/\s+/);
+    const texto = partes.length > 1 ? partes.join('\n') : rawTexto;
 
-    // Dirección: izquierda a derecha o derecha a izquierda
-    const haciaDerecha = Math.random() > 0.45;
-    const startX = haciaDerecha ? -38 : 112;
-    const endX = haciaDerecha ? 112 : -38;
+    // Trayectorias desparramadas en todas direcciones:
+    // 0: Arriba hacia Abajo (vertical / diagonal descendente)
+    // 1: Abajo hacia Arriba (vertical / diagonal ascendente)
+    // 2: Izquierda a Derecha diagonal
+    // 3: Derecha a Izquierda diagonal
+    const tipos = ['down', 'up', 'left_to_right', 'right_to_left'];
+    const tipo = tipos[Math.floor(Math.random() * tipos.length)];
 
-    // Ángulo de inclinación variado (-36° a +36°, evitando ángulos casi planos)
-    const signoAngulo = Math.random() > 0.5 ? 1 : -1;
-    const angulo = signoAngulo * Math.floor(14 + Math.random() * 22);
+    let startX, startY, endX, endY;
 
-    // Duración del vuelo (entre 9s y 13.5s)
-    const duracion = (9 + Math.random() * 4.5).toFixed(2);
+    if (tipo === 'down') {
+      startX = Math.floor(5 + Math.random() * 85);
+      endX = startX + (Math.random() * 34 - 17);
+      startY = -25;
+      endY = 115;
+    } else if (tipo === 'up') {
+      startX = Math.floor(5 + Math.random() * 85);
+      endX = startX + (Math.random() * 34 - 17);
+      startY = 115;
+      endY = -25;
+    } else if (tipo === 'left_to_right') {
+      startX = -35;
+      endX = 115;
+      startY = Math.floor(5 + Math.random() * 85);
+      endY = startY + (Math.random() * 50 - 25);
+    } else {
+      startX = 115;
+      endX = -35;
+      startY = Math.floor(5 + Math.random() * 85);
+      endY = startY + (Math.random() * 50 - 25);
+    }
+
+    // Ángulo de inclinación pronunciado (-38° a +38°, evitando 0°)
+    const signo = Math.random() > 0.5 ? 1 : -1;
+    const angulo = signo * Math.floor(14 + Math.random() * 26);
+
+    // Duración del vuelo (entre 8.5s y 13.5s)
+    const duracion = (8.5 + Math.random() * 5).toFixed(2);
 
     const span = document.createElement('span');
     span.className = 'flying-card-word';
     span.textContent = texto;
     span.style.color = color;
-    span.style.setProperty('--start-x', `${startX}vw`);
-    span.style.setProperty('--start-y', `${startY}vh`);
-    span.style.setProperty('--end-x', `${endX}vw`);
-    span.style.setProperty('--end-y', `${endY}vh`);
+    span.style.setProperty('--start-x', `${startX.toFixed(1)}vw`);
+    span.style.setProperty('--start-y', `${startY.toFixed(1)}vh`);
+    span.style.setProperty('--end-x', `${endX.toFixed(1)}vw`);
+    span.style.setProperty('--end-y', `${endY.toFixed(1)}vh`);
     span.style.setProperty('--rot', `${angulo}deg`);
     span.style.animationDuration = `${duracion}s`;
     if (initialDelaySec < 0) {
@@ -138,9 +162,9 @@ function iniciarPalabrasVoladoras(layerEl) {
     layerEl.appendChild(span);
   }
 
-  // Sembrar 7 palabras iniciales ya en vuelo en distintas fases
-  for (let i = 0; i < 7; i++) {
-    crearPalabra(-(i * 1.6 + 0.5));
+  // Sembrar 8 palabras iniciales ya en vuelo en distintas fases y trayectorias
+  for (let i = 0; i < 8; i++) {
+    crearPalabra(-(i * 1.5 + 0.4));
   }
 }
 
